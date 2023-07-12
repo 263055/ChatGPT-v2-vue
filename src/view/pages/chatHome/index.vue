@@ -1,35 +1,40 @@
 <template>
   <div class="chatHome">
+    <!--聊天室左侧-->
     <div class="chatLeft" style="width:20%" v-show="showPersonList">
       <div class="title" style="text-align: center;">
-        <h2>OpenAI Manager</h2>
+        <h2>4gai Manager</h2>
       </div>
       <div class="online-person" style="margin-top: 5%;">
+        <!--上方的按钮-->
         <el-row :gutter="24">
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
-              <span class="" @click="sessionClick" :class="{ whiteText: cutSetting === 1 }">{{ $t('session.title')
-              }}</span>
+              <span class="" @click="sessionClick" :class="{ whiteText: cutSetting === 1 }">
+                {{ $t('session.title') }}</span>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
-              <span class="" @click="modelClick" :class="{ whiteText: cutSetting === 0 }">{{ $t('model.title') }}</span>
+              <span class="" @click="modelClick" :class="{ whiteText: cutSetting === 0 }">
+                {{ $t('model.title') }}</span>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
-              <span class="" @click="fineTuningClick" :class="{ whiteText: cutSetting === 2 }">{{
-                $t('slightly.title.whole') }}</span>
+              <span class="" @click="fineTuningClick" :class="{ whiteText: cutSetting === 2 }">
+                {{ $t('slightly.title.whole') }}</span>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
-              <span class="" @click="fileClick" :class="{ whiteText: cutSetting === 3 }">{{ $t('file.title') }}</span>
+              <span class="" @click="fileClick" :class="{ whiteText: cutSetting === 3 }">
+                {{ $t('file.title') }}</span>
             </div>
           </el-col>
         </el-row>
-        <div v-show="cutSetting == 0">
+        <!--ai模型-->
+        <div v-show="cutSetting === 0">
           <input class="inputs" v-model="modelSearch" style=" margin-top: 10px;"
             :placeholder="$t('placeholder.model_name')" />
           <div class="s-wrapper">
@@ -39,8 +44,8 @@
             </div>
           </div>
         </div>
-
-        <div v-show="cutSetting == 1">
+        <!--聊天室-->
+        <div v-show="cutSetting === 1">
           <input class="inputs" v-model="sessionSearch" style=" margin-top: 10px;"
             :placeholder="$t('placeholder.session_name')" />
           <div class="s-wrapper">
@@ -49,8 +54,8 @@
             </div>
           </div>
         </div>
-
-        <div v-show="cutSetting == 2">
+        <!--微调-->
+        <div v-show="cutSetting === 2">
           <input class="inputs" v-model="fineTuningSearch" style=" margin-top: 10px;"
             :placeholder="$t('placeholder.slightly_name')" />
           <div class="s-wrapper">
@@ -60,25 +65,24 @@
             </div>
           </div>
         </div>
-
-        <div v-show="cutSetting == 3">
+        <!--文件-->
+        <div v-show="cutSetting === 3">
           <input class="inputs" v-model="fileSearch" style=" margin-top: 10px;"
             :placeholder="$t('placeholder.file_name')" />
-
           <div class="s-wrapper">
             <div class="personList" v-for="(fileInfo, index) in fileList" :key="index" @click="clickFile(fileInfo)">
               <File :fileInfo="fileInfo" :pcCurrent="fiCurrent"></File>
             </div>
           </div>
         </div>
-
       </div>
     </div>
+    <!--聊天室右侧-->
     <div class="chatRight">
-      <!-- <router-view></router-view> -->
+      <!--折叠面板-->
       <div class="top-left" @click="toggleLeft">
-        <svg t="1679366341860" class="icon" v-show="!showPersonList" viewBox="0 0 1024 1024" version="1.1"
-          xmlns="http://www.w3.org/2000/svg" p-id="5764" width="30" height="30">
+        <svg x="1679366341860" class="icon" v-show="!showPersonList" viewBox="0 0 1024 1024" version="1.1"
+             xmlns="http://www.w3.org/2000/svg" p-id="5764" width="30" height="30">
           <path
             d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
             fill="#BDD2EF" p-id="5765"></path>
@@ -86,7 +90,7 @@
             d="M626.8 345.9c0 15-5.7 30.1-17.2 41.5L487.1 510l122.6 122.6c22.9 22.9 22.9 60.2 0 83.1-22.9 22.9-60.2 22.9-83.1 0L362.4 551.6c-22.9-22.9-22.9-60.2 0-83.1l164.1-164.1c22.9-22.9 60.2-22.9 83.1 0 11.5 11.5 17.2 26.5 17.2 41.5z"
             fill="#2867CE" p-id="5766"></path>
         </svg>
-        <svg t="1679366707602" class="icon" v-show="showPersonList" viewBox="0 0 1024 1024" version="1.1"
+        <svg x="1679366707602" class="icon" v-show="showPersonList" viewBox="0 0 1024 1024" version="1.1"
           xmlns="http://www.w3.org/2000/svg" p-id="7551" width="30" height="30">
           <path
             d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
@@ -96,9 +100,8 @@
             fill="#2867CE" p-id="7553"></path>
         </svg>
       </div>
-
       <div class="top-right" @click="toggleRight">
-        <svg t="1679366707602" class="icon" v-show="!showSetupList" viewBox="0 0 1024 1024" version="1.1"
+        <svg x="1679366707602" class="icon" v-show="!showSetupList" viewBox="0 0 1024 1024" version="1.1"
           xmlns="http://www.w3.org/2000/svg" p-id="7551" width="30" height="30">
           <path
             d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
@@ -107,7 +110,7 @@
             d="M402.5 677.3c0-15 5.7-30.1 17.2-41.5l122.6-122.6-122.6-122.6c-22.9-22.9-22.9-60.2 0-83.1 22.9-22.9 60.2-22.9 83.1 0l164.1 164.1c22.9 22.9 22.9 60.2 0 83.1L502.8 718.8c-22.9 22.9-60.2 22.9-83.1 0-11.5-11.4-17.2-26.5-17.2-41.5z"
             fill="#2867CE" p-id="7553"></path>
         </svg>
-        <svg t="1679366341860" class="icon" v-show="showSetupList" viewBox="0 0 1024 1024" version="1.1"
+        <svg x="1679366341860" class="icon" v-show="showSetupList" viewBox="0 0 1024 1024" version="1.1"
           xmlns="http://www.w3.org/2000/svg" p-id="5764" width="30" height="30">
           <path
             d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
@@ -117,13 +120,14 @@
             fill="#2867CE" p-id="5766"></path>
         </svg>
       </div>
-
+      <!--展示聊天窗口-->
       <div v-if="showChatWindow" v-show="showMainContent">
         <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo" :storeStatu="storeStatus"
-          @personCardSort="personCardSort"></ChatWindow>
+          @personCardSort="personCardSort">
+        </ChatWindow>
       </div>
       <div class="showIcon" v-else>
-        <svg t="1679552353056" class="icon iconfont icon-snapchat" viewBox="0 0 1024 1024" version="1.1"
+        <svg x="1679552353056" class="icon iconfont icon-snapchat" viewBox="0 0 1024 1024" version="1.1"
           xmlns="http://www.w3.org/2000/svg" p-id="3488" width="200" height="200">
           <path
             d="M992.33 416.37c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-63.96h63.98c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-95.94c0.01-8.48-3.36-16.62-9.35-22.62-6-6-14.14-9.37-22.62-9.36h-95.94V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96H544.6V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98s-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98S224.8 14.95 224.8 32.61v63.96h-95.94c-8.48 0-16.62 3.36-22.62 9.36s-9.36 14.14-9.36 22.62v95.94H32.92c-17.67 0-31.98 14.32-31.98 31.98s14.32 31.98 31.98 31.98h63.96v63.96H32.92c-17.67 0-31.98 14.32-31.98 31.98 0 17.67 14.32 31.98 31.98 31.98h63.96v63.97H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.65 14.31 31.97 31.97 31.97h63.96v63.98H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.66 14.31 31.97 31.97 31.97h63.96v63.98H32.92C15.26 736.18 0.95 750.5 0.95 768.15s14.31 31.97 31.97 31.97h63.96v95.95a31.944 31.944 0 0 0 9.36 22.62c6 5.99 14.14 9.36 22.62 9.35h95.94v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h95.94c8.48 0.02 16.62-3.35 22.62-9.35s9.37-14.14 9.35-22.62v-95.95h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98V672.2h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.98h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.97h63.98zM864.41 864.1H160.84V160.53h703.57V864.1zM406.82 580.42h79.2l15.48 61.56h67.68l-83.16-267.84h-77.04l-83.16 267.84h65.52l15.48-61.56z m18-72.36c6.84-26.64 14.04-57.96 20.52-86.04h1.44c7.2 27.36 14.04 59.4 21.24 86.04l5.76 22.68h-54.72l5.76-22.68zM697.7 641.98h-64.44V374.14h64.44v267.84z"
@@ -131,18 +135,19 @@
         </svg>
       </div>
     </div>
-
+    <!--右侧栏是否展示-->
     <div class="chatLeft" v-show="showSetupList">
-
+      <!--api key-->
       <el-card shadow="hover" id="jianbian" style="line-height: 120%;text-align: center;">
         <div>
-          <input class="inputs" v-model="SettingInfo.KeyMsg" :placeholder="$t('placeholder.openai_key')" type="password"
-            auto-complete="new-password" autocomplete="new-password"
-            style="width: 100%; margin-left: 0px;margin-right: 0px;" />
+          <input class="inputs" v-model="SettingInfo.KeyMsg" :placeholder="$t('placeholder.openai_key')"
+                 type="password" autocomplete="new-password"
+            style="width: 100%; margin-left: 0;margin-right: 0;" />
         </div>
       </el-card>
 
       <div class="online-person">
+        <!--展示右侧栏的按钮-->
         <el-row :gutter="20">
           <el-col :span="6" v-for="(setting, index) in getSettings" :key="index"> <span class="setting"
               @click="SettingStatus = index" :class="{ active: SettingStatus === index }"> {{ setting.name }} </span>
@@ -150,12 +155,10 @@
         </el-row>
 
         <div class="s-wrapper" style="height: 75vh;">
-
-
           <!--对话设置-->
           <el-collapse-transition>
-            <div v-show="SettingStatus == 0">
-
+            <div v-show="SettingStatus === 0">
+              <!--联网设置-->
               <div class="block" v-show="SettingInfo.openNet">
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.online')" placement="top">
@@ -169,33 +172,32 @@
 
                 <el-slider class="astrict" v-model="SettingInfo.max_results" :step="1" :min="0" :max="6"></el-slider>
               </div>
-
+              <!--不联网-->
               <div v-show="!SettingInfo.openNet">
+                <!--后缀-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">
                     <span class="demonstration">{{ $t('model.suffix_title') }}</span>
                   </el-tooltip>
-
                   <input class="weitiao" v-model="SettingInfo.chat.suffix" :placeholder="$t('placeholder.suffix')" />
                 </div>
-
+                <!--停用词-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.stop')" placement="top">
-                    <span class="demonstration" s>{{ $t('model.stop_title') }}</span>
+                    <span class="demonstration" is>{{ $t('model.stop_title') }}</span>
                   </el-tooltip>
 
                   <input class="weitiao" v-model="SettingInfo.chat.stop" :placeholder="$t('placeholder.stop')" />
                 </div>
-
+                <!--单词重复度-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.frequency_penalty')" placement="top">
                     <span class="demonstration">{{ $t('model.frequency_penalty_title') }}</span>
                   </el-tooltip>
-
                   <el-slider class="astrict" v-model="SettingInfo.chat.FrequencyPenalty" :step="0.1" :min="-2"
                     :max="2"></el-slider>
                 </div>
-
+                <!--话题重复度-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.presence_penalty')" placement="top">
                     <span class="demonstration">{{ $t('model.presence_penalty_title') }}</span>
@@ -203,7 +205,7 @@
                   <el-slider class="astrict" v-model="SettingInfo.chat.PresencePenalty" :step="0.1" :min="-2"
                     :max="2"></el-slider>
                 </div>
-
+                <!--最大token-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.max_tokens')" placement="top">
                     <span class="demonstration" style="">{{ $t('model.max_tokens_title') }}</span>
@@ -212,53 +214,42 @@
                   <el-slider class="astrict" v-model="SettingInfo.chat.MaxTokens" :step="1" :min="0"
                     :max="2048"></el-slider>
                 </div>
-
+                <!--随机性-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.temperature')" placement="top">
                     <span class="demonstration">{{ $t('model.temperature_title') }}</span>
                   </el-tooltip>
-
                   <el-slider class="astrict" v-model="SettingInfo.chat.Temperature" :step="0.1" :min="0"
                     :max="2"></el-slider>
                 </div>
-
+                <!--保留词-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.top_p')" placement="top">
-                    <span class="demonstration" s>{{ $t('model.top_p_title') }}</span>
+                    <span class="demonstration" is>{{ $t('model.top_p_title') }}</span>
                   </el-tooltip>
-
                   <el-slider class="astrict" v-model="SettingInfo.chat.TopP" :step="0.1" :min="0" :max="1"></el-slider>
                 </div>
-
-                <!-- <div class="block">
-                  <el-tooltip class="item" effect="dark" :content="$t('model.n')" placement="top">
-                    <span class="demonstration" s>{{$t('model.n_title')}}</span>
-                  </el-tooltip>
-
-                  <input class="weitiao" v-model="SettingInfo.chat.n" :placeholder="$t('placeholder.response_count')" type="number" />
-                </div> -->
-
+                <!--流输出-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.stream')" placement="top">
                     <span class="demonstration">{{ $t('model.stream_title') }}</span>
                   </el-tooltip>
                   <el-switch v-model="SettingInfo.chat.stream" :width="defaulWidth" style="margin-left: 15%;"></el-switch>
                 </div>
-
+                <!--回显词-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.echo')" placement="top">
                     <span class="demonstration">{{ $t('model.echo_title') }}</span>
                   </el-tooltip>
                   <el-switch v-model="SettingInfo.chat.echo" :width="defaulWidth" style="margin-left: 22%;"></el-switch>
                 </div>
-
+                <!--是否联网-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.online')" placement="top">
                     <span class="demonstration">{{ $t('model.online_title') }}</span>
                   </el-tooltip>
                   <el-switch v-model="SettingInfo.openNet" :width="defaulWidth" style="margin-left: 15%;"></el-switch>
                 </div>
-
               </div>
               <!-- <div class="block">
                 <el-tooltip class="item" effect="dark" content="开启读文模式" placement="top">
@@ -270,10 +261,9 @@
               <div style="height: 30px;"></div> -->
             </div>
           </el-collapse-transition>
-
           <!--图片设置-->
           <el-collapse-transition>
-            <div v-show="SettingStatus == 1">
+            <div v-show="SettingStatus === 1">
 
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('image.production_title')" placement="top">
@@ -312,12 +302,9 @@
 
             </div>
           </el-collapse-transition>
-
-
-
           <!--音频设置-->
           <el-collapse-transition>
-            <div v-show="SettingStatus == 2">
+            <div v-show="SettingStatus === 2">
 
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('audio.to_text_title')" placement="top">
@@ -352,8 +339,6 @@
 
             </div>
           </el-collapse-transition>
-
-
           <!--微调-->
           <el-collapse-transition>
             <div v-show="SettingStatus == 3">
@@ -501,7 +486,6 @@
               </el-collapse-transition>
             </div>
           </el-collapse-transition>
-
           <!--文件-->
           <el-collapse-transition>
             <div v-show="SettingStatus == 4">
@@ -532,10 +516,9 @@
               </div>
             </div>
           </el-collapse-transition>
-
           <!--会话-->
           <el-collapse-transition>
-            <div v-show="SettingStatus == 5">
+            <div v-show="SettingStatus === 5">
               <div class="session boxinput" @click="newSession">
                 <svg t="1679215361568" class="icon" viewBox="0 0 1024 1024" version="1.1"
                   xmlns="http://www.w3.org/2000/svg" p-id="3128" width="25" height="25">
@@ -548,24 +531,14 @@
                 </svg>
                 {{ $t('session.create') }}
               </div>
-              <!-- <div class="session boxinput" @click="clearCurrentContext">
-                清空当前会话内容
-              </div>
-              <div class="session boxinput" @click="exportObjArrToJson">
-                导出当前会话内容
-              </div>
-              <div class="session boxinput" @click="importFromJsonArr">
-                导入当前会话内容
-                <input type="file" ref="onupdateJosnArr" @change="handleFileUpload" style="display: none;">
-              </div> -->
               <div class="session boxinput" @click="exportObjArrAllToJson"
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
+                style="margin-left: 0;margin-right: 0;width: 99%;">
                 <span class="iconfont icon-daochu" style="color: #fff; margin-right:10px;"></span>
                 {{ $t('session.export') }}
               </div>
               <div class="session boxinput" @click="importFromJsonArrAll">
-                <span class="iconfont icon-daoru" style="color: #fff; margin-right:10px;"></span> {{ $t('session.import')
-                }}
+                <span class="iconfont icon-daoru" style="color: #fff; margin-right:10px;"></span>
+                {{ $t('session.import') }}
                 <input type="file" ref="onupdateJosnArrAll" @change="handleFileUploadAll" style="display: none;">
               </div>
               <div class="session boxinput" @click="clearAllContext">
@@ -574,32 +547,29 @@
               </div>
             </div>
           </el-collapse-transition>
-
           <!--角色-->
           <el-collapse-transition>
-            <div v-show="SettingStatus == 6">
+            <div v-show="SettingStatus === 6">
               <div class="block">
                 <input class="weitiao" v-model="roleSearch" :placeholder="$t('placeholder.role_name')" />
               </div>
               <div class="personList" v-for="roleInfo in roleList" :key="roleInfo.act" @click="roleClick(roleInfo)">
                 <RoleCard :roleInfo="roleInfo" :prCurrent="prCurrent"></RoleCard>
               </div>
-
             </div>
           </el-collapse-transition>
-
           <!--界面设置-->
           <el-collapse-transition>
-            <div v-show="SettingStatus == 7">
-              <!-- <div class="block">
-                <el-tooltip class="item" effect="dark" content="将图片的url路径填入此处即可设置聊天背景。" placement="top">
-                  <span class="demonstration">聊天背景</span>
-                </el-tooltip>
-                <input class="inputs" v-model="SettingInfo.contentImageUrl" placeholder="设置聊天界面的背景URL"
-                  style="margin-top: 10px; width: 100%; margin-left: 0px;margin-right: 0px;" />
-              </div> -->
+            <div v-show="SettingStatus === 7">
+              <!-- <div class="block">-->
+              <!--  <el-tooltip class="item" effect="dark" content="将图片的url路径填入此处即可设置聊天背景。" placement="top">-->
+              <!--    <span class="demonstration">聊天背景</span>-->
+              <!--  </el-tooltip>-->
+              <!--  <input class="inputs" v-model="SettingInfo.contentImageUrl" placeholder="设置聊天界面的背景URL"-->
+              <!--    style="margin-top: 10px; width: 100%; margin-left: 0;margin-right: 0;" />-->
+              <!--</div> -->
               <div class="session boxinput" @click="changeLanguage"
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
+                style="margin-left: 0;margin-right: 0;width: 99%;">
                 <span class="iconfont icon-iconyuanbanben_fanyi" style="color: #fff; margin-right:10px;"></span>
                 {{ $t('setting.Language') }}
               </div>
@@ -609,7 +579,6 @@
         </div>
       </div>
     </div>
-    <!-- <el-col :span="4"><div class="grid-content bg-purple"></div></el-col> -->
   </div>
 </template>
 
@@ -618,11 +587,24 @@ import PersonCard from "@/components/PersonCard.vue";
 import Session from "@/components/Session.vue";
 import File from "@/components/File.vue";
 import ChatWindow from "./chatwindow.vue";
-import { AI_HEAD_IMG_URL } from '@/store/mutation-types'
+import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
 import RoleCard from "@/components/RoleCard.vue";
-import { getModels, getMoneyInfo, getFineTunesList, getFilesList, uploadFile, createFineTune, cancelFineTune, deleteFineTuneModel, retrieveFineTune, deleteFile, retrieveFile, retrieveFileContent, getRoles } from "@/api/getData";
+import {
+  cancelFineTune,
+  createFineTune,
+  deleteFile,
+  deleteFineTuneModel,
+  getFilesList,
+  getFineTunesList,
+  getModels,
+  getRoles,
+  retrieveFile,
+  retrieveFineTune,
+  uploadFile
+} from "@/api/getData";
 
-import { getNowTime, JCMFormatDate, JCMFormatTimestamp } from "@/util/util";
+import {getNowTime, JCMFormatDate, JCMFormatTimestamp} from "@/util/util";
+
 const { Configuration, OpenAIApi } = require("openai");
 export default {
   name: "App",
@@ -702,8 +684,8 @@ export default {
       sessionCurrent: "",
       //当前点击的微调模型
       ftCurrent: "",
-      //微调搜索数据
-      fineTuningSearch: "",
+      // //微调搜索数据
+      // fineTuningSearch: "",
       //模型搜索数据
       modelSearch: "",
       //角色搜索数据
@@ -774,7 +756,6 @@ export default {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
   },
-
   destoryed() {
     window.removeEventListener('resize', this.handleResize)
   },
@@ -855,8 +836,7 @@ export default {
           this.SettingInfo.openChangePicture = false
         }
         if (newVal.fineTunes.batch_size) {
-          let batchSize = parseInt(newVal.fineTunes.batch_size)
-          this.SettingInfo.fineTunes.batch_size = batchSize
+          this.SettingInfo.fineTunes.batch_size = parseInt(newVal.fineTunes.batch_size)
         } else { }
         if (newVal.fineTunes.validation_file) {
           this.SettingInfo.fineTunes.validation_file = newVal.fineTunes.validation_file
@@ -873,9 +853,6 @@ export default {
             this.$message.error(this.$t('message.get_model_fail'))
           })
         }
-        // if (newVal.fineTunes.classification_n_classes) {
-        //   this.SettingInfo.fineTunes.classification_n_classes = parseInt(newVal.fineTunes.classification_n_classes)
-        // }
       },
       deep: true
     }
@@ -890,7 +867,7 @@ export default {
     //显示或者隐藏取消过的微调模型
     showOrHidenCancelFine(status) {
       this.cancelFineStatus = status
-      if (this.cancelFineStatus == true) {
+      if (this.cancelFineStatus === true) {
         this.fineTuningList = this.fineTuningCacheList
       } else {
         this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
@@ -907,8 +884,7 @@ export default {
 
       reader.onload = () => {
         const fileContent = reader.result; // 文件内容
-        const parsed = JSON.parse(fileContent); // 转换为数组
-        this.sessionList = parsed
+        this.sessionList = JSON.parse(fileContent)  // 转换为数组
       };
       reader.readAsText(file);
     },
@@ -964,16 +940,16 @@ export default {
           this.personList = models;
           this.personListCache = models;
         })
-        this.updateMoneyInfo()
+        // this.updateMoneyInfo()
       }).catch(e => {
-        // this.$message.error(this.$t('message.get_model_fail'))
+        this.$message.error(this.$t('message.get_model_fail'))
       })
     },
     //获取微调模型列表
     getFineTunessList(key) {
       getFineTunesList(key).then((res) => {
         this.fineTuningCacheList = res
-        if (this.cancelFineStatus == true) {
+        if (this.cancelFineStatus === true) {
           this.fineTuningList = this.fineTuningCacheList
         } else {
           this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
@@ -1029,7 +1005,7 @@ export default {
         this.firstSize = false;
         this.width = window.innerWidth;
       }
-      if ( this.width != window.innerWidth ){
+      if ( this.width !== window.innerWidth ){
         this.resize();
         this.width = window.innerWidth;
       }
@@ -1062,7 +1038,7 @@ export default {
           //清除当前窗口数据
           this.$refs.chatWindow.clearMsgList();
         }
-      } else if (msgList.length = 1) {
+      } else if (msgList.length === 1) {
         //清除当前窗口数据
         this.$refs.chatWindow.clearMsgList();
       }
@@ -1204,7 +1180,7 @@ export default {
           const openai = new OpenAIApi(configuration);
           const response = await openai.downloadFile(this.fileInfo.fileId);
         } catch (e) {
-          this.$message.error(this.$t('message.openai_free'))
+          this.$message.error(this.$t(`message.openai_free`))
         }
       }
     },
@@ -1323,7 +1299,7 @@ export default {
           }
           context += this.$t('index.user_group') + res.organization_id;
 
-          if (res.result_files.length == 0) {
+          if (res.result_files.length === 0) {
             context += this.$t('index.results_null')
           } else {
             context += this.$t('index.results')
@@ -1335,7 +1311,7 @@ export default {
           }
           context += this.$t('index.statu') + res.status + "\n";
 
-          if (res.training_files.length == 0) {
+          if (res.training_files.length === 0) {
             context += this.$t('index.files_null')
           } else {
             context += this.$t('index.files')
@@ -1345,7 +1321,7 @@ export default {
               context += `| ${obj.id} | ${obj.filename}  | ${(obj.bytes / 1024 / 1024).toFixed(2) + "MB"} | ${obj.object} | ${obj.status} |  \n`;
             });
           }
-          if (res.validation_files.length == 0) {
+          if (res.validation_files.length === 0) {
             context += this.$t('index.verifys_null')
           } else {
             context += this.$t('index.verifys')
@@ -1377,7 +1353,7 @@ export default {
         console.log(id);
         let nowPersonInfo;
         for (let i = 0; i < this.personList.length; i++) {
-          if (this.personList[i].id == id) {
+          if (this.personList[i].id === id) {
             nowPersonInfo = this.personList[i];
             this.personList.splice(i, 1);
             break;
@@ -1391,7 +1367,7 @@ export default {
         console.log(id);
         let nowPersonInfo;
         for (let i = 0; i < this.fineTuningList.length; i++) {
-          if (this.fineTuningList[i].id == id) {
+          if (this.fineTuningList[i].id === id) {
             nowPersonInfo = this.fineTuningList[i];
             this.fineTuningList.splice(i, 1);
             break;
@@ -1435,7 +1411,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin-right: 20px;
   width: 90%;
   text-align: center;
-  height: 50px;
+  //height: 50px;
   background-color: rgb(66, 70, 86);
   border-radius: 15px;
   border: 1px solid rgb(80, 85, 103);
@@ -1456,18 +1432,18 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: rgb(66, 70, 86);
   border: 0;
   transition: 0.3s;
-  box-shadow: 0px 0px 5px 0px rgb(84, 89, 110);
+  box-shadow: 0 0 5px 0 rgb(84, 89, 110);
 
   &:hover {
-    box-shadow: 0px 0px 10px 0px rgb(91, 219, 239);
+    box-shadow: 0 0 10px 0 rgb(91, 219, 239);
   }
 }
 
 .weitiao {
   margin-top: 10px;
   width: 100%;
-  margin-left: 0px;
-  margin-right: 0px;
+  margin-left: 0;
+  margin-right: 0;
   height: 50px;
   background-color: rgb(66, 70, 86);
   border-radius: 15px;
@@ -1492,10 +1468,10 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: rgb(66, 70, 86);
   border: 0;
   transition: 0.3s;
-  box-shadow: 0px 0px 5px 0px rgb(84, 89, 110);
+  box-shadow: 0 0 5px 0 rgb(84, 89, 110);
 
   &:hover {
-    box-shadow: 0px 0px 10px 0px rgb(29, 144, 245);
+    box-shadow: 0 0 10px 0 rgb(29, 144, 245);
   }
 }
 
@@ -1507,13 +1483,13 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: rgb(66, 70, 86);
   border: 0;
   transition: 0.3s;
-  box-shadow: 0px 0px 5px 0px rgb(84, 89, 110);
-  margin-left: 0px;
-  margin-right: 0px;
+  box-shadow: 0 0 5px 0 rgb(84, 89, 110);
+  margin-left: 0;
+  margin-right: 0;
   width: 99%;
 
   &:hover {
-    box-shadow: 0px 0px 10px 0px rgb(29, 144, 245);
+    box-shadow: 0 0 10px 0 rgb(29, 144, 245);
   }
 }
 
@@ -1546,7 +1522,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .setting {
-  margin-left: 0px;
+  margin-left: 0;
   padding-left: 10px;
   color: rgb(176, 178, 189);
 }
@@ -1563,7 +1539,7 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: rgb(39, 42, 55);
   border-color: #409EFF;
   color: #fff;
-  border-width: 0px;
+  border-width: 0;
 }
 
 .astrict {

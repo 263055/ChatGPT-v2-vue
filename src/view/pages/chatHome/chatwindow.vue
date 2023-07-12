@@ -2,19 +2,20 @@
   <div class="chat-window">
     <div class="top">
       <el-row style="height: 70px;">
-
+        <!--主页面的头像-->
         <el-col :span="personInfoSpan[0]">
           <div class="head-pic">
             <HeadPortrait :imgUrl="frinedInfo.headImg"></HeadPortrait>
           </div>
         </el-col>
-
+        <!--主页面的模型名称和介绍-->
         <el-col :span="personInfoSpan[1]">
           <div class="info-detail">
             <div class="name">{{ frinedInfo.name }}</div>
             <div class="detail">{{ frinedInfo.detail }}</div>
           </div>
         </el-col>
+        <!--聊天室上方,右侧的快捷按钮-->
         <el-col :span="personInfoSpan[2]">
           <div class="other-fun">
             <label @click="clearMsgList">
@@ -32,83 +33,98 @@
             <label for="docFile">
               <span class="iconfont icon-wenben"></span>
             </label>
-            <input type="file" name="" id="imgFile" @change="sendImg" accept="image/*" />
-            <input type="file" name="" id="docFile" @change="sendFile" accept="application/*,text/*" />
+            <input type="file" name="" id="imgFile" @change="sendImg" accept="image/*"/>
+            <input type="file" name="" id="docFile" @change="sendFile" accept="application/*,text/*"/>
             <!-- 导入当前会话内容 -->
             <input type="file" ref="onupdateJosnArr" @change="handleFileUpload" style="display: none;">
           </div>
         </el-col>
       </el-row>
-
     </div>
+    <!--发送消息时展示的加载动画-->
     <div v-show="!acqStatus">
       <div class="line"></div>
     </div>
 
+    <!--聊天室页面-->
     <div class="botoom" style="background-color:rgb(50, 54, 68);">
-      <!-- :style="{ backgroundImage: 'url(' + contentBackImageUrl + ')' }" -->
+      <!--聊天室主页面,正常的用户对话-->
       <div class="chat-content" id="chat-content" ref="chatContent" @scroll="onScroll">
         <div class="chat-wrapper" v-for="item in chatList" :key="item.id">
+          <!--gpt回答-->
           <div class="chat-friend" v-if="item.uid !== 'jcm'">
-            <div class="chat-text" v-if="item.chatType == 0">
+            <!--如果是文字,提供复制按钮-->
+            <div class="chat-text" v-if="item.chatType === 0">
               <el-row :gutter="20">
                 <el-col :span="2">
-                  <svg t="1679666016648" @click="$copy(item.msg, '已复制')" class="icon" viewBox="0 0 1024 1024"
-                    version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6241" width="22" height="22">
+                  <svg x="1679666016648" @click="$copy(item.msg, '已复制')" class="icon" viewBox="0 0 1024 1024"
+                       xmlns="http://www.w3.org/2000/svg" p-id="6241" width="22" height="22">
                     <path
-                      d="M661.333333 234.666667A64 64 0 0 1 725.333333 298.666667v597.333333a64 64 0 0 1-64 64h-469.333333A64 64 0 0 1 128 896V298.666667a64 64 0 0 1 64-64z m-21.333333 85.333333H213.333333v554.666667h426.666667v-554.666667z m191.829333-256a64 64 0 0 1 63.744 57.856l0.256 6.144v575.701333a42.666667 42.666667 0 0 1-85.034666 4.992l-0.298667-4.992V149.333333H384a42.666667 42.666667 0 0 1-42.368-37.674666L341.333333 106.666667a42.666667 42.666667 0 0 1 37.674667-42.368L384 64h447.829333z"
-                      fill="#909399" p-id="6242"></path>
+                        d="M661.333333 234.666667A64 64 0 0 1 725.333333 298.666667v597.333333a64 64 0 0 1-64 64h-469.333333A64
+                        64 0 0 1 128 896V298.666667a64 64 0 0 1 64-64z m-21.333333 85.333333H213.333333v554.666667h426.666667v-554.666667z m191.829333-256a64
+                        64 0 0 1 63.744 57.856l0.256 6.144v575.701333a42.666667 42.666667 0 0 1-85.034666
+                        4.992l-0.298667-4.992V149.333333H384a42.666667 42.666667 0 0 1-42.368-37.674666L341.333333
+                        106.666667a42.666667 42.666667 0 0 1 37.674667-42.368L384 64h447.829333z"
+                        fill="#909399" p-id="6242"></path>
                   </svg>
                 </el-col>
                 <el-col :span="21">
                 </el-col>
               </el-row>
-
-              <markdown-it-vue :content="item.msg.trim()" />
+              <markdown-it-vue :content="item.msg.trim()"/>
             </div>
-            <div class="chat-img" v-if="item.chatType == 1">
-              <img :src="item.msg" alt="表情" v-if="item.extend.imgType == 1" style="width: 100px; height: 100px" />
+            <!--如果是图片,就直接展示-->
+            <div class="chat-img" v-if="item.chatType === 1">
+              <img :src="item.msg" alt="表情" v-if="item.extend.imgType === 1" style="width: 100px; height: 100px"/>
               <el-image style="border-radius: 10px" :src="item.msg" :preview-src-list="srcImgList" v-else>
               </el-image>
             </div>
-            <div class="chat-img" v-if="item.chatType == 2">
+            <!--图片,不知道有什么用-->
+            <div class="chat-img" v-if="item.chatType === 2">
               <div class="word-file">
                 <FileCard :fileType="item.extend.fileType" :file="item.msg"></FileCard>
               </div>
             </div>
+            <!--展示名字和时间-->
             <div class="info-time">
-              <img :src="item.headImg" alt="" />
+              <img :src="item.headImg" alt=""/>
               <span>{{ item.name }}</span>
               <span>{{ item.time }}</span>
             </div>
           </div>
+          <!--用户提问-->
           <div class="chat-me" v-else>
-            <div class="chat-text" v-if="item.chatType == 0">
+            <!--文字部分-->
+            <div class="chat-text" v-if="item.chatType === 0">
               <span style="font-size:16px">{{ item.msg }}</span>
             </div>
-            <div class="chat-img" v-if="item.chatType == 1">
-              <img :src="item.msg" alt="表情" v-if="item.extend.imgType == 1" style="width: 100px; height: 100px" />
+            <!--发送照片-->
+            <div class="chat-img" v-if="item.chatType === 1">
+              <img :src="item.msg" alt="表情" v-if="item.extend.imgType === 1" style="width: 100px; height: 100px"/>
               <el-image style="max-width: 300px; border-radius: 10px" :src="item.msg" :preview-src-list="srcImgList"
-                v-else>
+                        v-else>
               </el-image>
             </div>
-            <div class="chat-img" v-if="item.chatType == 2">
+            <!--发送文件-->
+            <div class="chat-img" v-if="item.chatType === 2">
               <div class="word-file">
                 <FileCard :fileType="item.extend.fileType" :file="item.msg"></FileCard>
               </div>
             </div>
+            <!--展示名字和时间-->
             <div class="info-time">
               <span>{{ item.name }}</span>
               <span>{{ item.time }}</span>
-              <img :src="item.headImg" alt="" />
+              <img :src="item.headImg" alt=""/>
             </div>
           </div>
         </div>
       </div>
+      <!--下面的按钮部分-->
       <div class="chatInputs">
         <!--表情-->
         <div class="emoji boxinput" @click="clickEmoji" v-show="buttonStatus">
-          <img src="@/assets/img/emoji/smiling-face.png" alt="" />
+          <img src="@/assets/img/emoji/smiling-face.png" alt=""/>
         </div>
         <!--录音-->
         <div class="luyin boxinput" @click="stopRecording" v-if="recording" v-show="buttonStatus">
@@ -122,47 +138,61 @@
           <Emoji v-show="showEmoji" @sendEmoji="sendEmoji" @closeEmoji="clickEmoji"></Emoji>
         </div>
         <!--输入框-->
-          <textarea id="textareaMsg"  :placeholder="$t('placeholder.question')" class="inputs" v-autoheight style="z-index: 9999999999;min-height: 50px;max-height:400px;max-width: 100%;min-width: 45%;"    maxlength="2048" rows="3" dir autocorrect="off" aria-autocomplete="both" spellcheck="false" autocapitalize="off" autocomplete="off" v-model="inputMsg" @keyup.enter="handleKeyDown"  ></textarea>
-          <!--发送-->
+        <textarea id="textareaMsg" :placeholder="$t('placeholder.question')" class="inputs" v-autoheight
+                  style="z-index: 9999999999;min-height: 50px;max-height:400px;max-width: 100%;min-width: 45%;"
+                  maxlength="2048" rows="3" autocorrect="off" aria-autocomplete="both" spellcheck="false"
+                  autocapitalize="off" autocomplete="off" v-model="inputMsg" @keyup.enter="handleKeyDown"></textarea>
+        <!--发送-->
         <div>
           <div class="send boxinput" @click="sendText">
-            <img src="@/assets/img/emoji/rocket.png" alt="" />
+            <img src="@/assets/img/emoji/rocket.png" alt=""/>
           </div>
         </div>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
-import { animation, getNowTime, JCMFormatDate } from "@/util/util";
-import { getChatMsg, getCompletion, getChatCompletion, createImage, createImageEdit, createImageVariations, createTranscription, createTranslation, createEmbeddings } from "@/api/getData";
+import {animation, getNowTime, JCMFormatDate} from "@/util/util";
+import {
+  // getChatMsg,
+  // getCompletion,
+  // getChatCompletion,
+  createImage,
+  createImageEdit,
+  createImageVariations,
+  createTranscription,
+  createTranslation,
+  // createEmbeddings
+} from "@/api/getData";
 import HeadPortrait from "@/components/HeadPortrait";
 import Emoji from "@/components/Emoji";
 import FileCard from "@/components/FileCard.vue";
 import base from "@/api/index";
 import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
-import { AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME } from '@/store/mutation-types'
-import { saveAs } from 'file-saver';
+import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
+import {saveAs} from 'file-saver';
 
 export default {
+  //用于自适应文本框的高度
   directives: {
-      //用于自适应文本框的高度
     autoheight: {
       inserted: function (el) {
-        var Msg = document.getElementById("textareaMsg").value;
-        if (Msg == ""){
+        const Msg = document.getElementById("textareaMsg").value;
+        if (Msg === "") {
           el.style.height = "26px"
-        }else{
+        } else {
           el.style.height = el.scrollHeight + 'px'
         }
       },
       update: function (el) {
-        var Msg = document.getElementById("textareaMsg").value;
-        if (Msg == ""){
+        const Msg = document.getElementById("textareaMsg").value;
+        if (Msg === "") {
           el.style.height = "26px"
-        }else{
+        } else {
           el.style.height = el.scrollHeight + 'px'
         }
       }
@@ -182,8 +212,7 @@ export default {
       return {};
     },
   },
-  watch: {
-  },
+  watch: {},
   data() {
     return {
       isAutoScroll: true,
@@ -209,7 +238,6 @@ export default {
     };
   },
 
-
   created() {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
@@ -219,60 +247,63 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    // 发送函数
     handleKeyDown(event) {
       if (event.keyCode === 13 && (!event.shiftKey)) {  // 按下回车键，没按shift
         this.sendText()
       }
     },
-    readStream(reader,_this, currentResLocation,type) {
-        return reader.read().then(({ done, value }) => {
-          if ( done ) {
-            return;
-          }
-          if (!_this.chatList[currentResLocation].reminder) {
-            _this.chatList[currentResLocation].reminder = "";
-          }
-          let decoded = new TextDecoder().decode(value);
-          decoded = _this.chatList[currentResLocation].reminder + decoded;
-          let decodedArray = decoded.split("data: ");
-          let longstr = "";
-          decodedArray.forEach(decoded => {
-            try {
-              decoded = decoded.trim();
-              if ( longstr == "" ){
-                JSON.parse(decoded);
-              }else{
-                decoded = longstr + decoded;
-                longstr = "";
-                JSON.parse(decoded);
-              }
-            }catch ( e ){
-              longstr = decoded;
-              decoded = "";
+    // 读取gpt的回复流
+    readStream(reader, _this, currentResLocation, type) {
+      return reader.read().then(({done, value}) => {
+        if (done) {
+          return;
+        }
+        if (!_this.chatList[currentResLocation].reminder) {
+          _this.chatList[currentResLocation].reminder = "";
+        }
+        let decoded = new TextDecoder().decode(value);
+        decoded = _this.chatList[currentResLocation].reminder + decoded;
+        let decodedArray = decoded.split("data: ");
+        let longstr = "";
+        decodedArray.forEach(decoded => {
+          try {
+            decoded = decoded.trim();
+            if (longstr === "") {
+              JSON.parse(decoded);
+            } else {
+              decoded = longstr + decoded;
+              longstr = "";
+              JSON.parse(decoded);
             }
-            if(decoded!==""){
-              if(decoded.trim()==="[DONE]"){
-                return;
-              }else{
-                console.log(type)
-                if(type==="chat"){
-                  const response = JSON.parse(decoded).choices[0].delta.content ? JSON.parse(decoded).choices[0].delta.content : "";
-                  _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + response
-                  _this.scrollBottom();
-                }else{
-                  const response = JSON.parse(decoded).choices[0].text;
-                  _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + response
-                }
+          } catch (e) {
+            longstr = decoded;
+            decoded = "";
+          }
+          if (decoded !== "") {
+            if (decoded.trim() === "[DONE]") {
+
+            } else {
+              console.log(type)
+              if (type === "chat") {
+                const response = JSON.parse(decoded).choices[0].delta.content ? JSON.parse(decoded).choices[0].delta.content : "";
+                _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + response
+                _this.scrollBottom();
+              } else {
+                const response = JSON.parse(decoded).choices[0].text;
+                _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + response
               }
             }
-          })
-          return this.readStream(reader,_this, currentResLocation,type);
-        });
-      },
-    //导入当前内容json触发的方法
+          }
+        })
+        return this.readStream(reader, _this, currentResLocation, type);
+      });
+    },
+    // 聊天室上方右侧,导入当前内容json触发的方法
     importFromJsonArr() {
       this.$refs.onupdateJosnArr.click(); // 触发选择文件的弹框
     },
+    // 导入当前会话内容
     handleFileUpload(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
@@ -284,20 +315,20 @@ export default {
       };
       reader.readAsText(file);
     },
-    //导出当前会话到json文件
+    // 导出当前会话到json文件
     exportObjArrToJson() {
       console.log(this.chatList)
       let jsonString = JSON.stringify(this.chatList); // 将数组转为JSON字符串
-      let blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+      let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
       saveAs(blob, "data.json");
     },
-    //监听窗口的变化
+    // 监听窗口的变化
     handleResize() {
       if (window.innerWidth <= 700) {
         this.$nextTick(() => {
           document.querySelectorAll('.chat-content')[0].style.height = '93%';
           this.buttonStatus = false
-          var textareaMsg = document.getElementById("textareaMsg");
+          const textareaMsg = document.getElementById("textareaMsg");
           textareaMsg.style.marginLeft = "0px";
           this.personInfoSpan = [14, 0, 10];
           const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -306,21 +337,22 @@ export default {
           } else {
             document.querySelectorAll('.chatInputs')[0].style.margin = '3%';
           }
-       });
+        });
       } else {
         this.$nextTick(() => {
           document.querySelectorAll('.chat-content')[0].style.height = '88%';
           this.buttonStatus = true
           this.personInfoSpan = [1, 17, 6];
-       });
-      };
+        });
+      }
     },
-    newLine(event) {
-      this.rows += 1;
-      let text = this.$refs.textInput.value;
-      text += '\n';
-      this.$refs.textInput.value = text;
-    },
+    // 不知道干什么用
+    // newLine(event) {
+    //   this.rows += 1;
+    //   let text = this.$refs.textInput.value;
+    //   text += '\n';
+    //   this.$refs.textInput.value = text;
+    // },
     //赋值对话列表
     assignmentMesList(msgList) {
       this.chatList = msgList
@@ -333,19 +365,19 @@ export default {
     clearMsgList() {
       this.chatList = []
     },
-    //更新内容背景图片
+    // 更新内容背景图片
     updateContentImageUrl(imgUrl) {
       this.contentBackImageUrl = imgUrl
     },
     //组装上下文数据
     contextualAssemblyData() {
       const conversation = []
-      for (var chat of this.chatList.filter(chat => chat.chatType === 0)) {
-        if (chat.uid == 'jcm') {
-          let my = { 'speaker': 'user', 'text': chat.msg }
+      for (const chat of this.chatList.filter(chat => chat.chatType === 0)) {
+        if (chat.uid === 'jcm') {
+          let my = {'speaker': 'user', 'text': chat.msg}
           conversation.push(my)
-        } else if (chat.uid == this.frinedInfo.id) {
-          let ai = { 'speaker': 'agent', 'text': chat.msg }
+        } else if (chat.uid === this.frinedInfo.id) {
+          let ai = {'speaker': 'agent', 'text': chat.msg}
           conversation.push(ai)
         }
       }
@@ -353,7 +385,7 @@ export default {
     },
     //开始录音
     startRecording() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
         this.recorder = new MediaRecorder(stream);
         this.recorder.addEventListener('dataavailable', event => {
           this.audioChunks.push(event.data)
@@ -371,7 +403,7 @@ export default {
       this.recorder.stop()
       this.recording = false
       this.recorder.ondataavailable = (event) => {
-        const blob = new Blob([event.data], { type: 'audio/wav' });
+        const blob = new Blob([event.data], {type: 'audio/wav'});
         const file = new File([blob], 'recording.wav', {
           type: 'audio/wav',
           lastModified: Date.now()
@@ -406,12 +438,12 @@ export default {
       this.scrollBottom();
     },
     // 在组件或页面外部声明计算余弦相似度的函数
-    cosineSimilarity(a, b) {
-      const dotProduct = a.reduce((acc, curr, i) => acc + curr * b[i], 0);
-      const normA = Math.sqrt(a.reduce((acc, curr) => acc + curr * curr, 0));
-      const normB = Math.sqrt(b.reduce((acc, curr) => acc + curr * curr, 0));
-      return dotProduct / (normA * normB);
-    },
+    // cosineSimilarity(a, b) {
+    //   const dotProduct = a.reduce((acc, curr, i) => acc + curr * b[i], 0);
+    //   const normA = Math.sqrt(a.reduce((acc, curr) => acc + curr * curr, 0));
+    //   const normB = Math.sqrt(b.reduce((acc, curr) => acc + curr * curr, 0));
+    //   return dotProduct / (normA * normB);
+    // },
     //发送文字信息
     sendText() {
       // if(this.settingInfo.readefile){
@@ -422,7 +454,6 @@ export default {
       //   createEmbeddings(formData,this.settingInfo.KeyMsg).then(data => {
       //     const inputEmbedding=data.data[0]
       //     // const similarText = this.findMostSimilarEmbedding(, this.fileArrays);
-
       //     // 计算每个句子embedding与输入数据embedding之间的相似度
       //     const similarities = this.cosineSimilarity(this.fileArrays.embedding, inputEmbedding.embedding)
       //     const similaritiesArr=[];
@@ -430,14 +461,11 @@ export default {
       //     similaritiesArr.push(similarities)
       //     // 对相似度进行排名，选择与输入数据最相似的句子或文章段落作为匹配结果
       //     const topMatchIndex = similaritiesArr.reduce((maxIndex, similarity, index) => similarity > similaritiesArr[maxIndex] ? index : maxIndex, 0)
-
       //     console.log(topMatchIndex)
       //     const topMatchText = sentences[topMatchIndex]
       //     console.log('最匹配的句子是：', topMatchText)
       //     // console.log('最相似的文本为：', similarText);
       //   })
-
-
       //   // const configuration = new Configuration({
       //   //   apiKey:  ,
       //   // });
@@ -488,7 +516,7 @@ export default {
           this.inputMsg = "";
 
           createImageEdit(formData, this.settingInfo.KeyMsg).then(data => {
-            for (var imgInfo of data) {
+            for (const imgInfo of data) {
               let imgResMsg = {
                 headImg: AI_HEAD_IMG_URL,
                 name: this.frinedInfo.name,
@@ -524,37 +552,37 @@ export default {
         //如果是图片模式则进入待开发不过可用改状态使用
         if (this.settingInfo.openProductionPicture) {
           params.prompt = this.inputMsg,
-            params.n = this.settingInfo.n,
-            params.size = this.settingInfo.size,
-            createImage(params, this.settingInfo.KeyMsg).then(data => {
-              for (var imgInfo of data) {
-                let imgResMsg = {
-                  headImg: AI_HEAD_IMG_URL,
-                  name: this.frinedInfo.name,
-                  time: JCMFormatDate(getNowTime()),
-                  msg: imgInfo.url,
-                  chatType: 1, //信息类型，0文字，1图片
-                  extend: {
-                    imgType: 2, //(1表情，2本地图片)
-                  },
-                  uid: this.frinedInfo.id, //uid
-                };
-                this.sendMsg(imgResMsg);
-                this.srcImgList.push(imgInfo.url);
-              }
-              this.acqStatus = true
-            })
+              params.n = this.settingInfo.n,
+              params.size = this.settingInfo.size,
+              createImage(params, this.settingInfo.KeyMsg).then(data => {
+                for (const imgInfo of data) {
+                  let imgResMsg = {
+                    headImg: AI_HEAD_IMG_URL,
+                    name: this.frinedInfo.name,
+                    time: JCMFormatDate(getNowTime()),
+                    msg: imgInfo.url,
+                    chatType: 1, //信息类型，0文字，1图片
+                    extend: {
+                      imgType: 2, //(1表情，2本地图片)
+                    },
+                    uid: this.frinedInfo.id, //uid
+                  };
+                  this.sendMsg(imgResMsg);
+                  this.srcImgList.push(imgInfo.url);
+                }
+                this.acqStatus = true
+              })
         } else {
           //如果是文字模式则进入
           params.model = this.frinedInfo.id,
-          params.max_tokens = this.settingInfo.chat.MaxTokens,
-          params.temperature = this.settingInfo.chat.Temperature,
-          params.top_p = this.settingInfo.chat.TopP,
-          params.n = this.settingInfo.chat.n,
-          params.stream = this.settingInfo.chat.stream,
-          params.stop = this.settingInfo.chat.stop,
-          params.presence_penalty = this.settingInfo.chat.PresencePenalty,
-          params.frequency_penalty = this.settingInfo.chat.FrequencyPenalty
+              params.max_tokens = this.settingInfo.chat.MaxTokens,
+              params.temperature = this.settingInfo.chat.Temperature,
+              params.top_p = this.settingInfo.chat.TopP,
+              params.n = this.settingInfo.chat.n,
+              params.stream = this.settingInfo.chat.stream,
+              params.stop = this.settingInfo.chat.stop,
+              params.presence_penalty = this.settingInfo.chat.PresencePenalty
+              params.frequency_penalty = this.settingInfo.chat.FrequencyPenalty
 
           let chatBeforResMsg = {
             headImg: AI_HEAD_IMG_URL,
@@ -567,25 +595,25 @@ export default {
           if (this.frinedInfo.id === "gpt-3.5-turbo" || this.frinedInfo.id === "gpt-3.5-turbo-0301") {
             this.chatCompletion(params, chatBeforResMsg)
           } else {
-            if(this.settingInfo.cutSetting===0){
-              if(this.frinedInfo.id === "text-davinci-003" ){
+            if (this.settingInfo.cutSetting === 0) {
+              if (this.frinedInfo.id === "text-davinci-003") {
                 this.completion(params, chatBeforResMsg)
-              }else{
+              } else {
                 this.$message.error("暂时不支持gpt-3.5-turbo、gpt-3.5-turbo-0301、text-davinci-003以外的模型聊天~")
                 this.$nextTick(() => {
                   this.acqStatus = true
                 })
               }
-            }else{
+            } else {
               this.completion(params, chatBeforResMsg)
             }
 
           }
         }
-        if (this.storeStatu == 0) {
+        if (this.storeStatu === 0) {
           this.$emit('personCardSort', this.frinedInfo.id)
 
-        } else if (this.storeStatu == 1) {
+        } else if (this.storeStatu === 1) {
           this.$emit('fineTunesCardSort', this.frinedInfo.id)
         }
         this.inputMsg = "";
@@ -604,52 +632,52 @@ export default {
       if (this.settingInfo.openNet) {
         let context = "max_results=" + this.settingInfo.max_results + "&q=" + textContext + "&region=us-en";
         await fetch(
-          'https://search.freechatgpt.cc/search?' + context
+            'https://search.freechatgpt.cc/search?' + context
         ).then(response => response.json())
-          .then(
-            data => {
-              let netMessage = "Web search results:  ";
-              noUrlNetMessage = netMessage + "\n\n";
-              for (let i = 0; i < data.length; i++) {
-                netMessage += "[" + (i + 1) + "] \"" + data[i].body.substring(0, 400) + "\"  ";
-                netMessage += "URL:" + data[i].href + "  ";
-                noUrlNetMessage += "[" + (i + 1) + "] \"" + data[i].body.substring(0, 400) + "\"     \n\n";
-              }
-              const date = new Date();
-              const year = date.getFullYear();
-              const month = date.getMonth() + 1;
-              const day = date.getDate();
-              const formattedDate = `${year}/${month}/${day}`;
-              netMessage = netMessage.substring(0, 1500)
+            .then(
+                data => {
+                  let netMessage = "Web search results:  ";
+                  noUrlNetMessage = netMessage + "\n\n";
+                  for (let i = 0; i < data.length; i++) {
+                    netMessage += "[" + (i + 1) + "] \"" + data[i].body.substring(0, 400) + "\"  ";
+                    netMessage += "URL:" + data[i].href + "  ";
+                    noUrlNetMessage += "[" + (i + 1) + "] \"" + data[i].body.substring(0, 400) + "\"     \n\n";
+                  }
+                  const date = new Date();
+                  const year = date.getFullYear();
+                  const month = date.getMonth() + 1;
+                  const day = date.getDate();
+                  const formattedDate = `${year}/${month}/${day}`;
+                  netMessage = netMessage.substring(0, 1500)
 
-              netMessage += "Current date:" + formattedDate + "  ";
-              netMessage +=
-                "Instructions: Using the provided web search results, write a comprehensive reply to the given query. " +
-                "Make sure to cite results using [[number](URL)] notation after the reference. If the provided search " +
-                "results refer to multiple subjects with the same name, write separate answers for each subject." +
-                "Query: " + textContext +
-                "Reply in 中文";
-              noUrlNetMessage += " 您的问题: " + textContext;
-              itemContent = {};
-              itemContent.time = JCMFormatDate(getNowTime());
-              itemContent.msg = netMessage;
-              itemContent.chatType = 0;
-              itemContent.name = "网络";
-              itemContent.headImg = "https://i.328888.xyz/2023/04/04/ijlmhJ.png";
-              itemContent.uid = this.frinedInfo.id;
-              this.chatList.push(itemContent);
+                  netMessage += "Current date:" + formattedDate + "  ";
+                  netMessage +=
+                      "Instructions: Using the provided web search results, write a comprehensive reply to the given query. " +
+                      "Make sure to cite results using [[number](URL)] notation after the reference. If the provided search " +
+                      "results refer to multiple subjects with the same name, write separate answers for each subject." +
+                      "Query: " + textContext +
+                      "Reply in 中文";
+                  noUrlNetMessage += " 您的问题: " + textContext;
+                  itemContent = {};
+                  itemContent.time = JCMFormatDate(getNowTime());
+                  itemContent.msg = netMessage;
+                  itemContent.chatType = 0;
+                  itemContent.name = "网络";
+                  itemContent.headImg = "https://i.328888.xyz/2023/04/04/ijlmhJ.png";
+                  itemContent.uid = this.frinedInfo.id;
+                  this.chatList.push(itemContent);
 
-              let conversation = this.contextualAssemblyData();
+                  let conversation = this.contextualAssemblyData();
 
-              params.messages = conversation.map(item => {
-                return {
-                  role: item.speaker === 'user' ? 'user' : 'assistant',
-                  content: item.text
-                }
-              })
+                  params.messages = conversation.map(item => {
+                    return {
+                      role: item.speaker === 'user' ? 'user' : 'assistant',
+                      content: item.text
+                    }
+                  })
 
-              itemContent.msg = noUrlNetMessage;
-            });
+                  itemContent.msg = noUrlNetMessage;
+                });
       } else {
         let conversation = this.contextualAssemblyData();
         params.messages = conversation.map(item => {
@@ -659,88 +687,88 @@ export default {
           }
         })
       }
-        //新增一个空的消息
-        this.sendMsg(chatBeforResMsg);
+      //新增一个空的消息
+      this.sendMsg(chatBeforResMsg);
 
-        const currentResLocation = this.chatList.length - 1
-        let _this = this
-         try {
-            if ( this.settingInfo.chat.stream ){
-              await fetch(
-                base.baseUrl+'/v1/chat/completions',{
-                  method: "POST",
-                  body: JSON.stringify({
-                      ...params
-                  }),
-                  headers: {
-                      Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
-                      "Content-Type": "application/json",
-                      Accept: "application/json",
-                  },
-                }
-            ).then(response=>{
-                const reader = response.body.getReader();
-                this.readStream(reader,_this, currentResLocation,"chat");
-            });
-        }else{
+      const currentResLocation = this.chatList.length - 1
+      let _this = this
+      try {
+        if (this.settingInfo.chat.stream) {
           await fetch(
-            base.baseUrl+'/v1/chat/completions',{
-              method: "POST",
-              body: JSON.stringify({
-                ...params
-              }),
-              headers: {
-                Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }
-          ).then(response => response.json())
-            .then(
-              data => {
-                const content = data.choices[0].message.content; // 获取"content"字段的值
-                let decodedArray = content.split("");
-                decodedArray.forEach(decoded => {
-                  _this.chatList[currentResLocation].msg=_this.chatList[currentResLocation].msg+decoded
-                });
+              base.baseUrl + '/v1/chat/completions', {
+                method: "POST",
+                body: JSON.stringify({
+                  ...params
+                }),
+                headers: {
+                  Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
               }
-            )
-          }
-        } catch (error) {
-          const content ="网络不稳定或key余额不足，请重试或更换key"; // 获取"content"字段的值
-          let decodedArray = content.split("");
-          decodedArray.forEach(decoded => {
-              _this.chatList[currentResLocation].msg=_this.chatList[currentResLocation].msg+decoded
+          ).then(response => {
+            const reader = response.body.getReader();
+            this.readStream(reader, _this, currentResLocation, "chat");
           });
-          console.error(error);
+        } else {
+          await fetch(
+              base.baseUrl + '/v1/chat/completions', {
+                method: "POST",
+                body: JSON.stringify({
+                  ...params
+                }),
+                headers: {
+                  Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+          ).then(response => response.json())
+              .then(
+                  data => {
+                    const content = data.choices[0].message.content; // 获取"content"字段的值
+                    let decodedArray = content.split("");
+                    decodedArray.forEach(decoded => {
+                      _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + decoded
+                    });
+                  }
+              )
         }
-        this.acqStatus = true;
+      } catch (error) {
+        const content = "网络不稳定或key余额不足，请重试或更换key"; // 获取"content"字段的值
+        let decodedArray = content.split("");
+        decodedArray.forEach(decoded => {
+          _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + decoded
+        });
+        console.error(error);
+      }
+      this.acqStatus = true;
     },
     async completion(params, chatBeforResMsg) {
       if (this.settingInfo.chat.suffix !== "") {
         params.suffix = this.settingInfo.chat.suffix  //chat没有
       }
-      params.echo = this.settingInfo.chat.echo,  //chat没有
-        params.prompt = this.inputMsg
+      params.echo = this.settingInfo.chat.echo  //chat没有
+          params.prompt = this.inputMsg
       //新增一个空的消息
       this.sendMsg(chatBeforResMsg);
       const currentResLocation = this.chatList.length - 1
       let _this = this
       try {
         await fetch(
-          base.baseUrl + '/v1/completions', {
-          method: "POST",
-          timeout: 10000,
-          body: JSON.stringify({
-            ...params
-          }),
-          headers: {
-            Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
-            "Content-Type": "application/json"
-          },
-        }
+            base.baseUrl + '/v1/completions', {
+              method: "POST",
+              timeout: 10000,
+              body: JSON.stringify({
+                ...params
+              }),
+              headers: {
+                Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
+                "Content-Type": "application/json"
+              },
+            }
         ).then(response => {
-          if (response.status == 404) {
+          if (response.status === 404) {
             this.$message.error(this.$t('message.model_del'))
             this.$nextTick(() => {
               this.acqStatus = true
@@ -751,7 +779,7 @@ export default {
           this.$nextTick(() => {
             this.acqStatus = true
           });
-            this.readStream(reader,_this, currentResLocation,"completion");
+          this.readStream(reader, _this, currentResLocation, "completion");
         })
       } catch (error) {
 
@@ -767,12 +795,7 @@ export default {
       const offsetHeight = scrollDom.offsetHeight;
       const scrollHeight = scrollDom.scrollHeight;
       // 当滚动到底部，设置 isAutoScroll 为 true
-      if (scrollTop + offsetHeight === scrollHeight) {
-        this.isAutoScroll = true;
-      } else {
-        // 否则，用户正在手动滑动，设置为 false，停止自动滚动
-        this.isAutoScroll = false;
-      }
+      this.isAutoScroll = scrollTop + offsetHeight === scrollHeight;
     },
     //获取窗口高度并滚动至最底层
     scrollBottom() {
@@ -884,7 +907,7 @@ export default {
           this.srcImgList.push(imgInfo.url);
         }
         this.acqStatus = true
-      }).catch(e=>{
+      }).catch(e => {
         console.log("错误")
         console.log(e)
       })
@@ -974,7 +997,8 @@ export default {
 <style lang="scss" scoped>
 .iconfont:hover {
 
-   color: rgb(29, 144, 245);
+  color: rgb(29, 144, 245);
+
   .block {
     opacity: 1;
   }
@@ -1002,14 +1026,14 @@ export default {
 pre {
   background-color: #211f1f !important;
   border-radius: 20px !important;
-  box-shadow: 0px 0px 9px 0px #000000 !important;
+  box-shadow: 0 0 9px 0 #000000 !important;
   color: #ffff !important;
 }
 
 .hljs {
   background-color: #211f1f !important;
   border-radius: 20px !important;
-  box-shadow: 0px 0px 9px 0px #000000 !important;
+  box-shadow: 0 0 9px 0 #000000 !important;
   color: #ffff !important;
 }
 
@@ -1044,7 +1068,7 @@ textarea::-webkit-scrollbar-thumb {
 .chat-window {
   width: 100%;
   height: 100%;
-  margin-left: 0px;
+  margin-left: 0;
   position: relative;
 
   .top {
@@ -1106,7 +1130,7 @@ textarea::-webkit-scrollbar-thumb {
     background-size: 100% 100%;
     // background-color: rgb(50, 54, 68);
     border-radius: 20px;
-    padding: 0px;
+    padding: 0;
     box-sizing: border-box;
     position: relative;
 
@@ -1143,7 +1167,6 @@ textarea::-webkit-scrollbar-thumb {
           float: left;
           max-width: 90%;
           padding: 15px;
-          max-width: 650px;
           border-radius: 20px 20px 20px 5px;
           background-color: #fff;
         }
@@ -1246,13 +1269,14 @@ textarea::-webkit-scrollbar-thumb {
       margin: 3%;
       display: flex;
       background-color: #323644;
+
       .boxinput {
         width: 50px;
         height: 50px;
         background-color: rgb(50, 54, 68);
         border-radius: 15px;
         border: 1px solid rgb(80, 85, 103);
-        box-shadow: 0px 0px 5px 0px rgb(0, 136, 255);
+        box-shadow: 0 0 5px 0 rgb(0, 136, 255);
         position: relative;
         cursor: pointer;
 
@@ -1305,10 +1329,10 @@ textarea::-webkit-scrollbar-thumb {
         background-color: rgb(29, 144, 245);
         border: 0;
         transition: 0.3s;
-        box-shadow: 0px 0px 5px 0px rgba(0, 136, 255);
+        box-shadow: 0 0 5px 0 rgba(0, 136, 255);
 
         &:hover {
-          box-shadow: 0px 0px 10px 0px rgba(0, 136, 255);
+          box-shadow: 0 0 10px 0 rgba(0, 136, 255);
         }
       }
     }
@@ -1389,16 +1413,18 @@ textarea::-webkit-scrollbar-thumb {
     transform: scaleX(0);
   }
 }
+
 @media only screen and (min-width: 768px) { // 当屏幕宽度大于或等于768px时
-  .chat-window{
+  .chat-window {
     margin-left: 20px;
+
     .botoom {
       padding: 20px;
     }
   }
   .chat-window {
     .botoom {
-      .chatInputs{
+      .chatInputs {
         width: 90%;
       }
     }

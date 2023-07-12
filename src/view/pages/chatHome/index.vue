@@ -481,7 +481,7 @@
                       :max="1" style="width: 95%;"></el-slider>
                   </div>
 
-                  <!-- 
+                  <!--
                   <div class="block">
                     <el-tooltip class="item" effect="dark" content="用于确定是否在训练过程中计算分类特定的指标，例如准确率和F-1分数,可以在结果文件中查看这些指标."
                       placement="top">
@@ -669,7 +669,7 @@ export default {
         language: "zh",
         chat: {
           suffix: "",
-          MaxTokens: 1000,
+          MaxTokens: localStorage.getItem("MaxTokens") == null ? 5 : localStorage.getItem("MaxTokens"),
           Temperature: 1,
           TopP: 1,
           n: 1,

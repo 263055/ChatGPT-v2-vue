@@ -1,5 +1,5 @@
 import base from './index'
-import { AI_HEAD_IMG_URL } from '../store/mutation-types'
+import { AI_HEAD_IMG_URL } from '@/store/mutation-types'
 import { generateUUID } from "@/util/util";
 
 let axios = base.axios

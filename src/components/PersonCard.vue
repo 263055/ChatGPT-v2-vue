@@ -1,9 +1,13 @@
 <template>
-  <div class="person-card" :class="{ activeCard: personInfo.id == pcCurrent }">
+  <div :class="{ activeCard: personInfo.id === pcCurrent }" class="person-card">
     <div class="info">
-      <HeadPortrait :imgUrl="personInfo.headImg" v-show="personInfo.showHeadImg" />
+      <HeadPortrait v-show="personInfo.showHeadImg" :imgUrl="personInfo.headImg"/>
       <div class="info-detail">
-        <div class="name">{{ personInfo.name ? personInfo.name.slice(0, 20) : (personInfo.fineTunesStatus=="pending" ? $t('person_card.train') : $t('person_card.cancel'))}}</div>
+        <div class="name">
+          {{
+            personInfo.name ? personInfo.name.slice(0, 20) : (personInfo.fineTunesStatus === "pending" ? $t('person_card.train') : $t('person_card.cancel'))
+          }}
+        </div>
         <div class="detail">{{ personInfo.lastMsg.slice(0, 22) }}</div>
       </div>
     </div>
@@ -52,6 +56,7 @@ export default {
   position: relative;
   margin: 25px 0;
   cursor: pointer;
+
   .info {
     position: absolute;
     left: 50%;
@@ -60,6 +65,7 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
     display: flex;
+
     .info-detail {
       margin-top: 5px;
       margin-left: 20px;
@@ -67,6 +73,7 @@ export default {
       flex-direction: column;
       overflow: hidden;
       text-overflow: ellipsis;
+
       .name {
         color: #fff;
         overflow: hidden;
@@ -74,6 +81,7 @@ export default {
         text-overflow: ellipsis;
         margin-bottom: 5px;
       }
+
       .detail {
         color: #5c6675;
         overflow: hidden;
@@ -83,10 +91,12 @@ export default {
       }
     }
   }
+
   &:hover {
     background-color: #1d90f5;
     transition: 0.3s;
     box-shadow: 0px 0px 10px 0px rgba(0, 136, 255);
+
     .info {
       .info-detail {
         .detail {
@@ -96,10 +106,12 @@ export default {
     }
   }
 }
+
 .activeCard {
   background-color: #1d90f5;
   transition: 0.3s;
   box-shadow: 3px 2px 10px 0px rgba(0, 136, 255);
+
   .info {
     .info-detail {
       .detail {

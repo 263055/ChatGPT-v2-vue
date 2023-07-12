@@ -1,15 +1,15 @@
 <template>
   <div class="file-card">
-    <img src="@/assets/img/fileImg/unknowfile.png" alt="" v-if="fileType == 0"/>
-    <img src="@/assets/img/fileImg/word.png" alt="" v-else-if="fileType == 1"/>
-    <img src="@/assets/img/fileImg/excel.png" alt="" v-else-if="fileType == 2"/>
-    <img src="@/assets/img/fileImg/ppt.png" alt="" v-else-if="fileType == 3"/>
-    <img src="@/assets/img/fileImg/pdf.png" alt="" v-else-if="fileType == 4"/>
-    <img src="@/assets/img/fileImg/zpi.png" alt="" v-else-if="fileType == 5"/>
+    <img v-if="fileType === 0" alt="" src="@/assets/img/fileImg/unknowfile.png"/>
+    <img v-else-if="fileType === 1" alt="" src="@/assets/img/fileImg/word.png"/>
+    <img v-else-if="fileType === 2" alt="" src="@/assets/img/fileImg/excel.png"/>
+    <img v-else-if="fileType === 3" alt="" src="@/assets/img/fileImg/ppt.png"/>
+    <img v-else-if="fileType === 4" alt="" src="@/assets/img/fileImg/pdf.png"/>
+    <img v-else-if="fileType === 5" alt="" src="@/assets/img/fileImg/zpi.png"/>
     <img src="@/assets/img/fileImg/txt.png" alt="" v-else/>
     <div class="word">
       <span
-        >{{file.name || $t('file_card.unknown')}}</span
+      >{{ file.name || $t('file_card.unknown') }}</span
       >
       <span>154kb</span>
     </div>
@@ -30,7 +30,7 @@ export default {
     file() {
       console.log(this.file);
     },
-  },  
+  },
   mounted() {
     console.log(this.file);
     console.log(this.fileType);
@@ -50,28 +50,34 @@ export default {
   padding: 10px;
   box-sizing: border-box;
   cursor: pointer;
+
   &:hover {
     background-color: rgb(33, 36, 54);
   }
+
   img {
     width: 60px;
     height: 60px;
   }
+
   .word {
     width: 60%;
     margin-left: 10px;
     overflow: hidden;
+
     span {
       width: 90%;
       display: inline-block;
       color: #fff;
     }
+
     span:first-child {
       font-size: 14px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+
     span:last-child {
       font-size: 12px;
       color: rgb(180, 180, 180);

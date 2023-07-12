@@ -1,4 +1,5 @@
 import i18n from '@/config/i18n'
+
 //防抖
 export function debounce(fn) {
   console.log(1)
@@ -10,7 +11,6 @@ export function debounce(fn) {
       clearTimeout(t)
     }
     t = setTimeout(() => {
-      console.log(temp);  //可以获取
       // console.log(arguments[0]) //undefined
       fn.apply(this, arguments)
       //在这个回调函数里面的argument是这个回调函数的参数，因为没有参数所以undefined，可以通过外面的函数赋值来进行访问
@@ -42,7 +42,7 @@ export function animation(obj, target, fn1) {
   obj.timer = setInterval(function () {
     // 步长计算公式  越来越小
     // 步长取整
-    var step = (target - obj.scrollTop) / 10;
+    let step = (target - obj.scrollTop) / 10;
     step = step > 0 ? Math.ceil(step) : Math.floor(step);
     if (obj.scrollTop >= target) {
       clearInterval(obj.timer);
@@ -59,18 +59,18 @@ export function animation(obj, target, fn1) {
 
 //判断文件类型
 export function judgeFileType(file) {
-  if (file == null || file == "") {
+  if (file == null || file === "") {
     alert(i18n.t('util_js.select'));
     return false;
   }
-  if (file.lastIndexOf('.') == -1) {    //如果不存在"."    
+  if (file.lastIndexOf('.') === -1) {    //如果不存在"."
     alert(i18n.t('util_js.path'));
     return false;
   }
-  var AllImgExt = ".jpg|.jpeg|.gif|.bmp|.png|";
-  var extName = file.substring(file.lastIndexOf(".")).toLowerCase();//（把路径中的所有字母全部转换为小写）          
-  if (AllImgExt.indexOf(extName + "|") == -1) {
-    ErrMsg = i18n.t('util_js.notallowed') + AllImgExt + i18n.t('util_js.type') + extName;
+  const AllImgExt = ".jpg|.jpeg|.gif|.bmp|.png|";
+  const extName = file.substring(file.lastIndexOf(".")).toLowerCase();//（把路径中的所有字母全部转换为小写）
+  if (AllImgExt.indexOf(extName + "|") === -1) {
+    let ErrMsg = i18n.t('util_js.notallowed') + AllImgExt + i18n.t('util_js.type') + extName;
     alert(ErrMsg);
     return false;
   }
@@ -92,14 +92,14 @@ export function fileType() {
 */
 export function getNowTime() {
   // 创建一个Date对象
-  var date = new Date();
+  let date = new Date();
   // 获取年份、月份、日期、小时、分钟和秒数
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1; // 注意月份从0开始计数
-  var day = date.getDate();
-  var hour = date.getHours();
-  var minute = date.getMinutes();
-  var second = date.getSeconds();
+  let year = date.getFullYear();
+  let month = date.getMonth() + 1; // 注意月份从0开始计数
+  let day = date.getDate();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let second = date.getSeconds();
   // 如果月份、日期、小时、分钟或秒数小于10，需要在前面补0
   if (month < 10) {
     month = "0" + month;
@@ -117,9 +117,7 @@ export function getNowTime() {
     second = "0" + second;
   }
   // 拼接成字符串
-  var currentTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-  // 输出结果
-  return currentTime;
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 }
 
 
@@ -179,19 +177,18 @@ export function copyToClipboard(content) {
 
 /**
  * 生成UUID
- * @returns 
+ * @returns
  */
 export function generateUUID() {
   var d = new Date().getTime();
   if (window.performance && typeof window.performance.now === "function") {
-      d += performance.now(); //use high-precision timer if available
+    d += performance.now(); //use high-precision timer if available
   }
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
-  return uuid;
 }
 
 /**

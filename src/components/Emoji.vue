@@ -4,12 +4,12 @@
       <div class="emoji-wrapper">
         <ul class="emoji-list">
           <li
-            class="emoji-item"
-            v-for="(item, index) in emojiList"
-            :key="index"
-            @click="sendEmoji(item)"
+              v-for="(item, index) in emojiList"
+              :key="index"
+              class="emoji-item"
+              @click="sendEmoji(item)"
           >
-            <img :src="item" alt="" />
+            <img :src="item" alt=""/>
           </li>
         </ul>
       </div>
@@ -90,6 +90,7 @@ export default {
       left: 15px;
       z-index: 100;
     }
+
     .emoji-wrapper {
       width: 100%;
       height: 100%;
@@ -97,28 +98,33 @@ export default {
       padding: 10px;
       box-sizing: border-box;
       position: relative;
+
       &::-webkit-scrollbar {
         /*滚动条整体样式*/
         width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
         height: 1px;
       }
+
       &::-webkit-scrollbar-thumb {
         /*滚动条里面小方块*/
         border-radius: 10px;
         box-shadow: inset 0 0 5px rgba(97, 184, 179, 0.1);
         background: rgb(95, 101, 122);
       }
+
       &::-webkit-scrollbar-track {
         /*滚动条里面轨道*/
         box-shadow: inset 0 0 5px rgba(87, 175, 187, 0.1);
         border-radius: 10px;
         background: rgb(39, 42, 55);
       }
+
       .emoji-list {
         display: flex;
         justify-content: flex-start;
         flex-wrap: wrap;
         margin-left: 10px;
+
         .emoji-item {
           list-style: none;
           width: 50px;
@@ -127,9 +133,11 @@ export default {
           margin: 5px;
           position: relative;
           cursor: pointer;
+
           &:hover {
             background-color: rgb(50, 54, 68);
           }
+
           img {
             width: 35px;
             height: 35px;
@@ -143,6 +151,7 @@ export default {
     }
 
   }
+
   .mask {
     width: 100%;
     height: 100%;

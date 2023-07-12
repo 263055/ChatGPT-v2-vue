@@ -1,8 +1,8 @@
 <template>
-  <div class="role-card" :class="{ activeCard: roleInfo.act == prCurrent }">
+  <div :class="{ activeCard: roleInfo.act === prCurrent }" class="role-card">
     <div class="info">
       <div class="info-detail">
-        <div class="name">{{ roleInfo.act  }}</div>
+        <div class="name">{{ roleInfo.act }}</div>
         <div class="detail">{{ roleInfo.prompt.slice(0, 50) }}</div>
       </div>
     </div>
@@ -51,6 +51,7 @@ export default {
   position: relative;
   margin: 25px 0;
   cursor: pointer;
+
   .info {
     position: absolute;
     left: 50%;
@@ -59,6 +60,7 @@ export default {
     transform: translate(-50%, -50%);
     overflow: hidden;
     display: flex;
+
     .info-detail {
       margin-top: 5px;
       margin-left: 20px;
@@ -66,6 +68,7 @@ export default {
       flex-direction: column;
       overflow: hidden;
       text-overflow: ellipsis;
+
       .name {
         color: #fff;
         overflow: hidden;
@@ -73,6 +76,7 @@ export default {
         text-overflow: ellipsis;
         margin-bottom: 5px;
       }
+
       .detail {
         color: #5c6675;
         overflow: hidden;
@@ -82,10 +86,12 @@ export default {
       }
     }
   }
+
   &:hover {
     background-color: #1d90f5;
     transition: 0.3s;
-    box-shadow: 0px 0px 10px 0px rgba(0, 136, 255);
+    box-shadow: 0 0 10px 0 rgba(0, 136, 255);
+
     .info {
       .info-detail {
         .detail {
@@ -95,10 +101,12 @@ export default {
     }
   }
 }
+
 .activeCard {
   background-color: #1d90f5;
   transition: 0.3s;
-  box-shadow: 3px 2px 10px 0px rgba(0, 136, 255);
+  box-shadow: 3px 2px 10px 0 rgba(0, 136, 255);
+
   .info {
     .info-detail {
       .detail {

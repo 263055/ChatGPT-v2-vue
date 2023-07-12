@@ -1,6 +1,6 @@
 import base from './index'
-import { AI_HEAD_IMG_URL } from '@/store/mutation-types'
-import { generateUUID } from "@/util/util";
+import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
+import {generateUUID} from "@/util/util";
 
 let axios = base.axios
 let baseUrl = base.baseUrl
@@ -55,7 +55,7 @@ function produceModelDesc(model) {
         break;
       }
     }
-    if (desc == "") {
+    if (desc === "") {
       desc = model + "模型"
     }
     return desc

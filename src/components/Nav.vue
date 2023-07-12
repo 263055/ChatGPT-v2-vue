@@ -3,10 +3,10 @@
     <div class="nav-menu-wrapper">
       <ul class="menu-list">
         <li
-          v-for="(item, index) in menuList"
-          :key="index"
-          :class="{ activeNav: index == current }"
-          @click="changeMenu(index)"
+            v-for="(item, index) in menuList"
+            :key="index"
+            :class="{ activeNav: index === current }"
+            @click="changeMenu(index)"
         >
           <div class="block"></div>
           <span class="iconfont" :class="item"></span>
@@ -14,7 +14,7 @@
       </ul>
     </div>
     <div class="own-pic" @click="userInfoShow">
-        <HeadImg ></HeadImg>
+      <HeadImg></HeadImg>
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@
 import {USER_HEAD_IMG_URL} from '@/store/mutation-types'
 import HeadPortrait from "./HeadPortrait.vue";
 import HeadImg from "./HeadImg.vue";
+
 export default {
   components: {
     HeadPortrait,
@@ -44,12 +45,14 @@ export default {
         case 0:
           this.$router.push({
             name: "ChatHome",
-          }, () => {});
+          }, () => {
+          });
           break;
         case 1:
           this.$router.push({
             name: "Setting",
-          }, () => {});
+          }, () => {
+          });
           break;
         default:
           this.$router.push({
@@ -59,10 +62,11 @@ export default {
 
       this.current = index;
     },
-    userInfoShow(){
+    userInfoShow() {
       this.$router.push({
-            name: "UserInfo",
-          }, () => {});
+        name: "UserInfo",
+      }, () => {
+      });
     }
   },
 };
@@ -74,10 +78,12 @@ export default {
   height: 90vh;
   position: relative;
   border-radius: 20px 0 0 20px;
+
   .nav-menu-wrapper {
     position: absolute;
     top: 40%;
     transform: translate(0, -50%);
+
     .menu-list {
       margin-left: 10px;
 
@@ -86,6 +92,7 @@ export default {
         list-style: none;
         cursor: pointer;
         position: relative;
+
         .block {
           background-color: rgb(29, 144, 245);
           position: absolute;
@@ -97,10 +104,12 @@ export default {
           border-bottom-right-radius: 4px;
           opacity: 0;
         }
+
         &:hover {
           span {
             color: rgb(29, 144, 245);
           }
+
           .block {
             opacity: 1;
           }
@@ -108,16 +117,19 @@ export default {
       }
     }
   }
+
   .own-pic {
     position: absolute;
     bottom: 10%;
     margin-left: 25px;
   }
 }
+
 .activeNav {
   span {
     color: rgb(29, 144, 245);
   }
+
   .block {
     opacity: 1 !important;
   }

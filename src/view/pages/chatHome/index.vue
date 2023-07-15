@@ -22,24 +22,19 @@
           </el-col>
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
-              <span class="" @click="fineTuningClick" :class="{ whiteText: cutSetting === 2 }">
-                {{ $t('slightly.title.whole') }}</span>
+              <span :class="{ whiteText: cutSetting === 2 }" class="" @click="promptClick">
+                {{ $t('role.title') }}</span>
             </div>
           </el-col>
-          <el-col :span="6">
-            <div class="setting" style="text-align: center;">
-              <span class="" @click="fileClick" :class="{ whiteText: cutSetting === 3 }">
-                {{ $t('file.title') }}</span>
-            </div>
-          </el-col>
+
         </el-row>
         <!--ai模型-->
         <div v-show="cutSetting === 0">
           <input class="inputs" v-model="modelSearch" style=" margin-top: 10px;"
-            :placeholder="$t('placeholder.model_name')" />
+                 :placeholder="$t('placeholder.model_name')"/>
           <div class="s-wrapper">
             <div class="personList" v-for="personInfo in personList" :key="personInfo.id"
-              @click="clickPerson(personInfo)">
+                 @click="clickPerson(personInfo)">
               <PersonCard :personInfo="personInfo" :pcCurrent="pcCurrent"></PersonCard>
             </div>
           </div>
@@ -47,31 +42,21 @@
         <!--聊天室-->
         <div v-show="cutSetting === 1">
           <input class="inputs" v-model="sessionSearch" style=" margin-top: 10px;"
-            :placeholder="$t('placeholder.session_name')" />
+                 :placeholder="$t('placeholder.session_name')"/>
           <div class="s-wrapper">
             <div v-for="sessionInfo in sessionList" :key="sessionInfo.id" @click="clickSession(sessionInfo)">
               <Session :sessionInfo="sessionInfo" :pcCurrent="sessionCurrent"></Session>
             </div>
           </div>
         </div>
-        <!--微调-->
+        <!--角色-->
         <div v-show="cutSetting === 2">
-          <input class="inputs" v-model="fineTuningSearch" style=" margin-top: 10px;"
-            :placeholder="$t('placeholder.slightly_name')" />
-          <div class="s-wrapper">
-            <div class="personList" v-for="fineTuningInfo in fineTuningList" :key="fineTuningInfo.id"
-              @click="clickFineTuning(fineTuningInfo)">
-              <PersonCard :personInfo="fineTuningInfo" :pcCurrent="ftCurrent"></PersonCard>
+          <div class="s-wrapper" style="height: 80vh;">
+            <div class="block">
+              <input v-model="roleSearch" :placeholder="$t('placeholder.role_name')" class="weitiao"/>
             </div>
-          </div>
-        </div>
-        <!--文件-->
-        <div v-show="cutSetting === 3">
-          <input class="inputs" v-model="fileSearch" style=" margin-top: 10px;"
-            :placeholder="$t('placeholder.file_name')" />
-          <div class="s-wrapper">
-            <div class="personList" v-for="(fileInfo, index) in fileList" :key="index" @click="clickFile(fileInfo)">
-              <File :fileInfo="fileInfo" :pcCurrent="fiCurrent"></File>
+            <div v-for="roleInfo in roleList" :key="roleInfo.act" class="personList" @click="roleClick(roleInfo)">
+              <RoleCard :prCurrent="prCurrent" :roleInfo="roleInfo"></RoleCard>
             </div>
           </div>
         </div>
@@ -84,54 +69,54 @@
         <svg x="1679366341860" class="icon" v-show="!showPersonList" viewBox="0 0 1024 1024" version="1.1"
              xmlns="http://www.w3.org/2000/svg" p-id="5764" width="30" height="30">
           <path
-            d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
-            fill="#BDD2EF" p-id="5765"></path>
+              d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
+              fill="#BDD2EF" p-id="5765"></path>
           <path
-            d="M626.8 345.9c0 15-5.7 30.1-17.2 41.5L487.1 510l122.6 122.6c22.9 22.9 22.9 60.2 0 83.1-22.9 22.9-60.2 22.9-83.1 0L362.4 551.6c-22.9-22.9-22.9-60.2 0-83.1l164.1-164.1c22.9-22.9 60.2-22.9 83.1 0 11.5 11.5 17.2 26.5 17.2 41.5z"
-            fill="#2867CE" p-id="5766"></path>
+              d="M626.8 345.9c0 15-5.7 30.1-17.2 41.5L487.1 510l122.6 122.6c22.9 22.9 22.9 60.2 0 83.1-22.9 22.9-60.2 22.9-83.1 0L362.4 551.6c-22.9-22.9-22.9-60.2 0-83.1l164.1-164.1c22.9-22.9 60.2-22.9 83.1 0 11.5 11.5 17.2 26.5 17.2 41.5z"
+              fill="#2867CE" p-id="5766"></path>
         </svg>
         <svg x="1679366707602" class="icon" v-show="showPersonList" viewBox="0 0 1024 1024" version="1.1"
-          xmlns="http://www.w3.org/2000/svg" p-id="7551" width="30" height="30">
+             height="30" p-id="7551" width="30" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
-            fill="#BDD2EF" p-id="7552"></path>
+              d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
+              fill="#BDD2EF" p-id="7552"></path>
           <path
-            d="M402.5 677.3c0-15 5.7-30.1 17.2-41.5l122.6-122.6-122.6-122.6c-22.9-22.9-22.9-60.2 0-83.1 22.9-22.9 60.2-22.9 83.1 0l164.1 164.1c22.9 22.9 22.9 60.2 0 83.1L502.8 718.8c-22.9 22.9-60.2 22.9-83.1 0-11.5-11.4-17.2-26.5-17.2-41.5z"
-            fill="#2867CE" p-id="7553"></path>
+              d="M402.5 677.3c0-15 5.7-30.1 17.2-41.5l122.6-122.6-122.6-122.6c-22.9-22.9-22.9-60.2 0-83.1 22.9-22.9 60.2-22.9 83.1 0l164.1 164.1c22.9 22.9 22.9 60.2 0 83.1L502.8 718.8c-22.9 22.9-60.2 22.9-83.1 0-11.5-11.4-17.2-26.5-17.2-41.5z"
+              fill="#2867CE" p-id="7553"></path>
         </svg>
       </div>
       <div class="top-right" @click="toggleRight">
         <svg x="1679366707602" class="icon" v-show="!showSetupList" viewBox="0 0 1024 1024" version="1.1"
-          xmlns="http://www.w3.org/2000/svg" p-id="7551" width="30" height="30">
+             height="30" p-id="7551" width="30" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
-            fill="#BDD2EF" p-id="7552"></path>
+              d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
+              fill="#BDD2EF" p-id="7552"></path>
           <path
-            d="M402.5 677.3c0-15 5.7-30.1 17.2-41.5l122.6-122.6-122.6-122.6c-22.9-22.9-22.9-60.2 0-83.1 22.9-22.9 60.2-22.9 83.1 0l164.1 164.1c22.9 22.9 22.9 60.2 0 83.1L502.8 718.8c-22.9 22.9-60.2 22.9-83.1 0-11.5-11.4-17.2-26.5-17.2-41.5z"
-            fill="#2867CE" p-id="7553"></path>
+              d="M402.5 677.3c0-15 5.7-30.1 17.2-41.5l122.6-122.6-122.6-122.6c-22.9-22.9-22.9-60.2 0-83.1 22.9-22.9 60.2-22.9 83.1 0l164.1 164.1c22.9 22.9 22.9 60.2 0 83.1L502.8 718.8c-22.9 22.9-60.2 22.9-83.1 0-11.5-11.4-17.2-26.5-17.2-41.5z"
+              fill="#2867CE" p-id="7553"></path>
         </svg>
         <svg x="1679366341860" class="icon" v-show="showSetupList" viewBox="0 0 1024 1024" version="1.1"
-          xmlns="http://www.w3.org/2000/svg" p-id="5764" width="30" height="30">
+             height="30" p-id="5764" width="30" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
-            fill="#BDD2EF" p-id="5765"></path>
+              d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
+              fill="#BDD2EF" p-id="5765"></path>
           <path
-            d="M626.8 345.9c0 15-5.7 30.1-17.2 41.5L487.1 510l122.6 122.6c22.9 22.9 22.9 60.2 0 83.1-22.9 22.9-60.2 22.9-83.1 0L362.4 551.6c-22.9-22.9-22.9-60.2 0-83.1l164.1-164.1c22.9-22.9 60.2-22.9 83.1 0 11.5 11.5 17.2 26.5 17.2 41.5z"
-            fill="#2867CE" p-id="5766"></path>
+              d="M626.8 345.9c0 15-5.7 30.1-17.2 41.5L487.1 510l122.6 122.6c22.9 22.9 22.9 60.2 0 83.1-22.9 22.9-60.2 22.9-83.1 0L362.4 551.6c-22.9-22.9-22.9-60.2 0-83.1l164.1-164.1c22.9-22.9 60.2-22.9 83.1 0 11.5 11.5 17.2 26.5 17.2 41.5z"
+              fill="#2867CE" p-id="5766"></path>
         </svg>
       </div>
       <!--展示聊天窗口-->
       <div v-if="showChatWindow" v-show="showMainContent">
         <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo" :storeStatu="storeStatus"
-          @personCardSort="personCardSort">
+                    @personCardSort="personCardSort">
         </ChatWindow>
       </div>
       <div class="showIcon" v-else>
         <svg x="1679552353056" class="icon iconfont icon-snapchat" viewBox="0 0 1024 1024" version="1.1"
-          xmlns="http://www.w3.org/2000/svg" p-id="3488" width="200" height="200">
+             height="200" p-id="3488" width="200" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M992.33 416.37c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-63.96h63.98c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-95.94c0.01-8.48-3.36-16.62-9.35-22.62-6-6-14.14-9.37-22.62-9.36h-95.94V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96H544.6V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98s-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98S224.8 14.95 224.8 32.61v63.96h-95.94c-8.48 0-16.62 3.36-22.62 9.36s-9.36 14.14-9.36 22.62v95.94H32.92c-17.67 0-31.98 14.32-31.98 31.98s14.32 31.98 31.98 31.98h63.96v63.96H32.92c-17.67 0-31.98 14.32-31.98 31.98 0 17.67 14.32 31.98 31.98 31.98h63.96v63.97H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.65 14.31 31.97 31.97 31.97h63.96v63.98H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.66 14.31 31.97 31.97 31.97h63.96v63.98H32.92C15.26 736.18 0.95 750.5 0.95 768.15s14.31 31.97 31.97 31.97h63.96v95.95a31.944 31.944 0 0 0 9.36 22.62c6 5.99 14.14 9.36 22.62 9.35h95.94v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h95.94c8.48 0.02 16.62-3.35 22.62-9.35s9.37-14.14 9.35-22.62v-95.95h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98V672.2h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.98h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.97h63.98zM864.41 864.1H160.84V160.53h703.57V864.1zM406.82 580.42h79.2l15.48 61.56h67.68l-83.16-267.84h-77.04l-83.16 267.84h65.52l15.48-61.56z m18-72.36c6.84-26.64 14.04-57.96 20.52-86.04h1.44c7.2 27.36 14.04 59.4 21.24 86.04l5.76 22.68h-54.72l5.76-22.68zM697.7 641.98h-64.44V374.14h64.44v267.84z"
-            p-id="3489"></path>
+              d="M992.33 416.37c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-63.96h63.98c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-95.94c0.01-8.48-3.36-16.62-9.35-22.62-6-6-14.14-9.37-22.62-9.36h-95.94V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96H544.6V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98s-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98S224.8 14.95 224.8 32.61v63.96h-95.94c-8.48 0-16.62 3.36-22.62 9.36s-9.36 14.14-9.36 22.62v95.94H32.92c-17.67 0-31.98 14.32-31.98 31.98s14.32 31.98 31.98 31.98h63.96v63.96H32.92c-17.67 0-31.98 14.32-31.98 31.98 0 17.67 14.32 31.98 31.98 31.98h63.96v63.97H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.65 14.31 31.97 31.97 31.97h63.96v63.98H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.66 14.31 31.97 31.97 31.97h63.96v63.98H32.92C15.26 736.18 0.95 750.5 0.95 768.15s14.31 31.97 31.97 31.97h63.96v95.95a31.944 31.944 0 0 0 9.36 22.62c6 5.99 14.14 9.36 22.62 9.35h95.94v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h95.94c8.48 0.02 16.62-3.35 22.62-9.35s9.37-14.14 9.35-22.62v-95.95h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98V672.2h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.98h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.97h63.98zM864.41 864.1H160.84V160.53h703.57V864.1zM406.82 580.42h79.2l15.48 61.56h67.68l-83.16-267.84h-77.04l-83.16 267.84h65.52l15.48-61.56z m18-72.36c6.84-26.64 14.04-57.96 20.52-86.04h1.44c7.2 27.36 14.04 59.4 21.24 86.04l5.76 22.68h-54.72l5.76-22.68zM697.7 641.98h-64.44V374.14h64.44v267.84z"
+              p-id="3489"></path>
         </svg>
       </div>
     </div>
@@ -142,15 +127,16 @@
         <div>
           <input class="inputs" v-model="SettingInfo.KeyMsg" :placeholder="$t('placeholder.openai_key')"
                  type="password" autocomplete="new-password"
-            style="width: 100%; margin-left: 0;margin-right: 0;" />
+                 style="width: 100%; margin-left: 0;margin-right: 0;"/>
         </div>
       </el-card>
 
       <div class="online-person">
-        <!--展示右侧栏的按钮-->
+        <!--展示右侧栏的按钮 aaaa -->
         <el-row :gutter="20">
-          <el-col :span="6" v-for="(setting, index) in getSettings" :key="index"> <span class="setting"
-              @click="SettingStatus = index" :class="{ active: SettingStatus === index }"> {{ setting.name }} </span>
+          <el-col v-for="(setting, index) in getSettings" :key="index" :span="6">
+            <span :class="{ active: SettingStatus === index }" class="setting"
+                  @click="SettingStatus = index">{{ setting.name }}</span>
           </el-col>
         </el-row>
 
@@ -179,7 +165,7 @@
                   <el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">
                     <span class="demonstration">{{ $t('model.suffix_title') }}</span>
                   </el-tooltip>
-                  <input class="weitiao" v-model="SettingInfo.chat.suffix" :placeholder="$t('placeholder.suffix')" />
+                  <input v-model="SettingInfo.chat.suffix" :placeholder="$t('placeholder.suffix')" class="weitiao"/>
                 </div>
                 <!--停用词-->
                 <div class="block">
@@ -187,7 +173,7 @@
                     <span class="demonstration" is>{{ $t('model.stop_title') }}</span>
                   </el-tooltip>
 
-                  <input class="weitiao" v-model="SettingInfo.chat.stop" :placeholder="$t('placeholder.stop')" />
+                  <input v-model="SettingInfo.chat.stop" :placeholder="$t('placeholder.stop')" class="weitiao"/>
                 </div>
                 <!--单词重复度-->
                 <div class="block">
@@ -195,7 +181,7 @@
                     <span class="demonstration">{{ $t('model.frequency_penalty_title') }}</span>
                   </el-tooltip>
                   <el-slider class="astrict" v-model="SettingInfo.chat.FrequencyPenalty" :step="0.1" :min="-2"
-                    :max="2"></el-slider>
+                             :max="2"></el-slider>
                 </div>
                 <!--话题重复度-->
                 <div class="block">
@@ -203,7 +189,7 @@
                     <span class="demonstration">{{ $t('model.presence_penalty_title') }}</span>
                   </el-tooltip>
                   <el-slider class="astrict" v-model="SettingInfo.chat.PresencePenalty" :step="0.1" :min="-2"
-                    :max="2"></el-slider>
+                             :max="2"></el-slider>
                 </div>
                 <!--最大token-->
                 <div class="block">
@@ -212,7 +198,7 @@
                   </el-tooltip>
 
                   <el-slider class="astrict" v-model="SettingInfo.chat.MaxTokens" :step="1" :min="0"
-                    :max="2048"></el-slider>
+                             :max="2048"></el-slider>
                 </div>
                 <!--随机性-->
                 <div class="block">
@@ -220,7 +206,7 @@
                     <span class="demonstration">{{ $t('model.temperature_title') }}</span>
                   </el-tooltip>
                   <el-slider class="astrict" v-model="SettingInfo.chat.Temperature" :step="0.1" :min="0"
-                    :max="2"></el-slider>
+                             :max="2"></el-slider>
                 </div>
                 <!--保留词-->
                 <div class="block">
@@ -234,7 +220,8 @@
                   <el-tooltip class="item" effect="dark" :content="$t('model.stream')" placement="top">
                     <span class="demonstration">{{ $t('model.stream_title') }}</span>
                   </el-tooltip>
-                  <el-switch v-model="SettingInfo.chat.stream" :width="defaulWidth" style="margin-left: 15%;"></el-switch>
+                  <el-switch v-model="SettingInfo.chat.stream" :width="defaulWidth"
+                             style="margin-left: 15%;"></el-switch>
                 </div>
                 <!--回显词-->
                 <div class="block">
@@ -270,7 +257,7 @@
                   <span class="demonstration">{{ $t('image.production') }}</span>
                 </el-tooltip>
                 <el-switch v-model="SettingInfo.openProductionPicture" :width="defaulWidth"
-                  style="margin-left: 15%;"></el-switch>
+                           style="margin-left: 15%;"></el-switch>
               </div>
 
               <div class="block">
@@ -278,7 +265,7 @@
                   <span class="demonstration">{{ $t('image.change') }}</span>
                 </el-tooltip>
                 <el-switch v-model="SettingInfo.openChangePicture" :width="defaulWidth"
-                  style="margin-left: 15%;"></el-switch>
+                           style="margin-left: 15%;"></el-switch>
               </div>
 
               <div class="block">
@@ -305,13 +292,12 @@
           <!--音频设置-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 2">
-
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('audio.to_text_title')" placement="top">
                   <span class="demonstration">{{ $t('audio.to_text') }}</span>
                 </el-tooltip>
                 <el-switch v-model="SettingInfo.translateEnglish" :width="defaulWidth"
-                  style="margin-left: 15%;"></el-switch>
+                           style="margin-left: 15%;"></el-switch>
               </div>
 
               <div class="block">
@@ -333,206 +319,29 @@
                 </el-tooltip>
 
                 <el-slider class="astrict" v-model="SettingInfo.TemperatureAudio" :step="0.1" :min="0"
-                  :max="1"></el-slider>
+                           :max="1"></el-slider>
               </div>
 
 
-            </div>
-          </el-collapse-transition>
-          <!--微调-->
-          <el-collapse-transition>
-            <div v-show="SettingStatus == 3">
-              <div class="fineTune boxinput" @click="retrieveFine" style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('slightly.retrieveFineTuning') }}
-              </div>
-              <div class="fineTune boxinput" @click="cancelFine" style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('slightly.cancelFineTuning') }}
-              </div>
-              <div class="fineTune boxinput" @click="showOrHidenCancelFine(false)" v-if="cancelFineStatus"
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('slightly.hideCanceledFineTuning') }}
-              </div>
-              <div class="fineTune boxinput" @click="showOrHidenCancelFine(true)" v-else
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('slightly.showCanceledFineTuning') }}
-              </div>
-              <div class="fineTune boxinput" @click="deleteFine" style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                <span class="iconfont icon-shanchu" style="color: #fff; margin-right:10px;"></span>
-                {{ $t('slightly.deleteFineTuningModel') }}
-              </div>
-              <div class="fineTune boxinput" @click="showFineSetting = !showFineSetting"
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('slightly.createFineTuning') }}
-              </div>
-              <el-collapse-transition>
-                <div v-show="showFineSetting">
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.fileIDTrainingData')" placement="top">
-                      <span class="demonstration">trainingFile<span style="color: red;">*</span></span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.training_file"
-                      :placeholder="$t('placeholder.trainingDataFileID')" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.fileIDValidationData')" placement="top">
-                      <span class="demonstration" style="">validationFile</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.validation_file"
-                      :placeholder="$t('placeholder.validationDataFileID')" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.modelOptions')" placement="top">
-                      <span class="demonstration">model</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.model"
-                      :placeholder="$t('placeholder.modelName')" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.epochs')" placement="top">
-                      <span class="demonstration">nEpochs</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.n_epochs" type="number"
-                      :placeholder="$t('placeholder.trainingIterations')" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.batchSize')" placement="top">
-                      <span class="demonstration">batchSize</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.batch_size" type="number"
-                      :placeholder="$t('placeholder.batchSize')" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.learningRate')" placement="top">
-                      <span class="demonstration">learningRateMultiplier</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.learning_rate_multiplier" type="number"
-                      :placeholder="$t('placeholder.learningRate')" />
-                  </div>
-
-                  <!-- <div class="block">
-                    <el-tooltip class="item" effect="dark" content="分类任务中的类数,此参数对于多类分类是必需的" placement="top">
-                      <span class="demonstration" style="">classificationNClasses</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.classification_n_classes" type="number"
-                      placeholder="分类任务中的类数" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" content="二元分类中的正类,需要此参数来生成精度、召回率和 F1 执行二元分类时的指标。"
-                      placement="top">
-                      <span class="demonstration" style="">classificationPositiveClass</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.classification_positive_class"  type="text"
-                      placeholder="二元分类中的正类" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" content="将计算指定 F-beta 分数 贝塔值。F-beta 分数是 F-1 分数的概括。 这仅用于二元分类。"
-                      placement="top">
-                      <span class="demonstration" style="">classificationBetas</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.classification_betas" placeholder="分类贝塔" type="text" />
-                  </div> -->
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.fineTunedName')" placement="top">
-                      <span class="demonstration" style="">suffix</span>
-                    </el-tooltip>
-
-                    <input class="weitiao" v-model="SettingInfo.fineTunes.suffix"
-                      :placeholder="$t('placeholder.ftsuffix')" />
-                  </div>
-
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" :content="$t('slightly.promptAttention')" placement="top">
-                      <span class="demonstration" style="">promptLossWeight</span>
-                    </el-tooltip>
-
-                    <el-slider class="astrict" v-model="SettingInfo.fineTunes.prompt_loss_weight" :step="0.01" :min="0.01"
-                      :max="1" style="width: 95%;"></el-slider>
-                  </div>
-
-                  <!--
-                  <div class="block">
-                    <el-tooltip class="item" effect="dark" content="用于确定是否在训练过程中计算分类特定的指标，例如准确率和F-1分数,可以在结果文件中查看这些指标."
-                      placement="top">
-                      <span class="demonstration" style="">computeClassificationMetrics</span>
-                    </el-tooltip>
-                    <div>
-                      <el-switch v-model="SettingInfo.fineTunes.compute_classification_metrics" :width="defaulWidth"
-                        style="margin-top: 15px;margin-left: 35%;"></el-switch>
-                    </div>
-                  </div> -->
-
-                  <div class="fineTune boxinput" @click="createFine"
-                    style="margin-left: 0px;margin-right: 0px;width: 99%; background-color: #409EFF;">
-                    {{ $t('slightly.create') }}
-                  </div>
-                </div>
-              </el-collapse-transition>
-            </div>
-          </el-collapse-transition>
-          <!--文件-->
-          <el-collapse-transition>
-            <div v-show="SettingStatus == 4">
-              <div class="fineTune boxinput" @click="uploadFile" style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                <input type="file" ref="fileInput" style="display: none;" @change="onFileChange">
-                <svg t="1679458974300" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                  xmlns="http://www.w3.org/2000/svg" p-id="1590" width="30" height="30">
-                  <path
-                    d="M567.466667 634.325333v234.666667a21.333333 21.333333 0 0 1-21.333334 21.333333h-42.666666a21.333333 21.333333 0 0 1-21.333334-21.333333v-234.666667H413.866667a8.533333 8.533333 0 0 1-6.826667-13.653333l110.933333-147.925333a8.533333 8.533333 0 0 1 13.653334 0l110.933333 147.925333a8.533333 8.533333 0 0 1-6.826667 13.653333h-68.266666z"
-                    fill="#ffffff" p-id="1591"></path>
-                  <path
-                    d="M768 725.333333a128 128 0 0 0 38.613333-250.112l-39.850666-12.586666-14.506667-39.253334a256.128 256.128 0 0 0-480.554667 0l-14.464 39.253334-39.850666 12.586666A128.085333 128.085333 0 0 0 256 725.333333a42.666667 42.666667 0 0 1 0 85.333334 213.333333 213.333333 0 0 1-64.341333-416.810667 341.461333 341.461333 0 0 1 640.682666 0A213.418667 213.418667 0 0 1 768 810.666667a42.666667 42.666667 0 0 1 0-85.333334z"
-                    fill="#ffffff" p-id="1592"></path>
-                </svg>
-                {{ $t('file.upload') }}
-              </div>
-              <div class="fineTune boxinput" @click="deleteOnFile" style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                <span class="iconfont icon-shanchu" style="color: #fff; margin-right:10px;"></span>
-                {{ $t('file.delete') }}
-              </div>
-              <div class="fineTune boxinput" @click="retrieveOnFile"
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('file.retrieve') }}
-              </div>
-              <div class="fineTune boxinput" @click="retrieveOnFileContent"
-                style="margin-left: 0px;margin-right: 0px;width: 99%;">
-                {{ $t('file.view') }}
-              </div>
             </div>
           </el-collapse-transition>
           <!--会话-->
           <el-collapse-transition>
-            <div v-show="SettingStatus === 5">
+            <div v-show="SettingStatus === 3">
               <div class="session boxinput" @click="newSession">
                 <svg t="1679215361568" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                  xmlns="http://www.w3.org/2000/svg" p-id="3128" width="25" height="25">
+                     height="25" p-id="3128" width="25" xmlns="http://www.w3.org/2000/svg">
                   <path
-                    d="M512.001024 0A512 512 0 0 0 0.001024 512a506.88 506.88 0 0 0 92.16 292.352V972.8a51.2 51.2 0 0 0 51.2 51.2H512.001024a512 512 0 0 0 0-1024z m0 921.6H194.561024v-134.144a51.2 51.2 0 0 0-10.24-30.72A406.016 406.016 0 0 1 102.401024 512a409.6 409.6 0 1 1 409.6 409.6z"
-                    fill="#ffffff" p-id="3129"></path>
+                      d="M512.001024 0A512 512 0 0 0 0.001024 512a506.88 506.88 0 0 0 92.16 292.352V972.8a51.2 51.2 0 0 0 51.2 51.2H512.001024a512 512 0 0 0 0-1024z m0 921.6H194.561024v-134.144a51.2 51.2 0 0 0-10.24-30.72A406.016 406.016 0 0 1 102.401024 512a409.6 409.6 0 1 1 409.6 409.6z"
+                      fill="#ffffff" p-id="3129"></path>
                   <path
-                    d="M716.801024 486.4a51.2 51.2 0 0 0-51.2 51.2 153.6 153.6 0 0 1-307.2 0 51.2 51.2 0 0 0-102.4 0 256 256 0 0 0 512 0 51.2 51.2 0 0 0-51.2-51.2z"
-                    fill="#ffffff" p-id="3130"></path>
+                      d="M716.801024 486.4a51.2 51.2 0 0 0-51.2 51.2 153.6 153.6 0 0 1-307.2 0 51.2 51.2 0 0 0-102.4 0 256 256 0 0 0 512 0 51.2 51.2 0 0 0-51.2-51.2z"
+                      fill="#ffffff" p-id="3130"></path>
                 </svg>
                 {{ $t('session.create') }}
               </div>
               <div class="session boxinput" @click="exportObjArrAllToJson"
-                style="margin-left: 0;margin-right: 0;width: 99%;">
+                   style="margin-left: 0;margin-right: 0;width: 99%;">
                 <span class="iconfont icon-daochu" style="color: #fff; margin-right:10px;"></span>
                 {{ $t('session.export') }}
               </div>
@@ -547,33 +356,14 @@
               </div>
             </div>
           </el-collapse-transition>
-          <!--角色-->
-          <el-collapse-transition>
-            <div v-show="SettingStatus === 6">
-              <div class="block">
-                <input class="weitiao" v-model="roleSearch" :placeholder="$t('placeholder.role_name')" />
-              </div>
-              <div class="personList" v-for="roleInfo in roleList" :key="roleInfo.act" @click="roleClick(roleInfo)">
-                <RoleCard :roleInfo="roleInfo" :prCurrent="prCurrent"></RoleCard>
-              </div>
-            </div>
-          </el-collapse-transition>
           <!--界面设置-->
           <el-collapse-transition>
-            <div v-show="SettingStatus === 7">
-              <!-- <div class="block">-->
-              <!--  <el-tooltip class="item" effect="dark" content="将图片的url路径填入此处即可设置聊天背景。" placement="top">-->
-              <!--    <span class="demonstration">聊天背景</span>-->
-              <!--  </el-tooltip>-->
-              <!--  <input class="inputs" v-model="SettingInfo.contentImageUrl" placeholder="设置聊天界面的背景URL"-->
-              <!--    style="margin-top: 10px; width: 100%; margin-left: 0;margin-right: 0;" />-->
-              <!--</div> -->
+            <div v-show="SettingStatus === 4">
               <div class="session boxinput" @click="changeLanguage"
-                style="margin-left: 0;margin-right: 0;width: 99%;">
+                   style="margin-left: 0;margin-right: 0;width: 99%;">
                 <span class="iconfont icon-iconyuanbanben_fanyi" style="color: #fff; margin-right:10px;"></span>
                 {{ $t('setting.Language') }}
               </div>
-
             </div>
           </el-collapse-transition>
         </div>
@@ -605,7 +395,7 @@ import {
 
 import {getNowTime, JCMFormatDate, JCMFormatTimestamp} from "@/util/util";
 
-const { Configuration, OpenAIApi } = require("openai");
+const {Configuration, OpenAIApi} = require("openai");
 export default {
   name: "App",
   components: {
@@ -669,9 +459,6 @@ export default {
           n_epochs: 4,
           prompt_loss_weight: 0.01,
           suffix: ""
-          // compute_classification_metrics: false,
-          // classification_betas:"",
-          // classification_positive_class:"",
         }
       },
       //当前点击的文件
@@ -682,7 +469,7 @@ export default {
       prCurrent: "",
       //当前点击的会话
       sessionCurrent: "",
-      //当前点击的微调模型
+      //当前点击的微调模型 aaaa
       ftCurrent: "",
       // //微调搜索数据
       // fineTuningSearch: "",
@@ -741,14 +528,11 @@ export default {
   computed: {
     // 把获取setting列表的操作放到computed计算属性里来，这样才能动态绑定i18n的值
     getSettings() {
-      return [{ name: this.$t('model.talk'), active: true },
-      { name: this.$t('image.title'), active: false },
-      { name: this.$t('audio.title'), active: false },
-      { name: this.$t('slightly.title.abbreviation'), active: false },
-      { name: this.$t('file.title'), active: false },
-      { name: this.$t('session.title'), active: false },
-      { name: this.$t('role.title'), active: false },
-      { name: this.$t('setting.title'), active: false }
+      return [{name: this.$t('model.talk'), active: true}, // aaaa
+        {name: this.$t('image.title'), active: false},
+        {name: this.$t('audio.title'), active: false},
+        {name: this.$t('session.title'), active: false},
+        {name: this.$t('setting.title'), active: false}
       ]
     }
   },
@@ -837,7 +621,8 @@ export default {
         }
         if (newVal.fineTunes.batch_size) {
           this.SettingInfo.fineTunes.batch_size = parseInt(newVal.fineTunes.batch_size)
-        } else { }
+        } else {
+        }
         if (newVal.fineTunes.validation_file) {
           this.SettingInfo.fineTunes.validation_file = newVal.fineTunes.validation_file
         }
@@ -891,7 +676,7 @@ export default {
     //导出所有会话到json文件
     exportObjArrAllToJson() {
       let jsonString = JSON.stringify(this.sessionList); // 将数组转为JSON字符串
-      let blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+      let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
       saveAs(blob, "data.json");
     },
 
@@ -977,7 +762,7 @@ export default {
         this.$message.error(this.$t('message.get_roles_fail'))
       })
     },
-    resize(){
+    resize() {
       if (window.innerWidth <= 1150) {
         this.showPersonList = false;
         this.showSetupList = false;
@@ -1000,12 +785,12 @@ export default {
     },
     //监听窗口尺寸的变化
     handleResize() {
-      if ( this.firstSize ){
+      if (this.firstSize) {
         this.resize();
         this.firstSize = false;
         this.width = window.innerWidth;
       }
-      if ( this.width !== window.innerWidth ){
+      if (this.width !== window.innerWidth) {
         this.resize();
         this.width = window.innerWidth;
       }
@@ -1046,19 +831,21 @@ export default {
     //模型列表被点击
     modelClick() {
       this.clearCurrent()
-      this.getModelList(this.SettingInfo.KeyMsg)
-      //清除被点击的微调对象
-      this.fineTuningInfo = {};
+      // this.getModelList(this.SettingInfo.KeyMsg)
       this.SettingStatus = 0
       this.cutSetting = 0
       this.SettingInfo.cutSetting = 0
-      // this.showChatWindow = false;
+    },
+    promptClick() {
+      this.clearCurrent()
+      this.cutSetting = 2
+      this.SettingInfo.cutSetting = 0
     },
     //会话列表被点击
     sessionClick() {
       //清除当前点击的状态
       this.clearCurrent()
-      this.SettingStatus = 5
+      this.SettingStatus = 3
       this.cutSetting = 1
       this.SettingInfo.cutSetting = 1
       this.chatWindowInfo = {
@@ -1080,20 +867,10 @@ export default {
           type: "error",
         });
       } else {
-        var chatWindow = this.$refs.chatWindow;
+        const chatWindow = this.$refs.chatWindow;
         chatWindow.inputMsg = info.prompt;
       }
 
-    },
-    //微调模型列表被点击
-    fineTuningClick() {
-      this.clearCurrent()
-      this.SettingStatus = 3;
-      this.cutSetting = 2
-      this.SettingInfo.cutSetting = 2
-      // this.showChatWindow = false;
-      //获取微调模型列表
-      this.getFineTunessList(this.SettingInfo.KeyMsg)
     },
     clearCurrent() {
       //清除当前选择的模型微调模型
@@ -1109,7 +886,6 @@ export default {
     fileClick() {
       this.clearCurrent()
       //清除被点击的微调对象
-      this.fineTuningInfo = {};
       this.SettingStatus = 4;
       this.cutSetting = 3
       this.SettingInfo.cutSetting = 3
@@ -1139,51 +915,6 @@ export default {
         this.getFilessList(this.SettingInfo.KeyMsg)
       })
     },
-    //检索文件信息
-    retrieveOnFile() {
-      if (!this.fileInfo || !this.fileInfo.fileId) {
-        this.$message.error(this.$t('message.only_file'))
-      } else {
-        retrieveFile(this.fileInfo.fileId, this.SettingInfo.KeyMsg).then((res) => {
-          let context = this.$t('index.file_id') + res.id + "  \n"
-            + this.$t('index.file_name') + res.filename + "  \n"
-            + this.$t('index.file_size') + (res.bytes / 1024 / 1024).toFixed(2) + "MB \n"
-            + this.$t('index.obj') + res.object + "  \n"
-            + this.$t('index.status') + res.status + "  \n"
-            + this.$t('index.status_des') + res.status_details + "  \n"
-            + this.$t('index.target') + res.purpose + " \n"
-            + this.$t('index.file_time') + JCMFormatTimestamp(res.created_at);
-          let retrieveFineTuneMsg = {
-            headImg: AI_HEAD_IMG_URL,
-            name: res.filename,
-            time: JCMFormatDate(getNowTime()),
-            msg: context,
-            chatType: 0,
-            uid: res.id,
-          };
-          this.$refs.chatWindow.sendMsg(retrieveFineTuneMsg)
-          console.log(res)
-        }).catch(e => {
-          this.$message.error(this.$t('message.fail_file'))
-        })
-      }
-    },
-    //检索文件内容
-    async retrieveOnFileContent() {
-      if (!this.fileInfo || !this.fileInfo.fileId) {
-        this.$message.error(this.$t('message.only_file'))
-      } else {
-        try {
-          const configuration = new Configuration({
-            apiKey: this.SettingInfo.KeyMsg,
-          });
-          const openai = new OpenAIApi(configuration);
-          const response = await openai.downloadFile(this.fileInfo.fileId);
-        } catch (e) {
-          this.$message.error(this.$t(`message.openai_free`))
-        }
-      }
-    },
     //模型被点击
     clickPerson(info) {
       this.storeStatus = 0;
@@ -1198,16 +929,6 @@ export default {
     clickSession(info) {
       this.sessionCurrent = info.id;
       this.$refs.chatWindow.assignmentMesList(info.dataList)
-    },
-    //微调模型被点击
-    clickFineTuning(info) {
-      this.storeStatus = 1;
-      //传入当前聊天窗口信息
-      this.chatWindowInfo = info;
-      //设置当前被点击的对象
-      this.fineTuningInfo = info;
-      //设置当前选着的微调模型id
-      this.ftCurrent = info.id
     },
     //文件被点击
     clickFile(info) {
@@ -1234,120 +955,6 @@ export default {
         })
       }
     },
-    //创建微调
-    createFine() {
-      createFineTune(this.SettingInfo.fineTunes, this.SettingInfo.KeyMsg).then((res) => {
-        this.$message.success(this.$t('message.create_succ'))
-        this.getFineTunessList(this.SettingInfo.KeyMsg)
-      }).catch(e => {
-        this.$message.error(this.$t('message.create_fail'))
-      })
-    },
-    //删除微调
-    deleteFine() {
-      if (!this.fineTuningInfo || !this.fineTuningInfo.fineTunesId) {
-        this.$message.error(this.$t('message.only_del_model'))
-      } else {
-        deleteFineTuneModel(this.fineTuningInfo.name, this.SettingInfo.KeyMsg).then((res) => {
-          this.$message.success(this.$t('message.del_model_succ'))
-          this.getFineTunessList(this.SettingInfo.KeyMsg)
-        }).catch(e => {
-          this.$message.error(this.$t('message.del_fail_ing'))
-        })
-      }
-    },
-    //取消微调
-    cancelFine() {
-      if (!this.fineTuningInfo || !this.fineTuningInfo.fineTunesId || this.fineTuningInfo.fineTunesStatus === "succeeded") {
-        this.$message.error(this.$t('message.only_cancel'))
-      } else {
-        console.log(this.fineTuningInfo.fineTunesId)
-        cancelFineTune(this.fineTuningInfo.fineTunesId, this.SettingInfo.KeyMsg).then((res) => {
-          this.$message.success(this.$t('message.cancel_succ'))
-          this.getFineTunessList(this.SettingInfo.KeyMsg)
-        }).catch(e => {
-          console.log(e)
-          this.$message.error(this.$t('message.cancel_fail'))
-        })
-      }
-    },
-    //检索微调
-    retrieveFine() {
-      if (!this.fineTuningInfo || !this.fineTuningInfo.fineTunesId) {
-        this.$message.error(this.$t('message.only_model'))
-      } else {
-        console.log(this.fineTuningInfo.fineTunesId)
-        retrieveFineTune(this.fineTuningInfo.fineTunesId, this.SettingInfo.KeyMsg).then((res) => {
-          let context = this.$t('index.task_id') + res.id + "  \n"
-            + this.$t('index.task_type') + res.object + "  \n"
-            + this.$t('index.model_type') + res.model + "  \n"
-            + this.$t('index.task_time') + JCMFormatTimestamp(res.created_at) + "  \n"
-            + this.$t('index.task_list')
-            + this.$t('index.obj_log_info_time')
-            + "| :------: | :------: | :------: | :------: |\n";
-          res.events.forEach(obj => {
-            context += `| ${obj.object} | ${obj.level} | ${obj.message} | ${JCMFormatTimestamp(obj.created_at)} |\n`;
-          });
-          context += this.$t('index.model_id') + res.fine_tuned_model
-            + this.$t('index.args')
-            + this.$t('index.item_setting')
-            + "| :------: | :------: | \n";
-          for (let prop in res.hyperparams) {
-            if (res.hyperparams.hasOwnProperty(prop)) {
-              context += `| ${prop} | ${res.hyperparams[prop]} |\n`;
-            }
-          }
-          context += this.$t('index.user_group') + res.organization_id;
-
-          if (res.result_files.length === 0) {
-            context += this.$t('index.results_null')
-          } else {
-            context += this.$t('index.results')
-              + this.$t('index.table_head')
-              + "| :------: | :------: | :------: | :------: | :------: | \n";
-            res.result_files.forEach(obj => {
-              context += `| ${obj.id} | ${obj.filename}  | ${(obj.bytes / 1024 / 1024).toFixed(2) + "MB"} | ${obj.object} | ${obj.status} |  \n`;
-            });
-          }
-          context += this.$t('index.statu') + res.status + "\n";
-
-          if (res.training_files.length === 0) {
-            context += this.$t('index.files_null')
-          } else {
-            context += this.$t('index.files')
-              + this.$t('index.table_head')
-              + "| :------: | :------: | :------: | :------: | :------: | \n";
-            res.training_files.forEach(obj => {
-              context += `| ${obj.id} | ${obj.filename}  | ${(obj.bytes / 1024 / 1024).toFixed(2) + "MB"} | ${obj.object} | ${obj.status} |  \n`;
-            });
-          }
-          if (res.validation_files.length === 0) {
-            context += this.$t('index.verifys_null')
-          } else {
-            context += this.$t('index.verifys')
-              + this.$t('index.table_head')
-              + "| :------: | :------: | :------: | :------: | :------: | \n";
-            res.validation_files.forEach(obj => {
-              context += `| ${obj.id} | ${obj.filename}  | ${(obj.bytes / 1024 / 1024).toFixed(2) + "MB"} | ${obj.object} | ${obj.status} |  \n`;
-            });
-          }
-          context += this.$t('index.last_time') + JCMFormatTimestamp(res.updated_at);
-          let retrieveFineTuneMsg = {
-            headImg: AI_HEAD_IMG_URL,
-            name: res.fine_tuned_model !== null ? res.fine_tuned_model : res.id,
-            time: JCMFormatDate(getNowTime()),
-            msg: context,
-            chatType: 0,
-            uid: res.id,
-          };
-          this.$refs.chatWindow.sendMsg(retrieveFineTuneMsg)
-          console.log(res)
-        }).catch(e => {
-          console.log(e)
-          this.$message.error(this.$t('message.verify_model_fail'))
-        })
-      }
-    },
     personCardSort(id) {
       if (typeof this.personList[0] != 'undefined' && id !== this.personList[0].id) {
         console.log(id);
@@ -1360,20 +967,6 @@ export default {
           }
         }
         this.personList.unshift(nowPersonInfo);
-      }
-    },
-    fineTunesCardSort(id) {
-      if (id !== this.fineTuningList[0].id) {
-        console.log(id);
-        let nowPersonInfo;
-        for (let i = 0; i < this.fineTuningList.length; i++) {
-          if (this.fineTuningList[i].id === id) {
-            nowPersonInfo = this.fineTuningList[i];
-            this.fineTuningList.splice(i, 1);
-            break;
-          }
-        }
-        this.fineTuningList.unshift(nowPersonInfo);
       }
     },
   },
@@ -1637,6 +1230,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
   }
 }
+
 @media only screen and (min-width: 768px) { // 当屏幕宽度大于或等于768px时
   .chatHome {
     .chatRight {

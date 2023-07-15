@@ -169,19 +169,19 @@
                 </el-button>
               </div>
               <!--联网设置-->
-              <div class="block" v-show="SettingInfo.openNet">
-                <div class="block">
-                  <el-tooltip class="item" effect="dark" :content="$t('model.online')" placement="top">
-                    <span class="demonstration">{{ $t('model.online_title') }}</span>
-                  </el-tooltip>
-                  <el-switch v-model="SettingInfo.openNet" :width="defaulWidth" style="margin-left: 15%;"></el-switch>
-                </div>
-                <el-tooltip class="item" effect="dark" :content="$t('model.max_results_title')" placement="top">
-                  <span class="demonstration" style="">{{ $t('model.max_results') }}</span>
-                </el-tooltip>
+              <!--<div class="block" v-show="SettingInfo.openNet">-->
+              <!--  <div class="block">-->
+              <!--    <el-tooltip class="item" effect="dark" :content="$t('model.online')" placement="top">-->
+              <!--      <span class="demonstration">{{ $t('model.online_title') }}</span>-->
+              <!--    </el-tooltip>-->
+              <!--    <el-switch v-model="SettingInfo.openNet" :width="defaulWidth" style="margin-left: 15%;"></el-switch>-->
+              <!--  </div>-->
+              <!--  <el-tooltip class="item" effect="dark" :content="$t('model.max_results_title')" placement="top">-->
+              <!--    <span class="demonstration" style="">{{ $t('model.max_results') }}</span>-->
+              <!--  </el-tooltip>-->
 
-                <el-slider class="astrict" v-model="SettingInfo.max_results" :step="1" :min="0" :max="6"></el-slider>
-              </div>
+              <!--  <el-slider class="astrict" v-model="SettingInfo.max_results" :step="1" :min="0" :max="6"></el-slider>-->
+              <!--</div>-->
               <!--不联网-->
               <div v-show="!SettingInfo.openNet">
                 <!--后缀-->
@@ -375,7 +375,6 @@ import RoleCard from "@/components/RoleCard.vue";
 import {
   deleteFile,
   getFilesList,
-  getFineTunesList,
   getModels,
   getRoles,
   uploadFile
@@ -434,7 +433,6 @@ export default {
       batch_sizeStr: "",
       //全部的设置参数
       SettingInfo: {
-        prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
         cutSetting: 1,
         KeyMsg: "",
         readefile: false,
@@ -446,6 +444,7 @@ export default {
         n: 1,
         size: "256x256",
         language: "zh",
+        prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
         chat: { // aaaaa
           // 后缀
           suffix: localStorage.getItem("suffix") == null ? "" : localStorage.getItem("suffix"),
@@ -471,14 +470,7 @@ export default {
               Boolean(localStorage.getItem("echo")),
         },
         openNet: false,
-        max_results: 3,
-        fineTunes: {
-          training_file: "",
-          model: "curie",
-          n_epochs: 4,
-          prompt_loss_weight: 0.01,
-          suffix: ""
-        }
+        // max_results: 3,
       },
       //当前点击的文件
       fiCurrent: "",
@@ -488,9 +480,9 @@ export default {
       prCurrent: "",
       //当前点击的会话
       sessionCurrent: "",
-      //当前点击的微调模型 aaaa
+      //当前点击的微调模型
       ftCurrent: "",
-      // //微调搜索数据
+      //微调搜索数据
       // fineTuningSearch: "",
       //模型搜索数据
       modelSearch: "",
@@ -578,10 +570,7 @@ export default {
     this.$watch('fileSearch', this.watchFileSearch);
   },
   filters: {
-    // //截取数据到小数点后几位
-    // numFilterReserved(value, digit) {
-    //   return parseFloat(value).toFixed(digit)
-    // }
+
   },
   watch: {
     modelSearch: {
@@ -593,24 +582,24 @@ export default {
         }
       }
     },
-    fineTuningSearch: {
-      handler: function (newVal, oldVal) {
-        if (this.fineTuningList) {
-          if (!this.cancelFineStatus) {
-            this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded").filter(fineTuning => fineTuning.id.includes(newVal))
-          } else {
-            this.fineTuningList = this.fineTuningCacheList.filter(fineTuning => fineTuning.id.includes(newVal))
-          }
-        } else {
-          if (!this.cancelFineStatus) {
-            this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
-          } else {
-            this.fineTuningList = this.fineTuningCacheList
-          }
-        }
-
-      }
-    },
+    // fineTuningSearch: {
+    //   handler: function (newVal, oldVal) {
+    //     if (this.fineTuningList) {
+    //       if (!this.cancelFineStatus) {
+    //         this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded").filter(fineTuning => fineTuning.id.includes(newVal))
+    //       } else {
+    //         this.fineTuningList = this.fineTuningCacheList.filter(fineTuning => fineTuning.id.includes(newVal))
+    //       }
+    //     } else {
+    //       if (!this.cancelFineStatus) {
+    //         this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
+    //       } else {
+    //         this.fineTuningList = this.fineTuningCacheList
+    //       }
+    //     }
+    //
+    //   }
+    // },
     fileSearch: {
       handler: function (newVal, oldVal) {
         if (this.fileList) {
@@ -637,16 +626,16 @@ export default {
         if (newVal.openProductionPicture) {
           this.SettingInfo.openChangePicture = false
         }
-        if (newVal.fineTunes.batch_size) {
-          this.SettingInfo.fineTunes.batch_size = parseInt(newVal.fineTunes.batch_size)
-        } else {
-        }
-        if (newVal.fineTunes.validation_file) {
-          this.SettingInfo.fineTunes.validation_file = newVal.fineTunes.validation_file
-        }
-        if (newVal.fineTunes.learning_rate_multiplier) {
-          this.SettingInfo.fineTunes.learning_rate_multiplier = parseInt(newVal.fineTunes.learning_rate_multiplier)
-        }
+        // if (newVal.fineTunes.batch_size) {
+        //   this.SettingInfo.fineTunes.batch_size = parseInt(newVal.fineTunes.batch_size)
+        // } else {
+        // }
+        // if (newVal.fineTunes.validation_file) {
+        //   this.SettingInfo.fineTunes.validation_file = newVal.fineTunes.validation_file
+        // }
+        // if (newVal.fineTunes.learning_rate_multiplier) {
+        //   this.SettingInfo.fineTunes.learning_rate_multiplier = parseInt(newVal.fineTunes.learning_rate_multiplier)
+        // }
         if (newVal.KeyMsg && newVal !== oldVal) {
           //获取模型列表
           getModels(newVal).then((res) => {
@@ -753,42 +742,42 @@ export default {
       }
     },
     //获取模型列表
-    getModelList(key) {
-      getModels(key).then((modelsRes) => {
-        // 提取fineTunesRes集合中所有id属性值
-        getFineTunesList(key).then((fineTunesRes) => {
-          const fineTunesIds = fineTunesRes.map(item => item.id);
-          const models = modelsRes.filter(item => !fineTunesIds.includes(item.id));
-          this.personList = models;
-          this.personListCache = models;
-        })
-        // this.updateMoneyInfo()
-      }).catch(e => {
-        this.$message.error(this.$t('message.get_model_fail'))
-      })
-    },
+    // getModelList(key) {
+    //   getModels(key).then((modelsRes) => {
+    //     // 提取fineTunesRes集合中所有id属性值
+    //     getFineTunesList(key).then((fineTunesRes) => {
+    //       const fineTunesIds = fineTunesRes.map(item => item.id);
+    //       const models = modelsRes.filter(item => !fineTunesIds.includes(item.id));
+    //       this.personList = models;
+    //       this.personListCache = models;
+    //     })
+    //     // this.updateMoneyInfo()
+    //   }).catch(e => {
+    //     this.$message.error(this.$t('message.get_model_fail'))
+    //   })
+    // },
     //获取微调模型列表
-    getFineTunessList(key) {
-      getFineTunesList(key).then((res) => {
-        this.fineTuningCacheList = res
-        if (this.cancelFineStatus === true) {
-          this.fineTuningList = this.fineTuningCacheList
-        } else {
-          this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
-        }
-      }).catch(e => {
-        this.$message.error(this.$t('message.get_model_fail'))
-      })
-    },
+    // getFineTunessList(key) {
+    //   getFineTunesList(key).then((res) => {
+    //     this.fineTuningCacheList = res
+    //     if (this.cancelFineStatus === true) {
+    //       this.fineTuningList = this.fineTuningCacheList
+    //     } else {
+    //       this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
+    //     }
+    //   }).catch(e => {
+    //     this.$message.error(this.$t('message.get_model_fail'))
+    //   })
+    // },
     //获取文件列表
-    getFilessList(key) {
-      getFilesList(key).then((res) => {
-        this.fileList = res
-        this.fileCacheList = res
-      }).catch(e => {
-        this.$message.error(this.$t('message.get_files_fail'))
-      })
-    },
+    // getFilessList(key) {
+    //   getFilesList(key).then((res) => {
+    //     this.fileList = res
+    //     this.fileCacheList = res
+    //   }).catch(e => {
+    //     this.$message.error(this.$t('message.get_files_fail'))
+    //   })
+    // },
     //获取角色列表
     getRolesList() {
       getRoles().then((res) => {

@@ -27,7 +27,7 @@ export default {
         clear: "Clear the session list"
     },
     model: {
-        title: "model",
+        title: "AI model",
         talk: "chat",
         online_title: "online",
         online: "Online query after opening",

@@ -27,7 +27,7 @@ export default {
         clear: "清除会话列表"
     },
     model: {
-        title: "模型",
+        title: "AI模型",
         talk: "对话",
         online_title: "联网",
         online: "打开之后联网查询",

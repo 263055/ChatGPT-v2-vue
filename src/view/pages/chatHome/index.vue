@@ -47,6 +47,23 @@
             <div v-for="sessionInfo in sessionList" :key="sessionInfo.id" @click="clickSession(sessionInfo)">
               <Session :sessionInfo="sessionInfo" :pcCurrent="sessionCurrent"></Session>
             </div>
+            <div class="session boxinput" @click="newSession">
+              <svg class="icon" height="25" p-id="3128" version="1.1"
+                   viewBox="0 0 1024 1024" width="25" x="1679215361568" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M512.001024 0A512 512 0 0 0 0.001024 512a506.88 506.88 0 0 0 92.16 292.352V972.8a51.2 51.2 0 0 0 51.2 51.2H512.001024a512 512 0 0 0 0-1024z m0 921.6H194.561024v-134.144a51.2 51.2 0 0 0-10.24-30.72A406.016 406.016 0 0 1 102.401024 512a409.6 409.6 0 1 1 409.6 409.6z"
+                    fill="#ffffff" p-id="3129"></path>
+                <path
+                    d="M716.801024 486.4a51.2 51.2 0 0 0-51.2 51.2 153.6 153.6 0 0 1-307.2 0 51.2 51.2 0 0 0-102.4 0 256 256 0 0 0 512 0 51.2 51.2 0 0 0-51.2-51.2z"
+                    fill="#ffffff" p-id="3130"></path>
+              </svg>
+              {{ $t('session.create') }}
+            </div>
+            <div class="session boxinput" style="margin-left: 0;margin-right: 0;width: 99%;"
+                 @click="exportObjArrAllToJson">
+              <span class="iconfont icon-daochu" style="color: #fff; margin-right:10px;"></span>
+              {{ $t('session.export') }}
+            </div>
           </div>
         </div>
         <!--角色-->
@@ -60,6 +77,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
     <!--聊天室右侧-->
@@ -106,19 +124,9 @@
         </svg>
       </div>
       <!--展示聊天窗口-->
-      <div v-if="showChatWindow" v-show="showMainContent">
-        <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo" :storeStatu="storeStatus"
-                    @personCardSort="personCardSort">
-        </ChatWindow>
-      </div>
-      <div class="showIcon" v-else>
-        <svg x="1679552353056" class="icon iconfont icon-snapchat" viewBox="0 0 1024 1024" version="1.1"
-             height="200" p-id="3488" width="200" xmlns="http://www.w3.org/2000/svg">
-          <path
-              d="M992.33 416.37c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-63.96h63.98c17.66 0 31.98-14.32 31.98-31.98s-14.32-31.98-31.98-31.98h-63.98v-95.94c0.01-8.48-3.36-16.62-9.35-22.62-6-6-14.14-9.37-22.62-9.36h-95.94V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96H544.6V32.61c0-17.67-14.32-31.98-31.98-31.98-17.67 0-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98s-31.98 14.32-31.98 31.98v63.96h-63.96V32.61c0-17.67-14.32-31.98-31.98-31.98S224.8 14.95 224.8 32.61v63.96h-95.94c-8.48 0-16.62 3.36-22.62 9.36s-9.36 14.14-9.36 22.62v95.94H32.92c-17.67 0-31.98 14.32-31.98 31.98s14.32 31.98 31.98 31.98h63.96v63.96H32.92c-17.67 0-31.98 14.32-31.98 31.98 0 17.67 14.32 31.98 31.98 31.98h63.96v63.97H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.65 14.31 31.97 31.97 31.97h63.96v63.98H32.92c-17.66 0-31.97 14.31-31.97 31.97 0 17.66 14.31 31.97 31.97 31.97h63.96v63.98H32.92C15.26 736.18 0.95 750.5 0.95 768.15s14.31 31.97 31.97 31.97h63.96v95.95a31.944 31.944 0 0 0 9.36 22.62c6 5.99 14.14 9.36 22.62 9.35h95.94v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98 17.67 0 31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h63.96v63.98c0 17.66 14.32 31.98 31.98 31.98s31.98-14.32 31.98-31.98v-63.98h95.94c8.48 0.02 16.62-3.35 22.62-9.35s9.37-14.14 9.35-22.62v-95.95h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98V672.2h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.98h63.98c17.65 0 31.97-14.31 31.97-31.97 0-17.66-14.31-31.97-31.97-31.97h-63.98v-63.97h63.98zM864.41 864.1H160.84V160.53h703.57V864.1zM406.82 580.42h79.2l15.48 61.56h67.68l-83.16-267.84h-77.04l-83.16 267.84h65.52l15.48-61.56z m18-72.36c6.84-26.64 14.04-57.96 20.52-86.04h1.44c7.2 27.36 14.04 59.4 21.24 86.04l5.76 22.68h-54.72l5.76-22.68zM697.7 641.98h-64.44V374.14h64.44v267.84z"
-              p-id="3489"></path>
-        </svg>
-      </div>
+      <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo"
+                  :storeStatu="storeStatus" @personCardSort="personCardSort">
+      </ChatWindow>
     </div>
     <!--右侧栏是否展示-->
     <div class="chatLeft" v-show="showSetupList">
@@ -132,7 +140,7 @@
       </el-card>
 
       <div class="online-person">
-        <!--展示右侧栏的按钮 aaaa -->
+        <!--展示右侧栏的上方按钮-->
         <el-row :gutter="20">
           <el-col v-for="(setting, index) in getSettings" :key="index" :span="6">
             <span :class="{ active: SettingStatus === index }" class="setting"
@@ -160,13 +168,6 @@
               </div>
               <!--不联网-->
               <div v-show="!SettingInfo.openNet">
-                <!--prompt预设-->
-                <div class="block">
-                  <el-tooltip :content="$t('model.prompt')" class="item" effect="dark" placement="top">
-                    <span class="demonstration">{{ $t('model.prompt_title') }}</span>
-                  </el-tooltip>
-                  <input v-model="SettingInfo.prompt" :placeholder="$t('placeholder.prompt')" class="weitiao"/>
-                </div>
                 <!--后缀-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">
@@ -245,14 +246,6 @@
                   <el-switch v-model="SettingInfo.openNet" :width="defaulWidth" style="margin-left: 15%;"></el-switch>
                 </div>
               </div>
-              <!-- <div class="block">
-                <el-tooltip class="item" effect="dark" content="开启读文模式" placement="top">
-                  <span class="demonstration">开启读文模式</span>
-                </el-tooltip>
-                <el-switch v-model="SettingInfo.readefile" :width="defaulWidth"
-                  style="margin-left: 15%;"></el-switch>
-              </div>
-              <div style="height: 30px;"></div> -->
             </div>
           </el-collapse-transition>
           <!--图片设置-->
@@ -332,34 +325,20 @@
 
             </div>
           </el-collapse-transition>
-          <!--会话-->
+          <!--prompt-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 3">
-              <div class="session boxinput" @click="newSession">
-                <svg t="1679215361568" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                     height="25" p-id="3128" width="25" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                      d="M512.001024 0A512 512 0 0 0 0.001024 512a506.88 506.88 0 0 0 92.16 292.352V972.8a51.2 51.2 0 0 0 51.2 51.2H512.001024a512 512 0 0 0 0-1024z m0 921.6H194.561024v-134.144a51.2 51.2 0 0 0-10.24-30.72A406.016 406.016 0 0 1 102.401024 512a409.6 409.6 0 1 1 409.6 409.6z"
-                      fill="#ffffff" p-id="3129"></path>
-                  <path
-                      d="M716.801024 486.4a51.2 51.2 0 0 0-51.2 51.2 153.6 153.6 0 0 1-307.2 0 51.2 51.2 0 0 0-102.4 0 256 256 0 0 0 512 0 51.2 51.2 0 0 0-51.2-51.2z"
-                      fill="#ffffff" p-id="3130"></path>
-                </svg>
-                {{ $t('session.create') }}
-              </div>
-              <div class="session boxinput" @click="exportObjArrAllToJson"
-                   style="margin-left: 0;margin-right: 0;width: 99%;">
-                <span class="iconfont icon-daochu" style="color: #fff; margin-right:10px;"></span>
-                {{ $t('session.export') }}
-              </div>
-              <div class="session boxinput" @click="importFromJsonArrAll">
-                <span class="iconfont icon-daoru" style="color: #fff; margin-right:10px;"></span>
-                {{ $t('session.import') }}
-                <input type="file" ref="onupdateJosnArrAll" @change="handleFileUploadAll" style="display: none;">
-              </div>
-              <div class="session boxinput" @click="clearAllContext">
-                <span class="iconfont icon-qingchu" style="color: #fff; margin-right:10px;"></span>
-                {{ $t('session.clear') }}
+              <!--prompt预设-->
+              <div class="block">
+                <el-tooltip :content="$t('model.prompt')" class="item" effect="dark" placement="top">
+                  <span class="demonstration">{{ $t('model.prompt_title') }}</span>
+                </el-tooltip>
+                <textarea id="textareaMsg1" v-model="SettingInfo.prompt" v-autoheight
+                          :placeholder="$t('placeholder.prompt')"
+                          aria-autocomplete="both"
+                          autocapitalize="off" autocomplete="off" autocorrect="off" class="weitiao" maxlength="2048"
+                          rows="3" spellcheck="false"
+                          style="z-index: 9999999999;min-height: 50px;max-height:400px;max-width: 100%;min-width: 45%;"></textarea>
               </div>
             </div>
           </el-collapse-transition>
@@ -377,24 +356,38 @@ import ChatWindow from "./chatwindow.vue";
 import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
 import RoleCard from "@/components/RoleCard.vue";
 import {
-  cancelFineTune,
-  createFineTune,
   deleteFile,
-  deleteFineTuneModel,
   getFilesList,
   getFineTunesList,
   getModels,
   getRoles,
-  retrieveFile,
-  retrieveFineTune,
   uploadFile
 } from "@/api/getData";
 
-import {getNowTime, JCMFormatDate, JCMFormatTimestamp} from "@/util/util";
 
-const {Configuration, OpenAIApi} = require("openai");
+const {OpenAIApi} = require("openai");
 export default {
   name: "App",
+  directives: {
+    autoheight: {
+      inserted: function (el) {
+        const Msg = document.getElementById("textareaMsg1").value;
+        if (Msg === "") {
+          el.style.height = "26px"
+        } else {
+          el.style.height = el.scrollHeight + 'px'
+        }
+      },
+      update: function (el) {
+        const Msg = document.getElementById("textareaMsg1").value;
+        if (Msg === "") {
+          el.style.height = "26px"
+        } else {
+          el.style.height = el.scrollHeight + 'px'
+        }
+      }
+    }
+  },
   components: {
     RoleCard,
     PersonCard,
@@ -525,10 +518,10 @@ export default {
   computed: {
     // 把获取setting列表的操作放到computed计算属性里来，这样才能动态绑定i18n的值
     getSettings() {
-      return [{name: this.$t('model.talk'), active: true}, // aaaa
+      return [{name: this.$t('model.talk'), active: true},
         {name: this.$t('image.title'), active: false},
         {name: this.$t('audio.title'), active: false},
-        {name: this.$t('session.title'), active: false},
+        {name: this.$t('model.prompt_title'), active: false},
       ]
     }
   },
@@ -812,20 +805,18 @@ export default {
     modelClick() {
       this.clearCurrent()
       // this.getModelList(this.SettingInfo.KeyMsg)
-      this.SettingStatus = 0
       this.cutSetting = 0
-      this.SettingInfo.cutSetting = 0
     },
-    promptClick() {
+    promptClick() { // aaaa SettingStatus
       this.clearCurrent()
       this.cutSetting = 2
-      this.SettingInfo.cutSetting = 0
+      this.SettingStatus = 3
     },
     //会话列表被点击
     sessionClick() {
       //清除当前点击的状态
       this.clearCurrent()
-      this.SettingStatus = 3
+      this.SettingStatus = 0
       this.cutSetting = 1
       this.SettingInfo.cutSetting = 1
       this.chatWindowInfo = {

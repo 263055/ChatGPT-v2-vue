@@ -186,9 +186,9 @@
               <div v-show="!SettingInfo.openNet">
                 <!--后缀-->
                 <div class="block">
-                  <el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">
-                    <span class="demonstration">{{ $t('model.suffix_title') }}</span>
-                  </el-tooltip>
+                  <!--<el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">-->
+                  <!--  <span class="demonstration">{{ $t('model.suffix_title') }}</span>-->
+                  <!--</el-tooltip>-->
                   <input v-model="SettingInfo.chat.suffix" :placeholder="$t('placeholder.suffix')" class="weitiao"/>
                 </div>
                 <!--停用词-->
@@ -337,6 +337,14 @@
           <!--prompt-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 3">
+              <div class="button-group">
+                <el-button class="left-btn" round size="small" type="primary" @click="savePrompt">
+                  {{ $t('model.savePrompt') }}
+                </el-button>
+                <el-button class="right-btn" round size="small" type="primary" @click="deletePrompt">
+                  {{ $t('model.resetPrompt') }}
+                </el-button>
+              </div>
               <!--prompt预设-->
               <div class="block">
                 <el-tooltip :content="$t('model.prompt')" class="item" effect="dark" placement="top">
@@ -426,7 +434,7 @@ export default {
       batch_sizeStr: "",
       //全部的设置参数
       SettingInfo: {
-        prompt: "",
+        prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
         cutSetting: 1,
         KeyMsg: "",
         readefile: false,
@@ -653,6 +661,13 @@ export default {
     }
   },
   methods: { // aaaaa
+    savePrompt() {
+      localStorage.setItem("prompt", this.SettingInfo.prompt)
+    },
+    deletePrompt() {
+      localStorage.removeItem("prompt")
+      this.SettingInfo.prompt = ""
+    },
     saveSettingInfo() {
       localStorage.setItem("suffix", this.SettingInfo.chat.suffix)
       localStorage.setItem("stop", this.SettingInfo.chat.stop)

@@ -8,7 +8,7 @@ export default {
         slightly_name: "fine-tuned model name",
         file_name: "file name",
         suffix: "Text snippet to add at the end.",
-        prompt: "set chat person settings for your AI",
+        prompt: "set chat person settings",
         stop: "Token to stop generating text.",
         response_count: "Number of Answers Generated",
         trainingDataFileID: 'ID of training data file',
@@ -27,10 +27,12 @@ export default {
         clear: "Clear the session list"
     },
     model: {
-        title: "AI model",
+        title: "model",
         talk: "chat",
         saveSetting: "save Chat Setting",
+        savePrompt: "save Prompt",
         resetSetting: "reset Chat Setting",
+        resetPrompt: "reset Prompt",
         online_title: "online",
         online: "Online query after opening",
         suffix_title: "suffix",

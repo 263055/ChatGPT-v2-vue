@@ -124,9 +124,17 @@
         </svg>
       </div>
       <!--展示聊天窗口-->
-      <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo"
-                  :storeStatu="storeStatus" @personCardSort="personCardSort">
-      </ChatWindow>
+      <div v-if="showChatWindow" v-show="showMainContent">
+        <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo" :storeStatu="storeStatus"
+                    @personCardSort="personCardSort">
+        </ChatWindow>
+      </div>
+      <div v-else class="showIcon">
+        <svg class="icon iconfont icon-snapchat" height="200" p-id="3488" version="1.1"
+             viewBox="0 0 1024 1024" width="200" x="1679552353056" xmlns="http://www.w3.org/2000/svg">
+          <path d="M99" p-id="3489"></path>
+        </svg>
+      </div>
     </div>
     <!--右侧栏是否展示-->
     <div class="chatLeft" v-show="showSetupList">
@@ -152,6 +160,14 @@
           <!--对话设置-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 0">
+              <div class="button-group">
+                <el-button class="left-btn" round size="small" type="primary" @click="saveSettingInfo">
+                  {{ $t('model.saveSetting') }}
+                </el-button>
+                <el-button class="right-btn" round size="small" type="primary" @click="deleteSettingInfo">
+                  {{ $t('model.resetSetting') }}
+                </el-button>
+              </div>
               <!--联网设置-->
               <div class="block" v-show="SettingInfo.openNet">
                 <div class="block">
@@ -216,13 +232,6 @@
                   <el-slider class="astrict" v-model="SettingInfo.chat.Temperature" :step="0.1" :min="0"
                              :max="2"></el-slider>
                 </div>
-                <!--保留词-->
-                <div class="block">
-                  <el-tooltip class="item" effect="dark" :content="$t('model.top_p')" placement="top">
-                    <span class="demonstration" is>{{ $t('model.top_p_title') }}</span>
-                  </el-tooltip>
-                  <el-slider class="astrict" v-model="SettingInfo.chat.TopP" :step="0.1" :min="0" :max="1"></el-slider>
-                </div>
                 <!--流输出-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.stream')" placement="top">
@@ -239,12 +248,12 @@
                   <el-switch v-model="SettingInfo.chat.echo" :width="defaulWidth" style="margin-left: 22%;"></el-switch>
                 </div>
                 <!--是否联网-->
-                <div class="block">
-                  <el-tooltip class="item" effect="dark" :content="$t('model.online')" placement="top">
-                    <span class="demonstration">{{ $t('model.online_title') }}</span>
-                  </el-tooltip>
-                  <el-switch v-model="SettingInfo.openNet" :width="defaulWidth" style="margin-left: 15%;"></el-switch>
-                </div>
+                <!--<div class="block">-->
+                <!--  <el-tooltip class="item" effect="dark" :content="$t('model.online')" placement="top">-->
+                <!--    <span class="demonstration">{{ $t('model.online_title') }}</span>-->
+                <!--  </el-tooltip>-->
+                <!--  <el-switch v-model="SettingInfo.openNet" :width="defaulWidth" style="margin-left: 15%;"></el-switch>-->
+                <!--</div>-->
               </div>
             </div>
           </el-collapse-transition>
@@ -429,17 +438,29 @@ export default {
         n: 1,
         size: "256x256",
         language: "zh",
-        chat: {
-          suffix: "",
-          MaxTokens: localStorage.getItem("MaxTokens") == null ? 5 : localStorage.getItem("MaxTokens"),
-          Temperature: 1,
-          TopP: 1,
-          n: 1,
-          stream: true,
-          echo: false,
-          stop: "",
-          FrequencyPenalty: 0,
-          PresencePenalty: 0,
+        chat: { // aaaaa
+          // 后缀
+          suffix: localStorage.getItem("suffix") == null ? "" : localStorage.getItem("suffix"),
+          // 停用词
+          stop: localStorage.getItem("stop") == null ? "" : localStorage.getItem("stop"),
+          // 单词重复度
+          FrequencyPenalty: localStorage.getItem("FrequencyPenalty") == null ? 0 :
+              parseFloat(localStorage.getItem("FrequencyPenalty")),
+          // 话题重复度
+          PresencePenalty: localStorage.getItem("PresencePenalty") == null ? 0 :
+              parseFloat(localStorage.getItem("PresencePenalty")),
+          // 最大token
+          MaxTokens: localStorage.getItem("MaxTokens") == null ? 1024 :
+              parseFloat(localStorage.getItem("MaxTokens")),
+          // 随机度
+          Temperature: localStorage.getItem("Temperature") == null ? 1 :
+              parseFloat(localStorage.getItem("Temperature")),
+          // 流
+          stream: localStorage.getItem("stream") == null ? true :
+              Boolean(localStorage.getItem("stream")),
+          // 回显词
+          echo: localStorage.getItem("echo") == null ? false :
+              Boolean(localStorage.getItem("echo")),
         },
         openNet: false,
         max_results: 3,
@@ -631,7 +652,35 @@ export default {
       deep: true
     }
   },
-  methods: {
+  methods: { // aaaaa
+    saveSettingInfo() {
+      localStorage.setItem("suffix", this.SettingInfo.chat.suffix)
+      localStorage.setItem("stop", this.SettingInfo.chat.stop)
+      localStorage.setItem("FrequencyPenalty", this.SettingInfo.chat.FrequencyPenalty)
+      localStorage.setItem("PresencePenalty", this.SettingInfo.chat.PresencePenalty)
+      localStorage.setItem("MaxTokens", this.SettingInfo.chat.MaxTokens)
+      localStorage.setItem("Temperature", this.SettingInfo.chat.Temperature)
+      localStorage.setItem("stream", this.SettingInfo.chat.stream)
+      localStorage.setItem("echo", this.SettingInfo.chat.echo)
+    },
+    deleteSettingInfo() {
+      localStorage.removeItem("suffix")
+      localStorage.removeItem("stop")
+      localStorage.removeItem("FrequencyPenalty")
+      localStorage.removeItem("PresencePenalty")
+      localStorage.removeItem("MaxTokens")
+      localStorage.removeItem("Temperature")
+      localStorage.removeItem("stream")
+      localStorage.removeItem("echo")
+      this.SettingInfo.chat.suffix = ""
+      this.SettingInfo.chat.stop = ""
+      this.SettingInfo.chat.FrequencyPenalty = 0
+      this.SettingInfo.chat.PresencePenalty = 0
+      this.SettingInfo.chat.MaxTokens = 1024
+      this.SettingInfo.chat.Temperature = 1
+      this.SettingInfo.chat.stream = true
+      this.SettingInfo.chat.echo = false
+    },
     //导入会话列表触发的方法
     importFromJsonArrAll() {
       this.$refs.onupdateJosnArrAll.click(); // 触发选择文件的弹框
@@ -950,6 +999,20 @@ export default {
   position: absolute;
   top: 5px;
   cursor: pointer;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-btn {
+  margin-right: 10px; /* 调整左边按钮与右边按钮之间的距离 */
+}
+
+.right-btn {
+  margin-left: 10px; /* 调整右边按钮与左边按钮之间的距离 */
 }
 
 .top-left {

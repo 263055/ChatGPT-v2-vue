@@ -29,6 +29,8 @@ export default {
     model: {
         title: "AI模型",
         talk: "对话",
+        saveSetting: "保存对话设置",
+        resetSetting: "重置对话设置",
         online_title: "联网",
         online: "打开之后联网查询",
         suffix_title: "后缀",
@@ -49,10 +51,10 @@ export default {
         echo: "回显提示词",
         stop_title: "停止令牌",
         stop: "设置模型停止生成文本的令牌",
-        frequency_penalty_title: "单词重复度（0-1）",
-        frequency_penalty: "指定降低重复单词出现概率的程度，范围是0到1，越高表示越避免重复。",
-        presence_penalty_title: "话题重复度（0-1）",
-        presence_penalty: "指定降低重复话题出现概率的程度，范围是0到1，越高表示越避免重复。",
+        frequency_penalty_title: "单词重复度[-2, 2]",
+        frequency_penalty: "指定降低重复单词出现概率的程度，范围是-2到2，越高表示越避免重复。",
+        presence_penalty_title: "话题重复度[-2, 2]",
+        presence_penalty: "指定降低重复话题出现概率的程度，范围是-2到2，越高表示越避免重复。",
         max_results_title: "指定联网查询数据的数量，不建议太大。",
         max_results: "查询规模"
     },

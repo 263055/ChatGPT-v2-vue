@@ -29,6 +29,8 @@ export default {
     model: {
         title: "AI model",
         talk: "chat",
+        saveSetting: "save Chat Setting",
+        resetSetting: "reset Chat Setting",
         online_title: "online",
         online: "Online query after opening",
         suffix_title: "suffix",
@@ -49,10 +51,10 @@ export default {
         echo: "echo prompt word",
         stop_title: "Stop token",
         stop: "Sets the token at which the model stops generating text",
-        frequency_penalty_title: "Word repetition（0-1）",
-        frequency_penalty: "Specify the degree to reduce the probability of repeated words, the range is 0 to 1, the higher the more to avoid repetition.",
-        presence_penalty_title: "Topic repetition（0-1）",
-        presence_penalty: "Specify the degree to reduce the occurrence probability of repeated topics, ranging from 0 to 1, the higher means avoiding repetition.",
+        frequency_penalty_title: "Word repetition[-2, 2]",
+        frequency_penalty: "Specify the degree to reduce the probability of repeated words, the range is -2 to 2, the higher the more to avoid repetition.",
+        presence_penalty_title: "Topic repetition[-2, 2]",
+        presence_penalty: "Specify the degree to reduce the occurrence probability of repeated topics, ranging from -2 to 2, the higher means avoiding repetition.",
         max_results_title: "Specify the amount of online query data, it is not recommended to be too large.",
         max_results: "max_results"
     },

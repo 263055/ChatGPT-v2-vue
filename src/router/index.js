@@ -2,13 +2,13 @@ import VueRouter from 'vue-router'
 
 import ChatHome from '../view/pages/chatHome/index.vue'
 import Setting from '../view/pages/setting.vue'
-import UserInfo from '../view/pages/user/userInfo.vue'
+import Login from '../view/pages/user/login.vue'
 
 export default new VueRouter({
     routes: [
         {
             path: "/",
-            redirect: "/UserInfo",
+            redirect: "/Login",
         },
         {
             path: "/ChatHome",
@@ -21,9 +21,9 @@ export default new VueRouter({
             component: Setting
         },
         {
-            path: "/UserInfo",
-            name: "UserInfo",
-            component: UserInfo
+            path: "/Login",
+            name: "Login",
+            component: Login
         }
     ]
 })

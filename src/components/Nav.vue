@@ -37,7 +37,7 @@ export default {
       switch (index) {
         case 0:
           this.$router.push({
-            name: "login",
+            name: "Login",
           }, () => {
           });
           break;

@@ -907,38 +907,38 @@ export default {
       this.fiCurrent = "";
     },
     //文件列表被点击
-    fileClick() {
-      this.clearCurrent()
-      //清除被点击的微调对象
-      this.SettingStatus = 4;
-      this.cutSetting = 3
-      this.SettingInfo.cutSetting = 3
-      //获取微调模型列表
-      this.getFilessList(this.SettingInfo.KeyMsg)
-    },
-    //上传文件按钮被点击触发的方法
-    uploadFile() {
-      this.$refs.fileInput.click();
-    },
+    // fileClick() {
+    //   this.clearCurrent()
+    //   //清除被点击的微调对象
+    //   this.SettingStatus = 4;
+    //   this.cutSetting = 3
+    //   this.SettingInfo.cutSetting = 3
+    //   //获取微调模型列表
+    //   this.getFilessList(this.SettingInfo.KeyMsg)
+    // },
+    // //上传文件按钮被点击触发的方法
+    // uploadFile() {
+    //   this.$refs.fileInput.click();
+    // },
     //文件上传触发的方法
-    onFileChange(e) {
-      //获取文件
-      const file = e.target.files[0];
-      // 验证文件类型是否为jsonl格式
-      if (!file.name.endsWith('.jsonl')) {
-        this.$message.warning(this.$t('message.valid_json'))
-        return;
-      }
-      // 通过验证后，上传文件
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("purpose", "fine-tune");
-      uploadFile(formData, this.SettingInfo.KeyMsg).then((res) => {
-        this.$copy(res.id, this.$t('index.up_file_id') + res.id + this.$t('index.copy'))
-        //更新文件列表
-        this.getFilessList(this.SettingInfo.KeyMsg)
-      })
-    },
+    // onFileChange(e) {
+    //   //获取文件
+    //   const file = e.target.files[0];
+    //   // 验证文件类型是否为jsonl格式
+    //   if (!file.name.endsWith('.jsonl')) {
+    //     this.$message.warning(this.$t('message.valid_json'))
+    //     return;
+    //   }
+    //   // 通过验证后，上传文件
+    //   const formData = new FormData();
+    //   formData.append("file", file);
+    //   formData.append("purpose", "fine-tune");
+    //   uploadFile(formData, this.SettingInfo.KeyMsg).then((res) => {
+    //     this.$copy(res.id, this.$t('index.up_file_id') + res.id + this.$t('index.copy'))
+    //     //更新文件列表
+    //     this.getFilessList(this.SettingInfo.KeyMsg)
+    //   })
+    // },
     //模型被点击
     clickPerson(info) {
       this.storeStatus = 0;
@@ -967,18 +967,18 @@ export default {
       this.fileInfo = info
     },
     //删除文件
-    deleteOnFile() {
-      if (!this.fileInfo || !this.fileInfo.fileId) {
-        this.$message.error(this.$t('message.only_del_file'))
-      } else {
-        deleteFile(this.fileInfo.fileId, this.SettingInfo.KeyMsg).then((res) => {
-          this.$message.success(this.$t('message.del_file_succ'))
-          this.getFilessList(this.SettingInfo.KeyMsg)
-        }).catch(e => {
-          this.$message.error(this.$t('message.del_fail'))
-        })
-      }
-    },
+    // deleteOnFile() {
+    //   if (!this.fileInfo || !this.fileInfo.fileId) {
+    //     this.$message.error(this.$t('message.only_del_file'))
+    //   } else {
+    //     deleteFile(this.fileInfo.fileId, this.SettingInfo.KeyMsg).then((res) => {
+    //       this.$message.success(this.$t('message.del_file_succ'))
+    //       this.getFilessList(this.SettingInfo.KeyMsg)
+    //     }).catch(e => {
+    //       this.$message.error(this.$t('message.del_fail'))
+    //     })
+    //   }
+    // },
     personCardSort(id) {
       if (typeof this.personList[0] != 'undefined' && id !== this.personList[0].id) {
         console.log(id);

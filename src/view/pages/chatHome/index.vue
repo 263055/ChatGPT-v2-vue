@@ -7,7 +7,7 @@
       </div>
       <div class="online-person" style="margin-top: 5%;">
         <!--上方的按钮-->
-        <el-row :gutter="24">
+        <el-row :gutter="18">
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
               <span class="" @click="sessionClick" :class="{ whiteText: cutSetting === 1 }">
@@ -160,6 +160,13 @@
               </div>
               <!--不联网-->
               <div v-show="!SettingInfo.openNet">
+                <!--prompt预设-->
+                <div class="block">
+                  <el-tooltip :content="$t('model.prompt')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('model.prompt_title') }}</span>
+                  </el-tooltip>
+                  <input v-model="SettingInfo.prompt" :placeholder="$t('placeholder.prompt')" class="weitiao"/>
+                </div>
                 <!--后缀-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">
@@ -356,16 +363,6 @@
               </div>
             </div>
           </el-collapse-transition>
-          <!--界面设置-->
-          <el-collapse-transition>
-            <div v-show="SettingStatus === 4">
-              <div class="session boxinput" @click="changeLanguage"
-                   style="margin-left: 0;margin-right: 0;width: 99%;">
-                <span class="iconfont icon-iconyuanbanben_fanyi" style="color: #fff; margin-right:10px;"></span>
-                {{ $t('setting.Language') }}
-              </div>
-            </div>
-          </el-collapse-transition>
         </div>
       </div>
     </div>
@@ -427,6 +424,7 @@ export default {
       batch_sizeStr: "",
       //全部的设置参数
       SettingInfo: {
+        prompt: "",
         cutSetting: 1,
         KeyMsg: "",
         readefile: false,
@@ -435,7 +433,6 @@ export default {
         openProductionPicture: false,
         openChangePicture: false,
         TemperatureAudio: 0,
-
         n: 1,
         size: "256x256",
         language: "zh",
@@ -532,7 +529,6 @@ export default {
         {name: this.$t('image.title'), active: false},
         {name: this.$t('audio.title'), active: false},
         {name: this.$t('session.title'), active: false},
-        {name: this.$t('setting.title'), active: false}
       ]
     }
   },
@@ -643,22 +639,6 @@ export default {
     }
   },
   methods: {
-    // 切换语言
-    changeLanguage() {
-      const lang = this.$i18n.locale === "zh" ? "en" : "zh";
-      localStorage.setItem("lang", lang);
-      this.$i18n.locale = lang;
-    },
-    //显示或者隐藏取消过的微调模型
-    showOrHidenCancelFine(status) {
-      this.cancelFineStatus = status
-      if (this.cancelFineStatus === true) {
-        this.fineTuningList = this.fineTuningCacheList
-      } else {
-        this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
-      }
-    },
-
     //导入会话列表触发的方法
     importFromJsonArrAll() {
       this.$refs.onupdateJosnArrAll.click(); // 触发选择文件的弹框
@@ -867,8 +847,8 @@ export default {
           type: "error",
         });
       } else {
-        const chatWindow = this.$refs.chatWindow;
-        chatWindow.inputMsg = info.prompt;
+        // const chatWindow = this.$refs.chatWindow;
+        this.SettingInfo.prompt = info.prompt;
       }
 
     },

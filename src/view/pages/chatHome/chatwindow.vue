@@ -21,22 +21,25 @@
             <label @click="clearMsgList">
               <span class="iconfont icon-qingchu"></span>
             </label>
-            <label @click="importFromJsonArr">
-              <span class="iconfont icon-daoru"></span>
-            </label>
             <label @click="exportObjArrToJson">
               <span class="iconfont icon-daochu"></span>
             </label>
             <label for="imgFile">
               <span class="iconfont icon-tupian"></span>
             </label>
-            <label for="docFile">
-              <span class="iconfont icon-wenben"></span>
+            <label @click="changeLanguage">
+              <span class="iconfont icon-iconyuanbanben_fanyi"></span>
             </label>
+            <!--<label @click="importFromJsonArr">-->
+            <!--  <span class="iconfont icon-daoru"></span>-->
+            <!--</label>-->
+            <!--<label for="docFile">-->
+            <!--  <span class="iconfont icon-wenben"></span>-->
+            <!--</label>-->
             <input type="file" name="" id="imgFile" @change="sendImg" accept="image/*"/>
             <input type="file" name="" id="docFile" @change="sendFile" accept="application/*,text/*"/>
-            <!-- 导入当前会话内容 -->
-            <input type="file" ref="onupdateJosnArr" @change="handleFileUpload" style="display: none;">
+            <!--&lt;!&ndash; 导入当前会话内容 &ndash;&gt;-->
+            <!--<input type="file" ref="onupdateJosnArr" @change="handleFileUpload" style="display: none;">-->
           </div>
         </el-col>
       </el-row>
@@ -322,6 +325,12 @@ export default {
       let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
       saveAs(blob, "data.json");
     },
+    // 切换语言
+    changeLanguage() {
+      const lang = this.$i18n.locale === "zh" ? "en" : "zh";
+      localStorage.setItem("lang", lang);
+      this.$i18n.locale = lang;
+    },
     // 监听窗口的变化
     handleResize() {
       if (window.innerWidth <= 700) {
@@ -437,47 +446,8 @@ export default {
       this.chatList.push(msgList);
       this.scrollBottom();
     },
-    // 在组件或页面外部声明计算余弦相似度的函数
-    // cosineSimilarity(a, b) {
-    //   const dotProduct = a.reduce((acc, curr, i) => acc + curr * b[i], 0);
-    //   const normA = Math.sqrt(a.reduce((acc, curr) => acc + curr * curr, 0));
-    //   const normB = Math.sqrt(b.reduce((acc, curr) => acc + curr * curr, 0));
-    //   return dotProduct / (normA * normB);
-    // },
     //发送文字信息
     sendText() {
-      // if(this.settingInfo.readefile){
-      //   console.log(this.fileArrays)
-      //   const formData = new FormData();
-      //   formData.append("model", "text-embedding-ada-002");
-      //   formData.append("input", "吕世昊是谁?");
-      //   createEmbeddings(formData,this.settingInfo.KeyMsg).then(data => {
-      //     const inputEmbedding=data.data[0]
-      //     // const similarText = this.findMostSimilarEmbedding(, this.fileArrays);
-      //     // 计算每个句子embedding与输入数据embedding之间的相似度
-      //     const similarities = this.cosineSimilarity(this.fileArrays.embedding, inputEmbedding.embedding)
-      //     const similaritiesArr=[];
-      //     console.log(similarities)
-      //     similaritiesArr.push(similarities)
-      //     // 对相似度进行排名，选择与输入数据最相似的句子或文章段落作为匹配结果
-      //     const topMatchIndex = similaritiesArr.reduce((maxIndex, similarity, index) => similarity > similaritiesArr[maxIndex] ? index : maxIndex, 0)
-      //     console.log(topMatchIndex)
-      //     const topMatchText = sentences[topMatchIndex]
-      //     console.log('最匹配的句子是：', topMatchText)
-      //     // console.log('最相似的文本为：', similarText);
-      //   })
-      //   // const configuration = new Configuration({
-      //   //   apiKey:  ,
-      //   // });
-      //   // const openai = new OpenAIApi(configuration);
-      //   // const response = openai.embeddings({
-      //   //   model: 'text-embedding-ada-002',
-      //   //   input:"text"
-      //   // });
-      //   // console.log(response)
-
-      //   return
-      // }
       this.rows = 1;
       this.$nextTick(() => {
         this.acqStatus = false

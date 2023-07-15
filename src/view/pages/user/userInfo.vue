@@ -1,10 +1,10 @@
 <template>
     <el-container style="height: 94vh;">
-     
+     啊
     </el-container>
   </template>
-  
-  <script>
+
+<script>
   export default {
     name: "App",
     data() {
@@ -17,8 +17,8 @@
     },
   };
   </script>
-  
-  <style>
+
+<style>
     .transition-box {
       text-align: center;
       margin-top: 5%;
@@ -34,4 +34,3 @@
       color: #67C23A;
     }
   </style>
-  

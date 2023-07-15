@@ -1,64 +1,199 @@
 <template>
-  <div class="setting">
-    <el-container>
-      <el-header>
-        <transition name="el-zoom-in-top">
-          <div v-show="show" class="transition-box">
-            <h3>JUN CHEN MO</h3>
-          </div>
-        </transition>
-      </el-header>
-      <el-main>
-        <transition name="el-zoom-in-top">
-          <div v-show="show" class="transition-box">
-            <span>
-              现已接入OpenAI的Models API、Completions API、Chat API、Audio API、Images API、Files API、Fine-tunes API后续会添加更多有意思的功能进去，希望大家给我的GitHub点个小小的星星，
-              大家如果有什么好的想法可以在GitHub中提出来，觉得项目不错的朋友可以打赏一波，感谢支持。
-            </span>
-            <div>
-              <a href="https://space.bilibili.com/326625155?spm_id_from=333.337.0.0">BliBili</a>---<a href="https://github.com/202252197/ChatGPT_JCM">GitHub</a>
-            </div>
-            <div>
-              <h3>愿半生编码，如一生老友</h3>
-            </div>
-            <div>
-              <img src="https://i.328888.xyz/2023/05/09/iQ8tvv.jpeg" width="300px" height="300px"/>
-              <img src="https://i.328888.xyz/2023/05/09/iQNnf3.jpeg" width="300px" height="300px"/>
-            </div>
-          </div>
-        </transition>
-      </el-main>
-    </el-container>
+  <div class="contain-log">
+    <el-card>
+      <div class="my-table">
+        <el-table :data="tableData" background-color="#FAFAFA" class="">
+          <el-table-column label="Date" prop="date" width="180"/>
+          <el-table-column label="Name" prop="name" width="180"/>
+          <el-table-column label="Address" prop="address"/>
+          <el-table-column align="right">
+            <template #default="scope">
+              <el-button
+                  size="small"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+              >删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="pagination">
+          <el-pagination
+              v-model:current-page="currentPage4"
+              v-model:page-size="pageSize4"
+              :background="background"
+              :page-sizes="[5, 10, 15, 20]"
+              :small="small"
+              :total="60"
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          />
+        </div>
+      </div>
+
+
+      <div class="my-table">
+        <el-table :data="tableData" background-color="#FAFAFA" class="">
+          <el-table-column label="Date" prop="date" width="180"/>
+          <el-table-column label="Name" prop="name" width="180"/>
+          <el-table-column label="Address" prop="address"/>
+          <el-table-column align="right">
+            <template #default="scope">
+              <el-button
+                  size="small"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+              >删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="">
+          <el-pagination
+              v-model:current-page="currentPage4"
+              v-model:page-size="pageSize4"
+              :background="background"
+              :page-sizes="[5, 10, 15, 20]"
+              :small="small"
+              :total="60"
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          />
+        </div>
+      </div>
+      <div class="my-table">
+        <el-table :data="tableData" background-color="#FAFAFA" class="">
+          <el-table-column label="Date" prop="date" width="180"/>
+          <el-table-column label="Name" prop="name" width="180"/>
+          <el-table-column label="Address" prop="address"/>
+          <el-table-column align="right">
+            <template #default="scope">
+              <el-button
+                  size="small"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+              >删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="">
+          <el-pagination
+              v-model:current-page="currentPage4"
+              v-model:page-size="pageSize4"
+              :background="background"
+              :page-sizes="[5, 10, 15, 20]"
+              :small="small"
+              :total="60"
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          />
+        </div>
+      </div>
+      <div class="my-table">
+        <el-table :data="tableData" background-color="#FAFAFA" class="">
+          <el-table-column label="Date" prop="date" width="180"/>
+          <el-table-column label="Name" prop="name" width="180"/>
+          <el-table-column label="Address" prop="address"/>
+          <el-table-column align="right">
+            <template #default="scope">
+              <el-button
+                  size="small"
+                  type="danger"
+                  @click="handleDelete(scope.$index, scope.row)"
+              >删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="">
+          <el-pagination
+              v-model:current-page="currentPage4"
+              v-model:page-size="pageSize4"
+              :background="background"
+              :page-sizes="[5, 10, 15, 20]"
+              :small="small"
+              :total="60"
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          />
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
+import {ref} from "vue";
+
 export default {
   name: "App",
+  computed() {
+  },
+  props: {
+    // tableData: [],
+    default() {
+      return {};
+    },
+  },
   data() {
     return {
-      show: false,
+      currentPage4: 4,
+      pageSize4: 100,
+      small: false,
+      background: ref(true),
+      tableData: [
+        {
+          date: '2016-05-03',
+          name: 'Tom1',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-02',
+          name: 'Tom2',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-04',
+          name: 'Tom3',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+        {
+          date: '2016-05-01',
+          name: 'Tom4',
+          address: 'No. 189, Grove St, Los Angeles',
+        },
+      ]
     };
   },
+  methods: {
+    handleDelete(event) {
+      console.log(this.tableData[event].name)
+      console.log(this.tableData[event].date)
+    },
+    handleCurrentChange(event) {
+      console.log(event)
+    },
+    handleSizeChange(event) {
+      console.log(event)
+    }
+  },
   mounted() {
-    this.show = true;
   },
 };
 </script>
 
 <style>
-  .transition-box {
-    text-align: center;
-    margin-top: 5%;
-    color: #F2F6FC;
-    font-size: 30px;
-  }
-  h1 {
-    color: aliceblue;
-    font-size: 80px;
-  }
-  a {
-    text-decoration: none;
-    color: #67C23A;
-  }
+.contain-log {
+  height: 100%;
+  background: rgb(39, 42, 55);
+  max-height: 95vh;
+  overflow: auto;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
 </style>

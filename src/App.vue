@@ -13,11 +13,11 @@ export default {
   name: 'App',
   components: {
     Home
-  }, 
-  methods:{
-    windowMove(canMove){
-      if (isPc()){
-        import("electron").then(({ ipcRenderer }) => {
+  },
+  methods: {
+    windowMove(canMove) {
+      if (isPc()) {
+        import("electron").then(({ipcRenderer}) => {
           ipcRenderer.send('window-move-open', canMove ?? false);
         });
       }
@@ -41,14 +41,14 @@ export default {
 * {
   padding: 0;
   margin: 0;
-  font-family: 'SSFY';
+  font-family: 'SSFY', serif;
 }
 #app {
   width: 100vw;
   height: 100vh;
-  background: url("@/assets/img/bj.png") no-repeat;
-  background-size:cover;
-  position:absolute;
+  background: url("./assets/img/bj.png") no-repeat;
+  background-size: cover;
+  position: absolute;
 }
 ::-webkit-scrollbar {
   display: none; /* Chrome Safari */

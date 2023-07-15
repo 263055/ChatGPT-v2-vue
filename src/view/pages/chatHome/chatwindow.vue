@@ -574,15 +574,15 @@ export default {
               })
         } else {
           //如果是文字模式则进入
-          params.model = this.frinedInfo.id,
-              params.max_tokens = this.settingInfo.chat.MaxTokens,
-              params.temperature = this.settingInfo.chat.Temperature,
-              params.top_p = this.settingInfo.chat.TopP,
-              params.n = this.settingInfo.chat.n,
-              params.stream = this.settingInfo.chat.stream,
-              params.stop = this.settingInfo.chat.stop,
-              params.presence_penalty = this.settingInfo.chat.PresencePenalty
-              params.frequency_penalty = this.settingInfo.chat.FrequencyPenalty
+          params.model = this.frinedInfo.id
+          params.max_tokens = this.settingInfo.chat.MaxTokens
+          params.temperature = this.settingInfo.chat.Temperature
+          params.top_p = this.settingInfo.chat.TopP
+          params.n = this.settingInfo.chat.n
+          params.stream = this.settingInfo.chat.stream
+          params.stop = this.settingInfo.chat.stop
+          params.presence_penalty = this.settingInfo.chat.PresencePenalty
+          params.frequency_penalty = this.settingInfo.chat.FrequencyPenalty
 
           let chatBeforResMsg = {
             headImg: AI_HEAD_IMG_URL,

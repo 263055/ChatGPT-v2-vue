@@ -13,27 +13,20 @@
         </li>
       </ul>
     </div>
-    <div class="own-pic" @click="userInfoShow">
-      <HeadImg></HeadImg>
-    </div>
   </div>
 </template>
 
 <script>
 import {USER_HEAD_IMG_URL} from '@/store/mutation-types'
-import HeadPortrait from "./HeadPortrait.vue";
-import HeadImg from "./HeadImg.vue";
 
 export default {
-  components: {
-    HeadPortrait,
-    HeadImg
-  },
+
   data() {
     return {
       menuList: [
+        "icon-weidenglu",
         "icon-xinxi",
-        "icon-shezhi"
+        "icon-shezhi",
       ],
       current: 0,
       imgUrl: USER_HEAD_IMG_URL
@@ -44,11 +37,17 @@ export default {
       switch (index) {
         case 0:
           this.$router.push({
-            name: "ChatHome",
+            name: "login",
           }, () => {
           });
           break;
         case 1:
+          this.$router.push({
+            name: "ChatHome",
+          }, () => {
+          });
+          break;
+        case 2:
           this.$router.push({
             name: "Setting",
           }, () => {
@@ -62,12 +61,6 @@ export default {
 
       this.current = index;
     },
-    userInfoShow() {
-      this.$router.push({
-        name: "UserInfo",
-      }, () => {
-      });
-    }
   },
 };
 </script>

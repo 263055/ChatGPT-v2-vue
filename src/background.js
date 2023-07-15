@@ -1,5 +1,4 @@
-const { app, BrowserWindow,globalShortcut,ipcMain,screen,protocol  } = require('electron')
-import path from "path";
+const {app, BrowserWindow, globalShortcut, ipcMain, screen} = require('electron')
 
 let mainWindow
 function createWindow() {

@@ -637,8 +637,8 @@ export default {
       batch_sizeStr: "",
       //全部的设置参数
       SettingInfo: {
-        cutSetting : 1,
-        KeyMsg: process.env.VUE_APP_OPENAI_API_KEY,
+        cutSetting: 1,
+        KeyMsg: "",
         readefile: false,
         inputStatus: true,
         translateEnglish: false,

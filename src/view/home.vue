@@ -40,20 +40,16 @@ export default {
   },
   methods: {
     resize(){
-      if (window.innerWidth <= 1150) {
-        this.asideStatus=false
-      } else {
-        this.asideStatus=true
-      }
+      this.asideStatus = window.innerWidth > 1150;
     },
    //监听窗口尺寸的变化
     handleResize() {
-      if (this.firstSize){
+      if (this.firstSize) {
         this.resize();
         this.firstSize = false;
         this.width = window.innerWidth;
       }
-      if ( this.width != window.innerWidth ){
+      if (this.width !== window.innerWidth) {
         this.resize();
         this.width = window.innerWidth;
       }

@@ -50,9 +50,9 @@
           <span class="form-label">密码</span>
           <el-input v-model="loginForm.password" style="width: 300px;"></el-input>
         </div>
+        <!--登录/注册-->
+        <el-button class="login-form-button" type="primary">登录/注册</el-button>
       </div>
-      <!--登录/注册-->
-      <el-button type="primary">a a a</el-button>
     </el-card>
 
   </el-container>
@@ -125,6 +125,11 @@ export default {
 </script>
 
 <style>
+.login-form-button {
+  display: block;
+  margin: auto auto;
+}
+
 .login-card {
   width: 450px;
   height: 500px;

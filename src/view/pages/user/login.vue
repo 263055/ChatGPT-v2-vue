@@ -21,7 +21,7 @@
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
         <!--最顶端的文字描述部分-->
         <div class="login-title">登录/注册</div>
-        <el-form-item prop="username">
+        <el-form-item prop="email">
           <el-input
               v-model="loginForm.email"
               auto-complete="off"
@@ -93,10 +93,11 @@
 
 
 <script>
-import {ref} from "vue";
 import {decrypt, encrypt} from '@/util/jsencrypt'
 import SvgIcon from "../../../components/SvgIcon.vue";
-import {getCodeImg, loginAndRegister} from "@/api/login";
+import {getCodeImg} from "@/api/login";
+import Cookies from "js-cookie";
+
 export default {
   name: "Login",
   computed() {
@@ -119,16 +120,26 @@ export default {
         }
       });
     },
+    getCookie() {
+      const email = Cookies.get("email");
+      const password = Cookies.get("password");
+      const rememberMe = Cookies.get('rememberMe')
+      this.loginForm = {
+        email: email === undefined ? this.loginForm.email : email,
+        password: password === undefined ? this.loginForm.password : decrypt(password),
+        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+      };
+    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
           if (this.loginForm.rememberMe) {
-            Cookies.set("username", this.loginForm.username, {expires: 30});
+            Cookies.set("email", this.loginForm.email, {expires: 30});
             Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
             Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
           } else {
-            Cookies.remove("username");
+            Cookies.remove("email");
             Cookies.remove("password");
             Cookies.remove('rememberMe');
           }
@@ -162,8 +173,8 @@ export default {
       },
       loading: false,
       loginRules: {
-        username: [
-          {required: true, trigger: "blur", message: "请输入您的账号"}
+        email: [
+          {required: true, trigger: "blur", message: "请输入您的邮箱"}
         ],
         password: [
           {required: true, trigger: "blur", message: "请输入您的密码"}

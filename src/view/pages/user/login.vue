@@ -50,6 +50,15 @@
           <span class="form-label">密码</span>
           <el-input v-model="loginForm.password" style="width: 300px;"></el-input>
         </div>
+        <section>
+          <g-recaptcha
+              :data-callback="callback"
+              :data-validate="validate"
+              data-sitekey="6LcY5ygnAAAAADKwkaJLdjwD4u5LgNzcsQOvgMzR"
+          >Submit form
+          </g-recaptcha>
+          <!-- g-recaptcha will replace a button for submit form -->
+        </section>
         <!--登录/注册-->
         <el-button class="login-form-button" type="primary">登录/注册</el-button>
       </div>
@@ -61,6 +70,7 @@
 
 <script>
 import {ref, reactive} from "vue";
+import gRecaptcha from '@finpo/vue2-recaptcha-invisible';
 
 export default {
   name: "App",
@@ -70,6 +80,36 @@ export default {
     default() {
       return {};
     },
+  },
+  components: {
+    gRecaptcha,
+  },
+  methods: {
+    validate() {
+      // validate your form , if you don't have validate prop , default validate pass .
+      return true;
+    },
+    callback(token) {
+      // google recaptcha token , then you can pass to backend with your form data .
+      if (token) {
+        alert(token);
+      } else {
+        // if you use data-size show reCAPTCHA , maybe you will get empty token.
+        alert('please check you are not robot');
+      }
+    },
+    handleDelete(event) {
+      console.log(this.tableData[event].name)
+      console.log(this.tableData[event].date)
+    },
+    handleCurrentChange(event) {
+      console.log(event)
+    },
+    handleSizeChange(event) {
+      console.log(event)
+    }
+  },
+  mounted() {
   },
   data() {
     return {
@@ -106,20 +146,6 @@ export default {
         },
       ]
     };
-  },
-  methods: {
-    handleDelete(event) {
-      console.log(this.tableData[event].name)
-      console.log(this.tableData[event].date)
-    },
-    handleCurrentChange(event) {
-      console.log(event)
-    },
-    handleSizeChange(event) {
-      console.log(event)
-    }
-  },
-  mounted() {
   },
 };
 </script>

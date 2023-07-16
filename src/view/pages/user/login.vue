@@ -94,8 +94,9 @@
 
 <script>
 import {ref} from "vue";
+import {decrypt, encrypt} from '@/util/jsencrypt'
 import SvgIcon from "../../../components/SvgIcon.vue";
-
+import {getCodeImg, loginAndRegister} from "@/api/login";
 export default {
   name: "Login",
   computed() {
@@ -110,37 +111,38 @@ export default {
   },
   methods: {
     getCode() {
-      // getCodeImg().then(res => {
-      //   this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-      //   if (this.captchaEnabled) {
-      //     this.codeUrl = "data:image/gif;base64," + res.img;
-      //     this.loginForm.uuid = res.uuid;
-      //   }
-      // });
+      getCodeImg().then(res => {
+        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+        if (this.captchaEnabled) {
+          this.codeUrl = "data:image/gif;base64," + res.img;
+          this.loginForm.uuid = res.uuid;
+        }
+      });
     },
     handleLogin() {
-      // this.$refs.loginForm.validate(valid => {
-      //   if (valid) {
-      //     this.loading = true;
-      //     if (this.loginForm.rememberMe) {
-      //       Cookies.set("username", this.loginForm.username, { expires: 30 });
-      //       Cookies.set("password", encrypt(this.loginForm.password), { expires: 30 });
-      //       Cookies.set('rememberMe', this.loginForm.rememberMe, { expires: 30 });
-      //     } else {
-      //       Cookies.remove("username");
-      //       Cookies.remove("password");
-      //       Cookies.remove('rememberMe');
-      //     }
-      //     this.$store.dispatch("Login", this.loginForm).then(() => {
-      //       this.$router.push({ path: this.redirect || "/" }).catch(()=>{});
-      //     }).catch(() => {
-      //       this.loading = false;
-      //       if (this.captchaEnabled) {
-      //         this.getCode();
-      //       }
-      //     });
-      //   }
-      // });
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          if (this.loginForm.rememberMe) {
+            Cookies.set("username", this.loginForm.username, {expires: 30});
+            Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
+            Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
+          } else {
+            Cookies.remove("username");
+            Cookies.remove("password");
+            Cookies.remove('rememberMe');
+          }
+          this.$store.dispatch("Login", this.loginForm).then(() => {
+            this.$router.push({path: this.redirect || "/"}).catch(() => {
+            });
+          }).catch(() => {
+            this.loading = false;
+            if (this.captchaEnabled) {
+              this.getCode();
+            }
+          });
+        }
+      });
     }
   },
   created() {

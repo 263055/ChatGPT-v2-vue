@@ -6,7 +6,7 @@ module.exports = defineConfig({
     config.plugins =  [
       ...config.plugins,
       new NodePolyfillPlugin()
-    ],
+    ]
     config.experiments = {
       syncWebAssembly: true
     }
@@ -20,6 +20,19 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: './', // 设置资源文件的根路径
   devServer: {
+    host: '0.0.0.0',
+    port: 5173,
+    open: true,
+    proxy: {
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
+      '/api': {
+        target: `http://localhost:9999`,
+        changeOrigin: true,
+        pathRewrite: {
+          '/api': ''
+        }
+      }
+    },
     hot: true//自动保存
   },
   pluginOptions: {
@@ -29,7 +42,7 @@ module.exports = defineConfig({
       mainProcessFile: 'src/background.js',
       builderOptions: {
         appId: 'com.example.app',
-        productName: 'ChatGPT_JCM',
+        productName: 'ChatGPT-v2',
         win: {
           icon: './public/app.ico'
         },

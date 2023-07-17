@@ -763,9 +763,11 @@ export default {
     },
     //创建会话
     newSession() {
-      this.$prompt('请输入会话标题', {
+      this.$prompt('最长15个字符哦', '请输入会话标题', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
+        inputPattern: /^[\u4e00-\u9fa5\w\s]{1,15}$/,
+        inputErrorMessage: '长度不要超过15哦',
       }).then(({value}) => {
         const uuid = generateUUID()
         new Promise((resolve, reject) => {

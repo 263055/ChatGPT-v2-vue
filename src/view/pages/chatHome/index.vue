@@ -502,6 +502,7 @@ export default {
       personList: [],
       //会话列表
       sessionList: [],
+      sessionCacheList: [],
       //角色列表
       roleList: [],
       //模型列表缓存
@@ -583,12 +584,12 @@ export default {
         }
       }
     },
-    fileSearch: {
+    sessionSearch: {
       handler: function (newVal, oldVal) {
-        if (this.fileList) {
-          this.fileList = this.fileCacheList.filter(fileList => fileList.id.includes(newVal))
+        if (this.sessionList) {
+          this.sessionList = this.sessionCacheList.filter(fileList => fileList.name.includes(newVal))
         } else {
-          this.fileList = this.fileCacheList
+          this.sessionList = this.sessionCacheList
         }
       }
     },
@@ -663,6 +664,7 @@ export default {
         getChatRoom().then(res => {
           res.list.forEach((element) => {
             this.sessionList.push(element);
+            this.sessionCacheList = this.sessionList
           });
           resolve()
         }).catch(error => {
@@ -774,7 +776,7 @@ export default {
           createChatRoom(uuid, value).then(() => {
             const newSession = {id: uuid, name: value};
             this.sessionList.unshift(newSession);
-            console.log(this.sessionList);
+            this.sessionCacheList = this.sessionList
             this.$message({
               type: 'success',
               message: '创建成功'

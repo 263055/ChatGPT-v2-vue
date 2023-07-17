@@ -374,7 +374,8 @@ import File from "@/components/File.vue";
 import ChatWindow from "./chatwindow.vue";
 import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
 import RoleCard from "@/components/RoleCard.vue";
-import {getChatRoom} from "@/api/session";
+import {createChatRoom, getChatRoom} from "@/api/session";
+import {generateUUID} from "@/util/util";
 
 import {
   getModels,
@@ -657,15 +658,12 @@ export default {
       this.SettingInfo.chat.stream = true
       this.SettingInfo.chat.echo = false
     },
-    getSessionList() { // aaaaa
+    getSessionList() {
       return new Promise((resolve, reject) => {
         getChatRoom().then(res => {
-          console.log(res.list)
           res.list.forEach((element) => {
             this.sessionList.push(element);
           });
-          console.log(0)
-          console.log(this.sessionList)
           resolve()
         }).catch(error => {
           reject(error)
@@ -765,36 +763,35 @@ export default {
     },
     //创建会话
     newSession() {
-      //获取当前会话长度
-      const currentLen = this.sessionList.length + 1
-      //定义对象
-      const obj = {
-        "id": currentLen,
-        "title": "",
-        "dataList": []
-      }
-      //先获取对话的列表
-      const msgList = this.$refs.chatWindow.getMesList();
-      if (msgList.length >= 2) {
-        if (this.sessionCurrent) {
-          this.sessionCurrent = ""
-          //清除当前窗口数据
-          this.$refs.chatWindow.clearMsgList();
-        } else {
-          obj.title = msgList[0].msg
-          obj.dataList = msgList;
-          let tempSessionList = this.sessionList;
-          tempSessionList.push(obj)
-
-          this.sessionList = tempSessionList.reverse();
-          this.sessionCurrent = "";
-          //清除当前窗口数据
-          this.$refs.chatWindow.clearMsgList();
-        }
-      } else if (msgList.length === 1) {
-        //清除当前窗口数据
-        this.$refs.chatWindow.clearMsgList();
-      }
+      this.$prompt('请输入会话标题', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({value}) => {
+        const uuid = generateUUID()
+        new Promise((resolve, reject) => {
+          createChatRoom(uuid, value).then(() => {
+            const newSession = {id: uuid, name: value};
+            this.sessionList.unshift(newSession);
+            console.log(this.sessionList);
+            this.$message({
+              type: 'success',
+              message: '创建成功'
+            });
+            resolve()
+          }).catch(error => {
+            this.$message({
+              type: 'info',
+              message: '创建失败'
+            });
+            reject(error)
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消创建'
+        });
+      });
     },
     //模型列表被点击
     modelClick() {

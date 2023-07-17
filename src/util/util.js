@@ -180,7 +180,7 @@ export function copyToClipboard(content) {
  * @returns
  */
 export function generateUUID() {
-  var d = new Date().getTime();
+  let d = new Date().getTime();
   if (window.performance && typeof window.performance.now === "function") {
     d += performance.now(); //use high-precision timer if available
   }

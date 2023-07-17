@@ -1,5 +1,6 @@
 import {loginAndRegister, logout} from '@/api/login'
 import {getToken, removeToken, setToken} from '@/util/auth'
+import {Notification} from 'element-ui'
 
 const user = {
   state: {
@@ -31,14 +32,28 @@ const user = {
   actions: {
     // 登录
     Login({commit}, userInfo) {
-      const username = userInfo.username.trim()
+      const email = userInfo.email.trim()
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
       return new Promise((resolve, reject) => {
-        loginAndRegister(username, password, code, uuid).then(res => {
-          setToken(res.token)
-          commit('SET_TOKEN', res.token)
+        loginAndRegister(email, password, code, uuid).then(res => {
+          if (res.data != null) {
+            setToken(res.data)
+            Notification.success({
+              title: '登陆成功',
+              message: '点击左侧栏的切换即可进行对话',
+              duration: 3000
+            })
+            commit('SET_TOKEN', res.data)
+            resolve()
+          } else {
+            Notification.success({
+              title: '邮件已发送',
+              message: '请点击邮箱的连接完成注册',
+              duration: 5000
+            })
+          }
           resolve()
         }).catch(error => {
           reject(error)
@@ -47,7 +62,7 @@ const user = {
     },
 
     // 退出系统
-    LogOut({commit, state}) {
+    Logout({commit, state}) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')

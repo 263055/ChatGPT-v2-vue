@@ -100,8 +100,8 @@ import Cookies from "js-cookie";
 
 export default {
   name: "Login",
-  computed() {
-  },
+  // computed() {
+  // },
   props: {
     default() {
       return {};
@@ -113,11 +113,8 @@ export default {
   methods: {
     getCode() {
       getCodeImg().then(res => {
-        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
-          this.loginForm.uuid = res.uuid;
-        }
+        this.codeUrl = "data:image/gif;base64," + res.data.img;
+        this.loginForm.uuid = res.data.uuid;
       });
     },
     getCookie() {
@@ -144,8 +141,9 @@ export default {
             Cookies.remove('rememberMe');
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
-            this.$router.push({path: this.redirect || "/"}).catch(() => {
-            });
+            this.loading = false;
+            // this.$router.push({path: "/ChatHome"}).catch(() => {
+            // });
           }).catch(() => {
             this.loading = false;
             if (this.captchaEnabled) {
@@ -225,7 +223,7 @@ export default {
 }
 
 .login-code {
-  width: 33%;
+  width: 36%;
   height: 38px;
   float: right;
 

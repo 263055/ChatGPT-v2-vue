@@ -44,9 +44,6 @@
           <input class="inputs" v-model="sessionSearch" style=" margin-top: 10px;"
                  :placeholder="$t('placeholder.session_name')"/>
           <div class="s-wrapper">
-            <div v-for="sessionInfo in sessionList" :key="sessionInfo.id" @click="clickSession(sessionInfo)">
-              <Session :sessionInfo="sessionInfo" :pcCurrent="sessionCurrent"></Session>
-            </div>
             <div class="session boxinput" @click="newSession">
               <svg class="icon" height="25" p-id="3128" version="1.1"
                    viewBox="0 0 1024 1024" width="25" x="1679215361568" xmlns="http://www.w3.org/2000/svg">
@@ -64,7 +61,12 @@
               <span class="iconfont icon-daochu" style="color: #fff; margin-right:10px;"></span>
               {{ $t('session.export') }}
             </div>
+            <!-- 所有会话-->
+            <div v-for="sessionInfo in sessionList" :key="sessionInfo.id" @click="clickSession(sessionInfo)">
+              <Session :pcCurrent="sessionCurrent" :sessionInfo="sessionInfo"></Session>
+            </div>
           </div>
+
         </div>
         <!--角色-->
         <div v-show="cutSetting === 2">
@@ -372,16 +374,15 @@ import File from "@/components/File.vue";
 import ChatWindow from "./chatwindow.vue";
 import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
 import RoleCard from "@/components/RoleCard.vue";
+import {getChatRoom} from "@/api/session";
+
 import {
-  deleteFile,
-  getFilesList,
   getModels,
   getRoles,
-  uploadFile
 } from "@/api/getData";
 
-
 const {OpenAIApi} = require("openai");
+
 export default {
   name: "App",
   directives: {
@@ -445,7 +446,7 @@ export default {
         size: "256x256",
         language: "zh",
         prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
-        chat: { // aaaaa
+        chat: {
           // 后缀
           suffix: localStorage.getItem("suffix") == null ? "" : localStorage.getItem("suffix"),
           // 停用词
@@ -567,11 +568,10 @@ export default {
       this.getModelList(this.SettingInfo.KeyMsg);
     }
     this.getRolesList();
+    this.getSessionList();
     this.$watch('fileSearch', this.watchFileSearch);
   },
-  filters: {
-
-  },
+  filters: {},
   watch: {
     modelSearch: {
       handler: function (newVal, oldVal) {
@@ -582,24 +582,6 @@ export default {
         }
       }
     },
-    // fineTuningSearch: {
-    //   handler: function (newVal, oldVal) {
-    //     if (this.fineTuningList) {
-    //       if (!this.cancelFineStatus) {
-    //         this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded").filter(fineTuning => fineTuning.id.includes(newVal))
-    //       } else {
-    //         this.fineTuningList = this.fineTuningCacheList.filter(fineTuning => fineTuning.id.includes(newVal))
-    //       }
-    //     } else {
-    //       if (!this.cancelFineStatus) {
-    //         this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
-    //       } else {
-    //         this.fineTuningList = this.fineTuningCacheList
-    //       }
-    //     }
-    //
-    //   }
-    // },
     fileSearch: {
       handler: function (newVal, oldVal) {
         if (this.fileList) {
@@ -626,16 +608,6 @@ export default {
         if (newVal.openProductionPicture) {
           this.SettingInfo.openChangePicture = false
         }
-        // if (newVal.fineTunes.batch_size) {
-        //   this.SettingInfo.fineTunes.batch_size = parseInt(newVal.fineTunes.batch_size)
-        // } else {
-        // }
-        // if (newVal.fineTunes.validation_file) {
-        //   this.SettingInfo.fineTunes.validation_file = newVal.fineTunes.validation_file
-        // }
-        // if (newVal.fineTunes.learning_rate_multiplier) {
-        //   this.SettingInfo.fineTunes.learning_rate_multiplier = parseInt(newVal.fineTunes.learning_rate_multiplier)
-        // }
         if (newVal.KeyMsg && newVal !== oldVal) {
           //获取模型列表
           getModels(newVal).then((res) => {
@@ -649,7 +621,7 @@ export default {
       deep: true
     }
   },
-  methods: { // aaaaa
+  methods: {
     savePrompt() {
       localStorage.setItem("prompt", this.SettingInfo.prompt)
     },
@@ -685,34 +657,26 @@ export default {
       this.SettingInfo.chat.stream = true
       this.SettingInfo.chat.echo = false
     },
-    //导入会话列表触发的方法
-    importFromJsonArrAll() {
-      this.$refs.onupdateJosnArrAll.click(); // 触发选择文件的弹框
-    },
-    handleFileUploadAll(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const fileContent = reader.result; // 文件内容
-        this.sessionList = JSON.parse(fileContent)  // 转换为数组
-      };
-      reader.readAsText(file);
+    getSessionList() { // aaaaa
+      return new Promise((resolve, reject) => {
+        getChatRoom().then(res => {
+          console.log(res.list)
+          res.list.forEach((element) => {
+            this.sessionList.push(element);
+          });
+          console.log(0)
+          console.log(this.sessionList)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
     },
     //导出所有会话到json文件
     exportObjArrAllToJson() {
       let jsonString = JSON.stringify(this.sessionList); // 将数组转为JSON字符串
       let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
       saveAs(blob, "data.json");
-    },
-
-    //清除所有的会话内容
-    clearAllContext() {
-      this.sessionList = []
-    },
-    //清除当前会话内容
-    clearCurrentContext() {
-      this.$refs.chatWindow.clearMsgList()
     },
     // 点击切换显示状态
     toggleLeft() {
@@ -741,43 +705,21 @@ export default {
         document.querySelectorAll('.chatLeft')[1].style.width = '20%';
       }
     },
-    //获取模型列表
-    // getModelList(key) {
-    //   getModels(key).then((modelsRes) => {
-    //     // 提取fineTunesRes集合中所有id属性值
-    //     getFineTunesList(key).then((fineTunesRes) => {
-    //       const fineTunesIds = fineTunesRes.map(item => item.id);
-    //       const models = modelsRes.filter(item => !fineTunesIds.includes(item.id));
-    //       this.personList = models;
-    //       this.personListCache = models;
-    //     })
-    //     // this.updateMoneyInfo()
-    //   }).catch(e => {
-    //     this.$message.error(this.$t('message.get_model_fail'))
-    //   })
-    // },
-    //获取微调模型列表
-    // getFineTunessList(key) {
-    //   getFineTunesList(key).then((res) => {
-    //     this.fineTuningCacheList = res
-    //     if (this.cancelFineStatus === true) {
-    //       this.fineTuningList = this.fineTuningCacheList
-    //     } else {
-    //       this.fineTuningList = this.fineTuningCacheList.filter(fineTunin => fineTunin.fineTunesStatus === "succeeded")
-    //     }
-    //   }).catch(e => {
-    //     this.$message.error(this.$t('message.get_model_fail'))
-    //   })
-    // },
-    //获取文件列表
-    // getFilessList(key) {
-    //   getFilesList(key).then((res) => {
-    //     this.fileList = res
-    //     this.fileCacheList = res
-    //   }).catch(e => {
-    //     this.$message.error(this.$t('message.get_files_fail'))
-    //   })
-    // },
+    // 获取模型列表
+    getModelList(key) {
+      getModels(key).then((modelsRes) => {
+        // 提取fineTunesRes集合中所有id属性值
+        getFineTunesList(key).then((fineTunesRes) => {
+          const fineTunesIds = fineTunesRes.map(item => item.id);
+          const models = modelsRes.filter(item => !fineTunesIds.includes(item.id));
+          this.personList = models;
+          this.personListCache = models;
+        })
+        // this.updateMoneyInfo()
+      }).catch(e => {
+        this.$message.error(this.$t('message.get_model_fail'))
+      })
+    },
     //获取角色列表
     getRolesList() {
       getRoles().then((res) => {
@@ -860,7 +802,7 @@ export default {
       // this.getModelList(this.SettingInfo.KeyMsg)
       this.cutSetting = 0
     },
-    promptClick() { // aaaa SettingStatus
+    promptClick() {
       this.clearCurrent()
       this.cutSetting = 2
       this.SettingStatus = 3
@@ -906,39 +848,6 @@ export default {
       //清除当前选择的文件
       this.fiCurrent = "";
     },
-    //文件列表被点击
-    // fileClick() {
-    //   this.clearCurrent()
-    //   //清除被点击的微调对象
-    //   this.SettingStatus = 4;
-    //   this.cutSetting = 3
-    //   this.SettingInfo.cutSetting = 3
-    //   //获取微调模型列表
-    //   this.getFilessList(this.SettingInfo.KeyMsg)
-    // },
-    // //上传文件按钮被点击触发的方法
-    // uploadFile() {
-    //   this.$refs.fileInput.click();
-    // },
-    //文件上传触发的方法
-    // onFileChange(e) {
-    //   //获取文件
-    //   const file = e.target.files[0];
-    //   // 验证文件类型是否为jsonl格式
-    //   if (!file.name.endsWith('.jsonl')) {
-    //     this.$message.warning(this.$t('message.valid_json'))
-    //     return;
-    //   }
-    //   // 通过验证后，上传文件
-    //   const formData = new FormData();
-    //   formData.append("file", file);
-    //   formData.append("purpose", "fine-tune");
-    //   uploadFile(formData, this.SettingInfo.KeyMsg).then((res) => {
-    //     this.$copy(res.id, this.$t('index.up_file_id') + res.id + this.$t('index.copy'))
-    //     //更新文件列表
-    //     this.getFilessList(this.SettingInfo.KeyMsg)
-    //   })
-    // },
     //模型被点击
     clickPerson(info) {
       this.storeStatus = 0;
@@ -952,6 +861,7 @@ export default {
     //会话被点击
     clickSession(info) {
       this.sessionCurrent = info.id;
+      // TODO 获取聊天记录到这里
       this.$refs.chatWindow.assignmentMesList(info.dataList)
     },
     //文件被点击
@@ -966,19 +876,6 @@ export default {
       this.fiCurrent = info.fileId
       this.fileInfo = info
     },
-    //删除文件
-    // deleteOnFile() {
-    //   if (!this.fileInfo || !this.fileInfo.fileId) {
-    //     this.$message.error(this.$t('message.only_del_file'))
-    //   } else {
-    //     deleteFile(this.fileInfo.fileId, this.SettingInfo.KeyMsg).then((res) => {
-    //       this.$message.success(this.$t('message.del_file_succ'))
-    //       this.getFilessList(this.SettingInfo.KeyMsg)
-    //     }).catch(e => {
-    //       this.$message.error(this.$t('message.del_fail'))
-    //     })
-    //   }
-    // },
     personCardSort(id) {
       if (typeof this.personList[0] != 'undefined' && id !== this.personList[0].id) {
         console.log(id);

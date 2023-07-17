@@ -1,17 +1,15 @@
 import request from '@/util/request'
 
 // 登录方法
-export function loginAndRegister(email, password, code, uuid) {
+export function createChatRoom(sessionId, sessionTitle) {
   const data = {
-    email,
-    password,
-    code,
-    uuid
+    sessionId,
+    sessionTitle,
   }
   return request({
-    url: '/user/loginAndRegister',
+    url: '/session/createSession',
     headers: {
-      isToken: false
+      isToken: true
     },
     method: 'post',
     data: data,
@@ -19,22 +17,14 @@ export function loginAndRegister(email, password, code, uuid) {
   })
 }
 
-// 退出方法
-export function logout() {
+export function getChatRoom() {
   return request({
-    url: '/logout',
-    method: 'post'
-  })
-}
-
-// 获取验证码
-export function getCodeImg() {
-  return request({
-    url: '/user/captchaImage',
+    url: '/session/getChatRoom',
     headers: {
-      isToken: false
+      isToken: true
     },
-    method: 'get',
+    method: 'post',
     timeout: 20000
   })
 }
+

@@ -160,15 +160,11 @@
 <script>
 import {animation, getNowTime, JCMFormatDate} from "@/util/util";
 import {
-  // getChatMsg,
-  // getCompletion,
-  // getChatCompletion,
   createImage,
   createImageEdit,
   createImageVariations,
   createTranscription,
   createTranslation,
-  // createEmbeddings
 } from "@/api/getData";
 import HeadPortrait from "@/components/HeadPortrait";
 import Emoji from "@/components/Emoji";
@@ -302,22 +298,6 @@ export default {
         return this.readStream(reader, _this, currentResLocation, type);
       });
     },
-    // 聊天室上方右侧,导入当前内容json触发的方法
-    importFromJsonArr() {
-      this.$refs.onupdateJosnArr.click(); // 触发选择文件的弹框
-    },
-    // 导入当前会话内容
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const fileContent = reader.result; // 文件内容
-        const parsed = JSON.parse(fileContent); // 转换为数组
-        this.chatList = this.chatList.concat(parsed)
-      };
-      reader.readAsText(file);
-    },
     // 导出当前会话到json文件
     exportObjArrToJson() {
       console.log(this.chatList)
@@ -355,13 +335,6 @@ export default {
         });
       }
     },
-    // 不知道干什么用
-    // newLine(event) {
-    //   this.rows += 1;
-    //   let text = this.$refs.textInput.value;
-    //   text += '\n';
-    //   this.$refs.textInput.value = text;
-    // },
     //赋值对话列表
     assignmentMesList(msgList) {
       this.chatList = msgList
@@ -886,33 +859,6 @@ export default {
 
     //发送文件
     sendFile(e) {
-      // let file = e.target.files[0];
-      // let reader = new FileReader();
-      // reader.readAsText(file);
-      // let _this=this
-      // reader.onload = function(event) {
-      //   let text = event.target.result;
-      //   //处理文件数据
-      //   const delimiters = ['.', '?', '!', '\n',':',","];
-      //   let result = [];
-      //   for (let i = 0; i < text.length; i++) {
-      //     let current = '';
-      //     while (i < text.length && !delimiters.includes(text[i])) {
-      //       current += text[i];
-      //       i++;
-      //     }
-      //     // 加入句子，并去除前后空格
-      //     if (current.trim()) {
-      //       result.push(current.trim());
-      //     }
-      //   }
-      //   const formData = new FormData()
-      //   formData.append("model", "text-embedding-ada-002");
-      //   formData.append("input", result);
-      //   createEmbeddings(formData,_this.settingInfo.KeyMsg).then(data => {
-      //     _this.fileArrays = data.data[0]
-      //   })
-      // };
       const dateNow = JCMFormatDate(getNowTime());
       let chatMsg = {
         headImg: USER_HEAD_IMG_URL,

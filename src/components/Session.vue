@@ -2,9 +2,7 @@
   <div :class="{ activeCard: sessionInfo.id === current }" class="person-card">
     <div class="info">
       <div class="info-detail">
-        <div class="detail">
-          <div style="padding: 10px;">{{ sessionInfo.title }}</div>
-        </div>
+        <div class="name">{{ sessionInfo.name }}</div>
       </div>
     </div>
   </div>
@@ -48,7 +46,7 @@ export default {
 <style lang="scss" scoped>
 .person-card {
   width: 100%;
-  height: auto;
+  height: 60px;
   border-radius: 10px;
   background-color: rgb(50, 54, 68);
   position: relative;
@@ -56,11 +54,29 @@ export default {
   cursor: pointer;
 
   .info {
-    width: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    display: flex;
 
     .info-detail {
       margin-top: 5px;
       margin-left: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      .name {
+        color: #fff;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-bottom: 5px;
+      }
 
       .detail {
         color: #fff;

@@ -63,7 +63,7 @@
             </div>
             <!-- 所有会话-->
             <div v-for="sessionInfo in sessionList" :key="sessionInfo.id" @click="clickSession(sessionInfo)">
-              <Session :pcCurrent="sessionCurrent" :sessionInfo="sessionInfo"></Session>
+              <Session :pcCurrent="sessionCurrent" :sessionInfo="sessionInfo" :sessionList="sessionList"></Session>
             </div>
           </div>
 
@@ -385,7 +385,6 @@ import {
 const {OpenAIApi} = require("openai");
 
 export default {
-  name: "App",
   directives: {
     autoheight: {
       inserted: function (el) {
@@ -796,6 +795,10 @@ export default {
           message: '取消创建'
         });
       });
+    },
+    //修改会话名称
+    updateSession() {
+      console.log(123)
     },
     //模型列表被点击
     modelClick() {

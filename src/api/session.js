@@ -17,6 +17,22 @@ export function createChatRoom(sessionId, sessionTitle) {
   })
 }
 
+export function updateChatRoom(sessionId, sessionTitle) {
+  const data = {
+    sessionId,
+    sessionTitle,
+  }
+  return request({
+    url: '/session/updateSessionName',
+    headers: {
+      isToken: true
+    },
+    method: 'post',
+    data: data,
+    timeout: 20000
+  })
+}
+
 export function getChatRoom() {
   return request({
     url: '/session/getChatRoom',
@@ -24,6 +40,17 @@ export function getChatRoom() {
       isToken: true
     },
     method: 'post',
+    timeout: 20000
+  })
+}
+
+export function deleteSession(sessionId) {
+  return request({
+    url: `/session/${sessionId}`,
+    headers: {
+      isToken: true
+    },
+    method: 'delete',
     timeout: 20000
   })
 }

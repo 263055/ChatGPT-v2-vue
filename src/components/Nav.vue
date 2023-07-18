@@ -32,6 +32,17 @@ export default {
       imgUrl: USER_HEAD_IMG_URL
     };
   },
+  created() {
+    // 判断localStorage中是否存在token
+    const token = localStorage.getItem('4gai-Token')
+    if (token) {
+      this.current = 1
+      location.href = '/#/ChatHome';
+    } else {
+      this.current = 0
+    }
+  },
+
   methods: {
     changeMenu(index) {
       switch (index) {

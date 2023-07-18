@@ -176,6 +176,7 @@ export default {
   .detail i {
     margin-left: 10px;
     margin-right: 0;
+    font-size: 20px;
   }
 
   &:hover {

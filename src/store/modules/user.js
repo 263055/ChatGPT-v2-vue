@@ -1,4 +1,4 @@
-import {loginAndRegister, logout} from '@/api/login'
+import {loginAndRegister} from '@/api/login'
 import {getToken, removeToken, setToken} from '@/util/auth'
 import {Notification} from 'element-ui'
 
@@ -63,15 +63,15 @@ const user = {
 
     // 退出系统
     Logout({commit, state}) {
-      return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
+      // return new Promise((resolve, reject) => {
+      //   logout(state.token).then(() => {
+      commit('SET_TOKEN', '')
+      removeToken()
+      // resolve()
+      // }).catch(error => {
+      //   reject(error)
+      // })
+      // })
     },
 
     // 前端 登出

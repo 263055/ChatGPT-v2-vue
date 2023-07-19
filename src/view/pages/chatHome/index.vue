@@ -866,7 +866,7 @@ export default {
     clickSession(info) {
       this.sessionCurrent = info.id;
       // TODO 获取聊天记录到这里
-      this.$refs.chatWindow.assignmentMesList(info.dataList)
+      this.$refs.chatWindow.getMessage(info.id)
     },
     //文件被点击
     clickFile(info) {

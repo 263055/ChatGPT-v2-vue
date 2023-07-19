@@ -18,9 +18,9 @@
         <!--聊天室上方,右侧的快捷按钮-->
         <el-col :span="personInfoSpan[2]">
           <div class="other-fun">
-            <label @click="clearMsgList">
-              <span class="iconfont icon-qingchu"></span>
-            </label>
+            <!--<label @click="clearMsgList">-->
+            <!--  <span class="iconfont icon-qingchu"></span>-->
+            <!--</label>-->
             <label @click="exportObjArrToJson">
               <span class="iconfont icon-daochu"></span>
             </label>
@@ -37,7 +37,7 @@
             <!--  <span class="iconfont icon-wenben"></span>-->
             <!--</label>-->
             <input type="file" name="" id="imgFile" @change="sendImg" accept="image/*"/>
-            <input type="file" name="" id="docFile" @change="sendFile" accept="application/*,text/*"/>
+            <!--<input type="file" name="" id="docFile" @change="sendFile" accept="application/*,text/*"/>-->
             <!--&lt;!&ndash; 导入当前会话内容 &ndash;&gt;-->
             <!--<input type="file" ref="onupdateJosnArr" @change="handleFileUpload" style="display: none;">-->
           </div>
@@ -174,6 +174,7 @@ import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
 import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
 import {saveAs} from 'file-saver';
+import {getMessage} from "@/api/chatMsg";
 
 export default {
   //用于自适应文本框的高度
@@ -335,18 +336,14 @@ export default {
         });
       }
     },
-    //赋值对话列表
-    assignmentMesList(msgList) {
-      this.chatList = msgList
-    },
     //获取对话列表
     getMesList() {
       return this.chatList
     },
     //清除当前对话列表
-    clearMsgList() {
-      this.chatList = []
-    },
+    // clearMsgList() {
+    //   this.chatList = []
+    // },
     // 更新内容背景图片
     updateContentImageUrl(imgUrl) {
       this.contentBackImageUrl = imgUrl
@@ -414,8 +411,28 @@ export default {
       }
       this.$message.success(this.$t('message.end_recording'))
     },
+    //获得聊天室所有消息
+    getMessage(id) {
+      new Promise((resolve, reject) => {
+        getMessage(id).then((res) => {
+          console.log(res)
+          this.chatList = res
+          this.$message({
+            type: 'success',
+            message: '创建成功'
+          });
+          resolve()
+        }).catch(error => {
+          this.$message({
+            type: 'info',
+            message: '创建失败'
+          });
+          reject(error)
+        })
+      })
+    },
     //发送信息
-    sendMsg(msgList) {
+    sendMsg(msgList) { // aaaaaa
       this.chatList.push(msgList);
       this.scrollBottom();
     },

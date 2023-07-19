@@ -142,11 +142,7 @@
     <div class="chatLeft" v-show="showSetupList">
       <!--api key-->
       <el-card shadow="hover" id="jianbian" style="line-height: 120%;text-align: center;">
-        <div>
-          <input class="inputs" v-model="SettingInfo.KeyMsg" :placeholder="$t('placeholder.openai_key')"
-                 type="password" autocomplete="new-password"
-                 style="width: 100%; margin-left: 0;margin-right: 0;"/>
-        </div>
+        <div>{{ getUserEmail }}</div>
       </el-card>
 
       <div class="online-person">
@@ -376,6 +372,7 @@ import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
 import RoleCard from "@/components/RoleCard.vue";
 import {createChatRoom, getChatRoom} from "@/api/session";
 import {generateUUID} from "@/util/util";
+import Cookies from "js-cookie";
 
 import {
   getModels,
@@ -539,6 +536,16 @@ export default {
     };
   },
   computed: {
+    getUserEmail() {
+      let res = '';
+      const token = localStorage.getItem('4gai-Token');
+      if (token) {
+        res = '4gai 欢迎你的到来' + Cookies.get("email")
+      } else {
+        res = '请点击左侧栏的按钮登录'
+      }
+      return res
+    },
     // 把获取setting列表的操作放到computed计算属性里来，这样才能动态绑定i18n的值
     getSettings() {
       return [{name: this.$t('model.talk'), active: true},

@@ -55,12 +55,13 @@
       <div class="chat-content" id="chat-content" ref="chatContent" @scroll="onScroll">
         <div class="chat-wrapper" v-for="item in chatList" :key="item.id">
           <!--gpt回答-->
-          <div class="chat-friend" v-if="item.uid !== 'jcm'">
+          <div v-if="item.messageType === 'ANSWER'" class="chat-friend">
             <!--如果是文字,提供复制按钮-->
-            <div class="chat-text" v-if="item.chatType === 0">
+            <div class="chat-text">
+              <!--<div class="chat-text" v-if="item.chatType === 0">-->
               <el-row :gutter="20">
                 <el-col :span="2">
-                  <svg x="1679666016648" @click="$copy(item.msg, '已复制')" class="icon" viewBox="0 0 1024 1024"
+                  <svg class="icon" viewBox="0 0 1024 1024" x="1679666016648" @click="$copy(item.content, '已复制')"
                        xmlns="http://www.w3.org/2000/svg" p-id="6241" width="22" height="22">
                     <path
                         d="M661.333333 234.666667A64 64 0 0 1 725.333333 298.666667v597.333333a64 64 0 0 1-64 64h-469.333333A64
@@ -74,7 +75,7 @@
                 <el-col :span="21">
                 </el-col>
               </el-row>
-              <markdown-it-vue :content="item.msg.trim()"/>
+              <markdown-it-vue :content="item.content.trim()"/>
             </div>
             <!--如果是图片,就直接展示-->
             <div class="chat-img" v-if="item.chatType === 1">
@@ -90,16 +91,16 @@
             </div>
             <!--展示名字和时间-->
             <div class="info-time">
-              <img :src="item.headImg" alt=""/>
-              <span>{{ item.name }}</span>
+              <span>{{ userName }}</span>
               <span>{{ item.time }}</span>
             </div>
           </div>
           <!--用户提问-->
           <div class="chat-me" v-else>
             <!--文字部分-->
-            <div class="chat-text" v-if="item.chatType === 0">
-              <span style="font-size:16px">{{ item.msg }}</span>
+            <div class="chat-text">
+              <!--<div class="chat-text" v-if="item.chatType === 0">-->
+              <span style="font-size:16px">{{ item.content }}</span>
             </div>
             <!--发送照片-->
             <div class="chat-img" v-if="item.chatType === 1">
@@ -116,9 +117,8 @@
             </div>
             <!--展示名字和时间-->
             <div class="info-time">
-              <span>{{ item.name }}</span>
+              <span>{{ userName }}</span>
               <span>{{ item.time }}</span>
-              <img :src="item.headImg" alt=""/>
             </div>
           </div>
         </div>
@@ -215,6 +215,7 @@ export default {
   watch: {},
   data() {
     return {
+      userName: USER_NAME,
       isAutoScroll: true,
       fileArrays: [],
       inputsStatus: true,
@@ -337,9 +338,9 @@ export default {
       }
     },
     //获取对话列表
-    getMesList() {
-      return this.chatList
-    },
+    // getMesList() {
+    //   return this.chatList
+    // },
     //清除当前对话列表
     // clearMsgList() {
     //   this.chatList = []
@@ -415,8 +416,10 @@ export default {
     getMessage(id) {
       new Promise((resolve, reject) => {
         getMessage(id).then((res) => {
-          console.log(res)
-          this.chatList = res
+          this.chatList = res.list.map(item => ({
+            ...item,
+            time: JCMFormatDate(item.time)
+          }));
           this.$message({
             type: 'success',
             message: '创建成功'
@@ -503,9 +506,9 @@ export default {
           headImg: USER_HEAD_IMG_URL,
           name: USER_NAME,
           time: dateNow,
-          msg: this.inputMsg,
+          content: this.inputMsg,
           chatType: 0, //信息类型，0文字，1图片
-          uid: "jcm", //uid
+          uid: "QUESTION", //uid
         };
         this.sendMsg(chatMsg);
 
@@ -782,7 +785,7 @@ export default {
         extend: {
           imgType: 1, //(1表情，2本地图片)
         },
-        uid: "jcm",
+        uid: "QUESTION",
       };
       this.sendMsg(chatMsg);
       this.clickEmoji();

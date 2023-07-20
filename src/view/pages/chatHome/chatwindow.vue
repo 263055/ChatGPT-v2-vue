@@ -91,7 +91,7 @@
             </div>
             <!--展示名字和时间-->
             <div class="info-time">
-              <span>{{ userName }}</span>
+              <span>{{ frinedInfo.name }}</span>
               <span>{{ item.time }}</span>
             </div>
           </div>
@@ -159,9 +159,9 @@
 
 <script>
 import {animation, getNowTime, JCMFormatDate} from "@/util/util";
+import {generateUUID} from "@/util/util";
 import {
   createImage,
-  createImageEdit,
   createImageVariations,
   createTranscription,
   createTranslation,
@@ -174,7 +174,7 @@ import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
 import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
 import {saveAs} from 'file-saver';
-import {getMessage} from "@/api/chatMsg";
+import {getMessage, send} from "@/api/chatMsg";
 
 export default {
   //用于自适应文本框的高度
@@ -208,6 +208,8 @@ export default {
     storeStatu: Number,
     settingInfo: Object,
     frinedInfo: Object,
+
+
     default() {
       return {};
     },
@@ -215,6 +217,21 @@ export default {
   watch: {},
   data() {
     return {
+      options: {
+        sessionId: '',
+        parentMessageId: '',
+      },
+      setting: {
+        model: "",
+        suffix: "",
+        stop: "",
+        FrequencyPenalty: "",
+        PresencePenalty: "",
+        maxTokens: "",
+        temperature: "",
+        stream: "",
+        echo: ""
+      },
       userName: USER_NAME,
       isAutoScroll: true,
       fileArrays: [],
@@ -222,6 +239,7 @@ export default {
       rows: 1,
       //是否显示表情和录音按钮
       buttonStatus: true,
+      lastChildId: '',
       //是否在接收消息中，如果是则true待发送状态，如果是false则是等待消息转圈状态
       acqStatus: true,
       chatList: [],
@@ -236,6 +254,7 @@ export default {
       updateImage: null,
       // 是否隐藏对话框上方介绍（空间局促时隐藏）
       personInfoSpan: [1, 17, 6],
+
     };
   },
 
@@ -420,22 +439,16 @@ export default {
             ...item,
             time: JCMFormatDate(item.time)
           }));
-          this.$message({
-            type: 'success',
-            message: '创建成功'
-          });
+          const lastItem = res.list[res.list.length - 1];
+          this.lastChildId = lastItem ? lastItem.id : null;
           resolve()
         }).catch(error => {
-          this.$message({
-            type: 'info',
-            message: '创建失败'
-          });
           reject(error)
         })
       })
     },
     //发送信息
-    sendMsg(msgList) { // aaaaaa
+    sendMsg(msgList) {
       this.chatList.push(msgList);
       this.scrollBottom();
     },
@@ -447,59 +460,58 @@ export default {
       })
       const dateNow = JCMFormatDate(getNowTime());
 
-      let params = {}
 
-      if (this.settingInfo.openChangePicture) {
-        if (this.updateImage == null) {
-          this.$nextTick(() => {
-            this.acqStatus = true
-          });
-          this.$message.warning(this.$t('message.edit_picture'))
-          return
-        } else {
-          // 通过验证后，上传文件
-          const formData = new FormData();
-          formData.append("image", this.updateImage);
-          formData.append("prompt", this.inputMsg);
-          formData.append("n", this.settingInfo.n);
-          formData.append("size", this.settingInfo.size);
-
-          const dateNow = JCMFormatDate(getNowTime());
-
-          let chatMsg = {
-            headImg: USER_HEAD_IMG_URL,
-            name: USER_NAME,
-            time: dateNow,
-            msg: this.inputMsg,
-            chatType: 0, //信息类型，0文字，1图片
-            uid: "jcm", //uid
-          };
-
-          this.sendMsg(chatMsg);
-          this.inputMsg = "";
-
-          createImageEdit(formData, this.settingInfo.KeyMsg).then(data => {
-            for (const imgInfo of data) {
-              let imgResMsg = {
-                headImg: AI_HEAD_IMG_URL,
-                name: this.frinedInfo.name,
-                time: JCMFormatDate(getNowTime()),
-                msg: imgInfo.url,
-                chatType: 1, //信息类型，0文字，1图片
-                extend: {
-                  imgType: 2, //(1表情，2本地图片)
-                },
-                uid: this.frinedInfo.id, //uid
-              };
-              this.sendMsg(imgResMsg);
-              this.srcImgList.push(imgInfo.url);
-            }
-            this.updateImage = null
-            this.acqStatus = true
-          })
-          return
-        }
-      }
+      // if (this.settingInfo.openChangePicture) {
+      //   if (this.updateImage == null) {
+      //     this.$nextTick(() => {
+      //       this.acqStatus = true
+      //     });
+      //     this.$message.warning(this.$t('message.edit_picture'))
+      //     return
+      //   } else {
+      //     // 通过验证后，上传文件
+      //     const formData = new FormData();
+      //     formData.append("image", this.updateImage);
+      //     formData.append("prompt", this.inputMsg);
+      //     formData.append("n", this.settingInfo.n);
+      //     formData.append("size", this.settingInfo.size);
+      //
+      //     const dateNow = JCMFormatDate(getNowTime());
+      //
+      //     let chatMsg = {
+      //       headImg: USER_HEAD_IMG_URL,
+      //       name: USER_NAME,
+      //       time: dateNow,
+      //       msg: this.inputMsg,
+      //       chatType: 0, //信息类型，0文字，1图片
+      //       uid: "jcm", //uid
+      //     };
+      //
+      //     this.sendMsg(chatMsg);
+      //     this.inputMsg = "";
+      //
+      //     createImageEdit(formData, this.settingInfo.KeyMsg).then(data => {
+      //       for (const imgInfo of data) {
+      //         let imgResMsg = {
+      //           headImg: AI_HEAD_IMG_URL,
+      //           name: this.frinedInfo.name,
+      //           time: JCMFormatDate(getNowTime()),
+      //           msg: imgInfo.url,
+      //           chatType: 1, //信息类型，0文字，1图片
+      //           extend: {
+      //             imgType: 2, //(1表情，2本地图片)
+      //           },
+      //           uid: this.frinedInfo.id, //uid
+      //         };
+      //         this.sendMsg(imgResMsg);
+      //         this.srcImgList.push(imgInfo.url);
+      //       }
+      //       this.updateImage = null
+      //       this.acqStatus = true
+      //     })
+      //     return
+      //   }
+      // }
 
       if (this.inputMsg) {
         let chatMsg = {
@@ -508,7 +520,7 @@ export default {
           time: dateNow,
           content: this.inputMsg,
           chatType: 0, //信息类型，0文字，1图片
-          uid: "QUESTION", //uid
+          messageType: "QUESTION",
         };
         this.sendMsg(chatMsg);
 
@@ -536,218 +548,27 @@ export default {
                 this.acqStatus = true
               })
         } else {
-          //如果是文字模式则进入
-          params.model = this.frinedInfo.id
-          params.max_tokens = this.settingInfo.chat.MaxTokens
-          params.temperature = this.settingInfo.chat.Temperature
-          params.top_p = this.settingInfo.chat.TopP
-          params.n = this.settingInfo.chat.n
-          params.stream = this.settingInfo.chat.stream
-          params.stop = this.settingInfo.chat.stop
-          params.presence_penalty = this.settingInfo.chat.PresencePenalty
-          params.frequency_penalty = this.settingInfo.chat.FrequencyPenalty
+          this.options.sessionId = generateUUID()
+          this.options.parentMessageId = this.lastChildId
 
-          let chatBeforResMsg = {
-            headImg: AI_HEAD_IMG_URL,
-            name: this.frinedInfo.name,
-            time: JCMFormatDate(getNowTime()),
-            msg: "",
-            chatType: 0, //信息类型，0文字，1图片
-            uid: this.frinedInfo.id, //uid
-          };
-          if (this.frinedInfo.id === "gpt-3.5-turbo" || this.frinedInfo.id === "gpt-3.5-turbo-0301") {
-            this.chatCompletion(params, chatBeforResMsg)
-          } else {
-            if (this.settingInfo.cutSetting === 0) {
-              if (this.frinedInfo.id === "text-davinci-003") {
-                this.completion(params, chatBeforResMsg)
-              } else {
-                this.$message.error("暂时不支持gpt-3.5-turbo、gpt-3.5-turbo-0301、text-davinci-003以外的模型聊天~")
-                this.$nextTick(() => {
-                  this.acqStatus = true
-                })
-              }
-            } else {
-              this.completion(params, chatBeforResMsg)
-            }
-
-          }
-        }
-        if (this.storeStatu === 0) {
-          this.$emit('personCardSort', this.frinedInfo.id)
-
-        } else if (this.storeStatu === 1) {
-          this.$emit('fineTunesCardSort', this.frinedInfo.id)
+          this.setting.model = this.frinedInfo.id
+          this.setting.suffix = this.settingInfo.chat.suffix
+          this.setting.stop = this.settingInfo.chat.stop
+          this.setting.FrequencyPenalty = this.settingInfo.chat.FrequencyPenalty
+          this.setting.PresencePenalty = this.settingInfo.chat.PresencePenalty
+          this.setting.maxTokens = this.settingInfo.chat.MaxTokens
+          this.setting.temperature = this.settingInfo.chat.Temperature
+          this.setting.stream = this.settingInfo.chat.stream
+          this.setting.echo = this.settingInfo.chat.echo
+          send(this.inputMsg, this.options, this.settingInfo.prompt, this.setting)
         }
         this.inputMsg = "";
-        // this.$parent.updateMoneyInfo();
       } else {
         this.$nextTick(() => {
           this.acqStatus = true
         });
         this.$message.warning(this.$t('message.msg_empty'))
       }
-    },
-    async chatCompletion(params, chatBeforResMsg) {
-      let textContext = this.inputMsg;
-      let itemContent;
-      let noUrlNetMessage;
-      if (this.settingInfo.openNet) {
-        let context = "max_results=" + this.settingInfo.max_results + "&q=" + textContext + "&region=us-en";
-        await fetch(
-            'https://search.freechatgpt.cc/search?' + context
-        ).then(response => response.json())
-            .then(
-                data => {
-                  let netMessage = "Web search results:  ";
-                  noUrlNetMessage = netMessage + "\n\n";
-                  for (let i = 0; i < data.length; i++) {
-                    netMessage += "[" + (i + 1) + "] \"" + data[i].body.substring(0, 400) + "\"  ";
-                    netMessage += "URL:" + data[i].href + "  ";
-                    noUrlNetMessage += "[" + (i + 1) + "] \"" + data[i].body.substring(0, 400) + "\"     \n\n";
-                  }
-                  const date = new Date();
-                  const year = date.getFullYear();
-                  const month = date.getMonth() + 1;
-                  const day = date.getDate();
-                  const formattedDate = `${year}/${month}/${day}`;
-                  netMessage = netMessage.substring(0, 1500)
-
-                  netMessage += "Current date:" + formattedDate + "  ";
-                  netMessage +=
-                      "Instructions: Using the provided web search results, write a comprehensive reply to the given query. " +
-                      "Make sure to cite results using [[number](URL)] notation after the reference. If the provided search " +
-                      "results refer to multiple subjects with the same name, write separate answers for each subject." +
-                      "Query: " + textContext +
-                      "Reply in 中文";
-                  noUrlNetMessage += " 您的问题: " + textContext;
-                  itemContent = {};
-                  itemContent.time = JCMFormatDate(getNowTime());
-                  itemContent.msg = netMessage;
-                  itemContent.chatType = 0;
-                  itemContent.name = "网络";
-                  itemContent.headImg = "https://i.328888.xyz/2023/04/04/ijlmhJ.png";
-                  itemContent.uid = this.frinedInfo.id;
-                  this.chatList.push(itemContent);
-
-                  let conversation = this.contextualAssemblyData();
-
-                  params.messages = conversation.map(item => {
-                    return {
-                      role: item.speaker === 'user' ? 'user' : 'assistant',
-                      content: item.text
-                    }
-                  })
-
-                  itemContent.msg = noUrlNetMessage;
-                });
-      } else {
-        let conversation = this.contextualAssemblyData();
-        params.messages = conversation.map(item => {
-          return {
-            role: item.speaker === 'user' ? 'user' : 'assistant',
-            content: item.text
-          }
-        })
-      }
-      //新增一个空的消息
-      this.sendMsg(chatBeforResMsg);
-
-      const currentResLocation = this.chatList.length - 1
-      let _this = this
-      try {
-        if (this.settingInfo.chat.stream) {
-          await fetch(
-              base.baseUrl + '/v1/chat/completions', {
-                method: "POST",
-                body: JSON.stringify({
-                  ...params
-                }),
-                headers: {
-                  Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                },
-              }
-          ).then(response => {
-            const reader = response.body.getReader();
-            this.readStream(reader, _this, currentResLocation, "chat");
-          });
-        } else {
-          await fetch(
-              base.baseUrl + '/v1/chat/completions', {
-                method: "POST",
-                body: JSON.stringify({
-                  ...params
-                }),
-                headers: {
-                  Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                },
-              }
-          ).then(response => response.json())
-              .then(
-                  data => {
-                    const content = data.choices[0].message.content; // 获取"content"字段的值
-                    let decodedArray = content.split("");
-                    decodedArray.forEach(decoded => {
-                      _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + decoded
-                    });
-                  }
-              )
-        }
-      } catch (error) {
-        const content = "网络不稳定或key余额不足，请重试或更换key"; // 获取"content"字段的值
-        let decodedArray = content.split("");
-        decodedArray.forEach(decoded => {
-          _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + decoded
-        });
-        console.error(error);
-      }
-      this.acqStatus = true;
-    },
-    async completion(params, chatBeforResMsg) {
-      if (this.settingInfo.chat.suffix !== "") {
-        params.suffix = this.settingInfo.chat.suffix  //chat没有
-      }
-      params.echo = this.settingInfo.chat.echo  //chat没有
-          params.prompt = this.inputMsg
-      //新增一个空的消息
-      this.sendMsg(chatBeforResMsg);
-      const currentResLocation = this.chatList.length - 1
-      let _this = this
-      try {
-        await fetch(
-            base.baseUrl + '/v1/completions', {
-              method: "POST",
-              timeout: 10000,
-              body: JSON.stringify({
-                ...params
-              }),
-              headers: {
-                Authorization: 'Bearer ' + this.settingInfo.KeyMsg,
-                "Content-Type": "application/json"
-              },
-            }
-        ).then(response => {
-          if (response.status === 404) {
-            this.$message.error(this.$t('message.model_del'))
-            this.$nextTick(() => {
-              this.acqStatus = true
-            });
-            return
-          }
-          const reader = response.body.getReader();
-          this.$nextTick(() => {
-            this.acqStatus = true
-          });
-          this.readStream(reader, _this, currentResLocation, "completion");
-        })
-      } catch (error) {
-
-      }
-
     },
     resetUpdate() {
       this.updateImage = null

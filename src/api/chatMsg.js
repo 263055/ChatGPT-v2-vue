@@ -1,21 +1,24 @@
 import request from '@/util/request'
 
-// // 登录方法
-// export function createChatRoom(sessionId, sessionTitle) {
-//   const data = {
-//     sessionId,
-//     sessionTitle,
-//   }
-//   return request({
-//     url: '/session/createSession',
-//     headers: {
-//       isToken: true
-//     },
-//     method: 'post',
-//     data: data,
-//     timeout: 20000
-//   })
-// }
+// 发消息
+export function send(question, options, prompt, setting) {
+  const data = {
+    question,
+    options,
+    prompt,
+    setting,
+  }
+  return request({
+    url: '/chatMsg/send',
+    headers: {
+      isToken: true
+    },
+    method: 'post',
+    data: data,
+    timeout: 20000
+  })
+}
+
 //
 // export function updateChatRoom(sessionId, sessionTitle) {
 //   const data = {

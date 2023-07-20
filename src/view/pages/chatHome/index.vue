@@ -572,6 +572,7 @@ export default {
       headImg: AI_HEAD_IMG_URL,
       showHeadImg: true
     }
+    // TODO 修改keyMsg
     if (this.SettingInfo.KeyMsg) {
       this.getModelList(this.SettingInfo.KeyMsg);
     }
@@ -802,10 +803,6 @@ export default {
           message: '取消创建'
         });
       });
-    },
-    //修改会话名称
-    updateSession() {
-      console.log(123)
     },
     //模型列表被点击
     modelClick() {

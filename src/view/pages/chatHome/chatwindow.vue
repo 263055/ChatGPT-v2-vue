@@ -159,7 +159,7 @@
 
 <script>
 import {animation, getNowTime, JCMFormatDate} from "@/util/util";
-import {generateUUID} from "@/util/util";
+import {getToken} from '@/util/auth'
 import {
   createImage,
   createImageVariations,
@@ -225,8 +225,8 @@ export default {
         model: "",
         suffix: "",
         stop: "",
-        FrequencyPenalty: "",
-        PresencePenalty: "",
+        frequencyPenalty: "",
+        presencePenalty: "",
         maxTokens: "",
         temperature: "",
         stream: "",
@@ -239,7 +239,16 @@ export default {
       rows: 1,
       //是否显示表情和录音按钮
       buttonStatus: true,
-      lastChildId: '',
+      lastChatMsg: {
+        id: "",
+        sessionId: "",
+        messageType: "",
+        content: "",
+        parentId: "",
+        childrenId: "",
+        time: "",
+      },
+      curSessionId: '',
       //是否在接收消息中，如果是则true待发送状态，如果是false则是等待消息转圈状态
       acqStatus: true,
       chatList: [],
@@ -277,12 +286,19 @@ export default {
     readStream(reader, _this, currentResLocation, type) {
       return reader.read().then(({done, value}) => {
         if (done) {
+          this.$nextTick(() => {
+            this.acqStatus = true
+          });
           return;
         }
         if (!_this.chatList[currentResLocation].reminder) {
           _this.chatList[currentResLocation].reminder = "";
         }
+        console.log("value")
+        console.log(value)
         let decoded = new TextDecoder().decode(value);
+        console.log("decoded")
+        console.log(decoded)
         decoded = _this.chatList[currentResLocation].reminder + decoded;
         let decodedArray = decoded.split("data: ");
         let longstr = "";
@@ -302,16 +318,18 @@ export default {
           }
           if (decoded !== "") {
             if (decoded.trim() === "[DONE]") {
-
+              this.$nextTick(() => {
+                this.acqStatus = true
+              });
             } else {
-              console.log(type)
               if (type === "chat") {
-                const response = JSON.parse(decoded).choices[0].delta.content ? JSON.parse(decoded).choices[0].delta.content : "";
-                _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + response
+                const parseMsg = JSON.parse(decoded);
+                const response = parseMsg.choices[0].delta.content ? JSON.parse(decoded).choices[0].delta.content : "";
+                _this.chatList[currentResLocation].content = _this.chatList[currentResLocation].content + response
                 _this.scrollBottom();
               } else {
                 const response = JSON.parse(decoded).choices[0].text;
-                _this.chatList[currentResLocation].msg = _this.chatList[currentResLocation].msg + response
+                _this.chatList[currentResLocation].content = _this.chatList[currentResLocation].content + response
               }
             }
           }
@@ -368,20 +386,6 @@ export default {
     updateContentImageUrl(imgUrl) {
       this.contentBackImageUrl = imgUrl
     },
-    //组装上下文数据
-    contextualAssemblyData() {
-      const conversation = []
-      for (const chat of this.chatList.filter(chat => chat.chatType === 0)) {
-        if (chat.uid === 'jcm') {
-          let my = {'speaker': 'user', 'text': chat.msg}
-          conversation.push(my)
-        } else if (chat.uid === this.frinedInfo.id) {
-          let ai = {'speaker': 'agent', 'text': chat.msg}
-          conversation.push(ai)
-        }
-      }
-      return conversation
-    },
     //开始录音
     startRecording() {
       navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
@@ -433,14 +437,14 @@ export default {
     },
     //获得聊天室所有消息
     getMessage(id) {
+      this.curSessionId = id;
       new Promise((resolve, reject) => {
         getMessage(id).then((res) => {
           this.chatList = res.list.map(item => ({
             ...item,
             time: JCMFormatDate(item.time)
           }));
-          const lastItem = res.list[res.list.length - 1];
-          this.lastChildId = lastItem ? lastItem.id : null;
+          this.lastChatMsg = res.list[res.list.length - 1] === undefined ? [] : res.list[res.list.length - 1];
           resolve()
         }).catch(error => {
           reject(error)
@@ -459,60 +463,6 @@ export default {
         this.acqStatus = false
       })
       const dateNow = JCMFormatDate(getNowTime());
-
-
-      // if (this.settingInfo.openChangePicture) {
-      //   if (this.updateImage == null) {
-      //     this.$nextTick(() => {
-      //       this.acqStatus = true
-      //     });
-      //     this.$message.warning(this.$t('message.edit_picture'))
-      //     return
-      //   } else {
-      //     // 通过验证后，上传文件
-      //     const formData = new FormData();
-      //     formData.append("image", this.updateImage);
-      //     formData.append("prompt", this.inputMsg);
-      //     formData.append("n", this.settingInfo.n);
-      //     formData.append("size", this.settingInfo.size);
-      //
-      //     const dateNow = JCMFormatDate(getNowTime());
-      //
-      //     let chatMsg = {
-      //       headImg: USER_HEAD_IMG_URL,
-      //       name: USER_NAME,
-      //       time: dateNow,
-      //       msg: this.inputMsg,
-      //       chatType: 0, //信息类型，0文字，1图片
-      //       uid: "jcm", //uid
-      //     };
-      //
-      //     this.sendMsg(chatMsg);
-      //     this.inputMsg = "";
-      //
-      //     createImageEdit(formData, this.settingInfo.KeyMsg).then(data => {
-      //       for (const imgInfo of data) {
-      //         let imgResMsg = {
-      //           headImg: AI_HEAD_IMG_URL,
-      //           name: this.frinedInfo.name,
-      //           time: JCMFormatDate(getNowTime()),
-      //           msg: imgInfo.url,
-      //           chatType: 1, //信息类型，0文字，1图片
-      //           extend: {
-      //             imgType: 2, //(1表情，2本地图片)
-      //           },
-      //           uid: this.frinedInfo.id, //uid
-      //         };
-      //         this.sendMsg(imgResMsg);
-      //         this.srcImgList.push(imgInfo.url);
-      //       }
-      //       this.updateImage = null
-      //       this.acqStatus = true
-      //     })
-      //     return
-      //   }
-      // }
-
       if (this.inputMsg) {
         let chatMsg = {
           headImg: USER_HEAD_IMG_URL,
@@ -548,27 +498,63 @@ export default {
                 this.acqStatus = true
               })
         } else {
-          this.options.sessionId = generateUUID()
-          this.options.parentMessageId = this.lastChildId
+          this.options.sessionId = this.curSessionId
+          this.options.parentMessageId = this.lastChatMsg.id
 
           this.setting.model = this.frinedInfo.id
           this.setting.suffix = this.settingInfo.chat.suffix
           this.setting.stop = this.settingInfo.chat.stop
-          this.setting.FrequencyPenalty = this.settingInfo.chat.FrequencyPenalty
-          this.setting.PresencePenalty = this.settingInfo.chat.PresencePenalty
+          this.setting.frequencyPenalty = this.settingInfo.chat.FrequencyPenalty
+          this.setting.presencePenalty = this.settingInfo.chat.PresencePenalty
           this.setting.maxTokens = this.settingInfo.chat.MaxTokens
           this.setting.temperature = this.settingInfo.chat.Temperature
           this.setting.stream = this.settingInfo.chat.stream
           this.setting.echo = this.settingInfo.chat.echo
-          send(this.inputMsg, this.options, this.settingInfo.prompt, this.setting)
+          //新增一个空的消息
+          let chatBeforResMsg = {
+            headImg: AI_HEAD_IMG_URL,
+            name: this.frinedInfo.name,
+            time: JCMFormatDate(getNowTime()),
+            messageType: "ANSWER",
+            chatType: 0, //信息类型，0文字，1图片
+            content: "",
+          };
+          this.sendMsg(chatBeforResMsg);
+          this.fetchChatMsg(this.inputMsg, this.options, this.settingInfo.prompt, this.setting)
         }
-        this.inputMsg = "";
+        this.inputMsg = ""
+        this.$nextTick(() => {
+          this.acqStatus = false
+        });
       } else {
         this.$nextTick(() => {
           this.acqStatus = true
         });
         this.$message.warning(this.$t('message.msg_empty'))
       }
+    },
+
+    async fetchChatMsg(question, options, prompt, setting) {
+      const currentResLocation = this.chatList.length - 1
+      let _this = this
+      await fetch('/api/chatMsg/send', {
+            method: 'POST',
+            body: JSON.stringify({
+              question: question,
+              options: options,
+              prompt: prompt,
+              setting: setting,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': getToken(),
+              Accept: "application/utf-8",
+            },
+          }
+      ).then(response => {
+        const reader = response.body.getReader();
+        this.readStream(reader, _this, currentResLocation, "chat");
+      });
     },
     resetUpdate() {
       this.updateImage = null

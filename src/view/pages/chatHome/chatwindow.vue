@@ -415,27 +415,27 @@ export default {
         this.sendMsg(chatMsg);
         //如果是图片模式则进入待开发不过可用改状态使用
         if (this.settingInfo.openProductionPicture) {
-          params.prompt = this.inputMsg,
-              params.n = this.settingInfo.n,
-              params.size = this.settingInfo.size,
-              createImage(params, this.settingInfo.KeyMsg).then(data => {
-                for (const imgInfo of data) {
-                  let imgResMsg = {
-                    headImg: AI_HEAD_IMG_URL,
-                    name: this.frinedInfo.name,
-                    time: JCMFormatDate(getNowTime()),
-                    msg: imgInfo.url,
-                    chatType: 1, //信息类型，0文字，1图片
-                    extend: {
-                      imgType: 2, //(1表情，2本地图片)
-                    },
-                    uid: this.frinedInfo.id, //uid
-                  };
-                  this.sendMsg(imgResMsg);
-                  this.srcImgList.push(imgInfo.url);
-                }
-                this.acqStatus = true
-              })
+          params.prompt = this.inputMsg
+          params.n = this.settingInfo.n
+          params.size = this.settingInfo.size
+          createImage(params, this.settingInfo.KeyMsg).then(data => {
+            for (const imgInfo of data) {
+              let imgResMsg = {
+                headImg: AI_HEAD_IMG_URL,
+                name: this.frinedInfo.name,
+                time: JCMFormatDate(getNowTime()),
+                msg: imgInfo.url,
+                chatType: 1, //信息类型，0文字，1图片
+                extend: {
+                  imgType: 2, //(1表情，2本地图片)
+                },
+                uid: this.frinedInfo.id, //uid
+              };
+              this.sendMsg(imgResMsg);
+              this.srcImgList.push(imgInfo.url);
+            }
+            this.acqStatus = true
+          })
         } else {
           this.options.sessionId = this.curSessionId
           this.options.parentMessageId = this.lastChatMsg.id

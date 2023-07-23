@@ -282,61 +282,6 @@ export default {
         this.sendText()
       }
     },
-    // 读取gpt的回复流
-    readStream(reader, _this, currentResLocation, type) {
-      return reader.read().then(({done, value}) => {
-        if (done) {
-          this.$nextTick(() => {
-            this.acqStatus = true
-          });
-          return;
-        }
-        if (!_this.chatList[currentResLocation].reminder) {
-          _this.chatList[currentResLocation].reminder = "";
-        }
-        console.log("value")
-        console.log(value)
-        let decoded = new TextDecoder().decode(value);
-        console.log("decoded")
-        console.log(decoded)
-        decoded = _this.chatList[currentResLocation].reminder + decoded;
-        let decodedArray = decoded.split("data: ");
-        let longstr = "";
-        decodedArray.forEach(decoded => {
-          try {
-            decoded = decoded.trim();
-            if (longstr === "") {
-              JSON.parse(decoded);
-            } else {
-              decoded = longstr + decoded;
-              longstr = "";
-              JSON.parse(decoded);
-            }
-          } catch (e) {
-            longstr = decoded;
-            decoded = "";
-          }
-          if (decoded !== "") {
-            if (decoded.trim() === "[DONE]") {
-              this.$nextTick(() => {
-                this.acqStatus = true
-              });
-            } else {
-              if (type === "chat") {
-                const parseMsg = JSON.parse(decoded);
-                const response = parseMsg.choices[0].delta.content ? JSON.parse(decoded).choices[0].delta.content : "";
-                _this.chatList[currentResLocation].content = _this.chatList[currentResLocation].content + response
-                _this.scrollBottom();
-              } else {
-                const response = JSON.parse(decoded).choices[0].text;
-                _this.chatList[currentResLocation].content = _this.chatList[currentResLocation].content + response
-              }
-            }
-          }
-        })
-        return this.readStream(reader, _this, currentResLocation, type);
-      });
-    },
     // 导出当前会话到json文件
     exportObjArrToJson() {
       console.log(this.chatList)
@@ -374,14 +319,6 @@ export default {
         });
       }
     },
-    //获取对话列表
-    // getMesList() {
-    //   return this.chatList
-    // },
-    //清除当前对话列表
-    // clearMsgList() {
-    //   this.chatList = []
-    // },
     // 更新内容背景图片
     updateContentImageUrl(imgUrl) {
       this.contentBackImageUrl = imgUrl
@@ -444,7 +381,7 @@ export default {
             ...item,
             time: JCMFormatDate(item.time)
           }));
-          this.lastChatMsg = res.list[res.list.length - 1] === undefined ? [] : res.list[res.list.length - 1];
+          // this.lastChatMsg = res.list[res.list.length - 1] === undefined ? [] : res.list[res.list.length - 1];
           resolve()
         }).catch(error => {
           reject(error)
@@ -465,15 +402,17 @@ export default {
       const dateNow = JCMFormatDate(getNowTime());
       if (this.inputMsg) {
         let chatMsg = {
-          headImg: USER_HEAD_IMG_URL,
-          name: USER_NAME,
           time: dateNow,
           content: this.inputMsg,
           chatType: 0, //信息类型，0文字，1图片
           messageType: "QUESTION",
+          id: "",
+          sessionId: "",
+          parentId: "",
+          childrenId: "",
         };
+        this.lastChatMsg = this.chatList[this.chatList.length - 1] === undefined ? [] : this.chatList[this.chatList.length - 1];
         this.sendMsg(chatMsg);
-
         //如果是图片模式则进入待开发不过可用改状态使用
         if (this.settingInfo.openProductionPicture) {
           params.prompt = this.inputMsg,
@@ -512,14 +451,19 @@ export default {
           this.setting.echo = this.settingInfo.chat.echo
           //新增一个空的消息
           let chatBeforResMsg = {
-            headImg: AI_HEAD_IMG_URL,
-            name: this.frinedInfo.name,
             time: JCMFormatDate(getNowTime()),
             messageType: "ANSWER",
             chatType: 0, //信息类型，0文字，1图片
             content: "",
+            id: "",
+            sessionId: "",
+            parentId: "",
+            childrenId: "",
           };
           this.sendMsg(chatBeforResMsg);
+          this.lastChatMsg = this.chatList[this.chatList.length - 1] === undefined ? [] : this.chatList[this.chatList.length - 1];
+          console.log("lastChatMsg2 ")
+          console.log(this.lastChatMsg)
           this.fetchChatMsg(this.inputMsg, this.options, this.settingInfo.prompt, this.setting)
         }
         this.inputMsg = ""
@@ -533,7 +477,7 @@ export default {
         this.$message.warning(this.$t('message.msg_empty'))
       }
     },
-
+    // 真正的发送gpt消息
     async fetchChatMsg(question, options, prompt, setting) {
       const currentResLocation = this.chatList.length - 1
       let _this = this
@@ -554,8 +498,65 @@ export default {
       ).then(response => {
         const reader = response.body.getReader();
         this.readStream(reader, _this, currentResLocation, "chat");
+        this.lastChatMsg = this.chatList[currentResLocation] === undefined ? [] : this.chatList[currentResLocation];
       });
     },
+    // 读取gpt的回复流
+    readStream(reader, _this, currentResLocation, type) {
+      return reader.read().then(({done, value}) => {
+        if (done) {
+          this.$nextTick(() => {
+            this.acqStatus = true
+          });
+          return;
+        }
+        if (!_this.chatList[currentResLocation].reminder) {
+          _this.chatList[currentResLocation].reminder = "";
+        }
+        let decoded = new TextDecoder("utf-8").decode(value);
+        decoded = _this.chatList[currentResLocation].reminder + decoded;
+        let decodedArray = decoded.split("data: ");
+        let longstr = "";
+        decodedArray.forEach(decoded => {
+          try {
+            decoded = decoded.trim();
+            if (longstr === "") {
+              JSON.parse(decoded);
+            } else {
+              decoded = longstr + decoded;
+              longstr = "";
+              JSON.parse(decoded);
+            }
+          } catch (e) {
+            longstr = decoded;
+            decoded = "";
+          }
+          if (decoded !== "") {
+            if (decoded.trim() === "[DONE]") {
+              this.$nextTick(() => {
+                this.acqStatus = true
+              });
+            } else {
+              if (type === "chat") {
+                //{"role":"user","id":"3db99dc1-296b-4379-8b83-b37abf3c12dd","parentMessageId":"abc14b91-b5bc-4253-b826-785e00fad2ea","text":"2","sessionId":"1b604023-dc9d-4def-bdf2-9d0259bd6e78"}
+                const parseMsg = JSON.parse(decoded);
+                const response = parseMsg.text ? parseMsg.text : "";
+                _this.lastChatMsg.id = parseMsg.id ? parseMsg.id : "";
+                _this.chatList[currentResLocation].content = response
+                _this.scrollBottom();
+                // const response = parseMsg.choices[0].delta.content ? JSON.parse(decoded).choices[0].delta.content : "";
+              } else {
+                // const response = JSON.parse(decoded).choices[0].text;
+                // _this.chatList[currentResLocation].content = _this.chatList[currentResLocation].content + response
+              }
+            }
+          }
+        })
+        return this.readStream(reader, _this, currentResLocation, type);
+      });
+    },
+
+
     resetUpdate() {
       this.updateImage = null
     },
@@ -579,7 +580,6 @@ export default {
     clickEmoji() {
       this.showEmoji = !this.showEmoji;
     },
-
     //发送表情
     sendEmoji(msg) {
       const dateNow = JCMFormatDate(getNowTime());
@@ -683,7 +683,6 @@ export default {
       })
       e.target.files = null;
     },
-
     //发送文件
     sendFile(e) {
       const dateNow = JCMFormatDate(getNowTime());

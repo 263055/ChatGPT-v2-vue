@@ -169,12 +169,11 @@ import {
 import HeadPortrait from "@/components/HeadPortrait";
 import Emoji from "@/components/Emoji";
 import FileCard from "@/components/FileCard.vue";
-import base from "@/api/index";
 import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
 import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
 import {saveAs} from 'file-saver';
-import {getMessage, send} from "@/api/chatMsg";
+import {getMessage} from "@/api/chatMsg";
 
 export default {
   //用于自适应文本框的高度
@@ -276,7 +275,7 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    // 发送函数
+    // 聊天室按回车键发消息发送函数
     handleKeyDown(event) {
       if (event.keyCode === 13 && (!event.shiftKey)) {  // 按下回车键，没按shift
         this.sendText()
@@ -319,59 +318,6 @@ export default {
         });
       }
     },
-    // 更新内容背景图片
-    updateContentImageUrl(imgUrl) {
-      this.contentBackImageUrl = imgUrl
-    },
-    //开始录音
-    startRecording() {
-      navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
-        this.recorder = new MediaRecorder(stream);
-        this.recorder.addEventListener('dataavailable', event => {
-          this.audioChunks.push(event.data)
-        })
-        this.recording = true
-        this.recorder.start()
-        // 在这里使用录音器
-        this.$message.success(this.$t('message.start_recording'))
-      }).catch((error) => {
-        this.$message.error(this.$t('message.fail_audio'))
-      });
-    },
-    //停止录音
-    async stopRecording() {
-      this.recorder.stop()
-      this.recording = false
-      this.recorder.ondataavailable = (event) => {
-        const blob = new Blob([event.data], {type: 'audio/wav'});
-        const file = new File([blob], 'recording.wav', {
-          type: 'audio/wav',
-          lastModified: Date.now()
-        });
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('model', "whisper-1")
-        formData.append('temperature', this.settingInfo.TemperatureAudio)
-        formData.append('response_format', "text")
-
-        if (this.settingInfo.translateEnglish) {
-          createTranslation(formData, this.settingInfo.KeyMsg).then(data => {
-            this.$nextTick(() => {
-              this.inputMsg = data;
-            });
-          })
-        } else {
-          formData.append('language', this.settingInfo.language)
-
-          createTranscription(formData, this.settingInfo.KeyMsg).then(data => {
-            this.$nextTick(() => {
-              this.inputMsg = data;
-            });
-          })
-        }
-      }
-      this.$message.success(this.$t('message.end_recording'))
-    },
     //获得聊天室所有消息
     getMessage(id) {
       this.curSessionId = id;
@@ -388,12 +334,12 @@ export default {
         })
       })
     },
-    //发送信息
+    //  把消息展示到聊天页面
     sendMsg(msgList) {
       this.chatList.push(msgList);
       this.scrollBottom();
     },
-    //发送文字信息
+    // 发送文字信息
     sendText() {
       this.rows = 1;
       this.$nextTick(() => {
@@ -555,11 +501,7 @@ export default {
         return this.readStream(reader, _this, currentResLocation, type);
       });
     },
-
-
-    resetUpdate() {
-      this.updateImage = null
-    },
+    // 打开页面时滚动窗口到最底层
     onScroll() {
       const scrollDom = this.$refs.chatContent;
       const scrollTop = scrollDom.scrollTop;
@@ -568,7 +510,7 @@ export default {
       // 当滚动到底部，设置 isAutoScroll 为 true
       this.isAutoScroll = scrollTop + offsetHeight === scrollHeight;
     },
-    //获取窗口高度并滚动至最底层
+    // 获取窗口高度并滚动至最底层
     scrollBottom() {
       this.$nextTick(() => {
         if (!this.isAutoScroll) return; // 如果 isAutoScroll 为 false，不执行滚动方法
@@ -576,11 +518,11 @@ export default {
         animation(scrollDom, scrollDom.scrollHeight - scrollDom.offsetHeight);
       });
     },
-    //关闭标签框
+    // 关闭标签框
     clickEmoji() {
       this.showEmoji = !this.showEmoji;
     },
-    //发送表情
+    // 发送表情
     sendEmoji(msg) {
       const dateNow = JCMFormatDate(getNowTime());
       let chatMsg = {
@@ -597,7 +539,7 @@ export default {
       this.sendMsg(chatMsg);
       this.clickEmoji();
     },
-    //发送本地图片
+    // 发送本地图片
     sendImg(e) {
       this.acqStatus = false
       //获取文件
@@ -683,54 +625,55 @@ export default {
       })
       e.target.files = null;
     },
-    //发送文件
-    sendFile(e) {
-      const dateNow = JCMFormatDate(getNowTime());
-      let chatMsg = {
-        headImg: USER_HEAD_IMG_URL,
-        name: USER_NAME,
-        time: dateNow,
-        msg: "",
-        chatType: 2, //信息类型，0文字，1图片, 2文件
-        extend: {
-          fileType: "", //(1word，2excel，3ppt，4pdf，5zpi, 6txt)
-        },
-        uid: "jcm",
-      };
-      let files = e.target.files[0]; //图片文件名
-      chatMsg.msg = files;
+    // 开始录音
+    startRecording() {
+      navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+        this.recorder = new MediaRecorder(stream);
+        this.recorder.addEventListener('dataavailable', event => {
+          this.audioChunks.push(event.data)
+        })
+        this.recording = true
+        this.recorder.start()
+        // 在这里使用录音器
+        this.$message.success(this.$t('message.start_recording'))
+      }).catch((error) => {
+        this.$message.error(this.$t('message.fail_audio'))
+      });
+    },
+    // 停止录音
+    async stopRecording() {
+      this.recorder.stop()
+      this.recording = false
+      this.recorder.ondataavailable = (event) => {
+        const blob = new Blob([event.data], {type: 'audio/wav'});
+        const file = new File([blob], 'recording.wav', {
+          type: 'audio/wav',
+          lastModified: Date.now()
+        });
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('model', "whisper-1")
+        formData.append('temperature', this.settingInfo.TemperatureAudio)
+        formData.append('response_format', "text")
 
-      if (files) {
-        switch (files.type) {
-          case "application/msword":
-          case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-            chatMsg.extend.fileType = 1;
-            break;
-          case "application/vnd.ms-excel":
-          case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-            chatMsg.extend.fileType = 2;
-            break;
-          case "application/vnd.ms-powerpoint":
-          case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-            chatMsg.extend.fileType = 3;
-            break;
-          case "application/pdf":
-            chatMsg.extend.fileType = 4;
-            break;
-          case "application/zip":
-          case "application/x-zip-compressed":
-            chatMsg.extend.fileType = 5;
-            break;
-          case "text/plain":
-            chatMsg.extend.fileType = 6;
-            break;
-          default:
-            chatMsg.extend.fileType = 0;
+        if (this.settingInfo.translateEnglish) {
+          createTranslation(formData, this.settingInfo.KeyMsg).then(data => {
+            this.$nextTick(() => {
+              this.inputMsg = data;
+            });
+          })
+        } else {
+          formData.append('language', this.settingInfo.language)
+
+          createTranscription(formData, this.settingInfo.KeyMsg).then(data => {
+            this.$nextTick(() => {
+              this.inputMsg = data;
+            });
+          })
         }
-        this.sendMsg(chatMsg);
-        e.target.files = null;
       }
-    }
+      this.$message.success(this.$t('message.end_recording'))
+    },
   },
 };
 </script>

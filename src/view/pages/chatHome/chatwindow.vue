@@ -232,9 +232,7 @@ export default {
         echo: ""
       },
       userName: USER_NAME,
-      isAutoScroll: true,
       fileArrays: [],
-      inputsStatus: true,
       rows: 1,
       //是否显示表情和录音按钮
       buttonStatus: true,
@@ -327,7 +325,6 @@ export default {
             ...item,
             time: JCMFormatDate(item.time)
           }));
-          // this.lastChatMsg = res.list[res.list.length - 1] === undefined ? [] : res.list[res.list.length - 1];
           resolve()
         }).catch(error => {
           reject(error)
@@ -341,12 +338,21 @@ export default {
     },
     // 发送文字信息
     sendText() {
+      if (this.curSessionId === undefined || this.curSessionId === '') {
+        this.$message.error('请开启新的聊天室后再与ai聊天')
+        return;
+      }
+      const curMessage = this.inputMsg;
+      if (curMessage === '\n') {
+        this.$message.error('请输入完整的对话再发送')
+        return;
+      }
       this.rows = 1;
       this.$nextTick(() => {
         this.acqStatus = false
       })
       const dateNow = JCMFormatDate(getNowTime());
-      if (this.inputMsg) {
+      if (curMessage) {
         let chatMsg = {
           time: dateNow,
           content: this.inputMsg,
@@ -408,8 +414,6 @@ export default {
           };
           this.sendMsg(chatBeforResMsg);
           this.lastChatMsg = this.chatList[this.chatList.length - 1] === undefined ? [] : this.chatList[this.chatList.length - 1];
-          console.log("lastChatMsg2 ")
-          console.log(this.lastChatMsg)
           this.fetchChatMsg(this.inputMsg, this.options, this.settingInfo.prompt, this.setting)
         }
         this.inputMsg = ""
@@ -507,13 +511,10 @@ export default {
       const scrollTop = scrollDom.scrollTop;
       const offsetHeight = scrollDom.offsetHeight;
       const scrollHeight = scrollDom.scrollHeight;
-      // 当滚动到底部，设置 isAutoScroll 为 true
-      this.isAutoScroll = scrollTop + offsetHeight === scrollHeight;
     },
     // 获取窗口高度并滚动至最底层
     scrollBottom() {
       this.$nextTick(() => {
-        if (!this.isAutoScroll) return; // 如果 isAutoScroll 为 false，不执行滚动方法
         const scrollDom = this.$refs.chatContent;
         animation(scrollDom, scrollDom.scrollHeight - scrollDom.offsetHeight);
       });

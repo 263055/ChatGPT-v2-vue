@@ -46,17 +46,17 @@ service.interceptors.request.use(config => {
         if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
             cache.session.setJSON('sessionObj', requestObj)
         } else {
-            const s_url = sessionObj.url;                  // 请求地址
-            const s_data = sessionObj.data;                // 请求数据
-            const s_time = sessionObj.time;                // 请求时间
-            const interval = 3000;                         // 间隔时间(ms)，小于此时间视为重复提交
-            if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
-                const message = '数据正在处理，请勿重复提交';
-                console.warn(`[${s_url}]: ` + message)
-                return Promise.reject(new Error(message))
-            } else {
-                cache.session.setJSON('sessionObj', requestObj)
-            }
+            // const s_url = sessionObj.url;                  // 请求地址
+            // const s_data = sessionObj.data;                // 请求数据
+            // const s_time = sessionObj.time;                // 请求时间
+            // const interval = 3000;                         // 间隔时间(ms)，小于此时间视为重复提交
+            // if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
+            //     const message = '数据正在处理，请勿重复提交';
+            //     console.warn(`[${s_url}]: ` + message)
+            //     return Promise.reject(new Error(message))
+            // } else {
+            //     cache.session.setJSON('sessionObj', requestObj)
+            // }
         }
     }
     return config

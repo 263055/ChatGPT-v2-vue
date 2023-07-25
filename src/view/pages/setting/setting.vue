@@ -1,17 +1,23 @@
 <template>
   <div class="contain-log">
     <el-card>
+      <div class="order-chatMsg-detail">使用记录和充值记录</div>
       <div class="my-table">
-        <el-table :data="tableData" background-color="#FAFAFA" class="">
-          <el-table-column label="Date" prop="date" width="180"/>
-          <el-table-column label="Name" prop="name" width="180"/>
-          <el-table-column label="Address" prop="address"/>
+        <!--对话记录-->
+        <div style="font-size: 30px;">使用记录：</div>
+        <el-table :data="chatMsgLog" background-color="#FAFAFA" class="">
+          <el-table-column label="对话时间" prop="time" width="220"/>
+          <el-table-column label="问题token" prop="promptToken"/>
+          <el-table-column label="回答token" prop="completeToken"/>
+          <el-table-column label="总共token" prop="totalToken"/>
+          <el-table-column label="剩余token" prop="consume"/>
+          <el-table-column label="是否免费" prop="free"/>
           <el-table-column align="right">
             <template #default="scope">
               <el-button
                   size="small"
                   type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
+                  @click="deleteChatMsgDetail(scope.$index, scope.row)"
               >删除
               </el-button>
             </template>
@@ -19,107 +25,27 @@
         </el-table>
         <div class="pagination">
           <el-pagination
-              v-model:current-page="currentPage4"
-              v-model:page-size="pageSize4"
-              :background="background"
-              :page-sizes="[5, 10, 15, 20]"
-              :small="small"
-              :total="60"
+              :page-sizes="[5]"
+              :total="chatMsgTotal"
               layout="total, sizes, prev, pager, next, jumper"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
+              @current-change="updateChtMsgPage"
           />
         </div>
-      </div>
-
-
-      <div class="my-table">
-        <el-table :data="tableData" background-color="#FAFAFA" class="">
-          <el-table-column label="Date" prop="date" width="180"/>
-          <el-table-column label="Name" prop="name" width="180"/>
-          <el-table-column label="Address" prop="address"/>
-          <el-table-column align="right">
-            <template #default="scope">
-              <el-button
-                  size="small"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
-              >删除
-              </el-button>
-            </template>
-          </el-table-column>
+        <!--支付记录-->
+        <div style="font-size: 30px; margin-top: 20px">使用记录：</div>
+        <el-table :data="orderLog" background-color="#FAFAFA" class="">
+          <el-table-column label="订单id" prop="aoid" width="280"/>
+          <el-table-column label="订单金额" prop="balance"/>
+          <el-table-column label="创建时间" prop="createTime"/>
+          <el-table-column label="支付状态" prop="content"/>
+          <el-table-column label="支付时间" prop="payTime"/>
         </el-table>
-        <div class="">
+        <div class="pagination">
           <el-pagination
-              v-model:current-page="currentPage4"
-              v-model:page-size="pageSize4"
-              :background="background"
-              :page-sizes="[5, 10, 15, 20]"
-              :small="small"
-              :total="60"
+              :page-sizes="[5]"
+              :total="orderLogTotal"
               layout="total, sizes, prev, pager, next, jumper"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-          />
-        </div>
-      </div>
-      <div class="my-table">
-        <el-table :data="tableData" background-color="#FAFAFA" class="">
-          <el-table-column label="Date" prop="date" width="180"/>
-          <el-table-column label="Name" prop="name" width="180"/>
-          <el-table-column label="Address" prop="address"/>
-          <el-table-column align="right">
-            <template #default="scope">
-              <el-button
-                  size="small"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
-              >删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="">
-          <el-pagination
-              v-model:current-page="currentPage4"
-              v-model:page-size="pageSize4"
-              :background="background"
-              :page-sizes="[5, 10, 15, 20]"
-              :small="small"
-              :total="60"
-              layout="total, sizes, prev, pager, next, jumper"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-          />
-        </div>
-      </div>
-      <div class="my-table">
-        <el-table :data="tableData" background-color="#FAFAFA" class="">
-          <el-table-column label="Date" prop="date" width="180"/>
-          <el-table-column label="Name" prop="name" width="180"/>
-          <el-table-column label="Address" prop="address"/>
-          <el-table-column align="right">
-            <template #default="scope">
-              <el-button
-                  size="small"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)"
-              >删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div class="">
-          <el-pagination
-              v-model:current-page="currentPage4"
-              v-model:page-size="pageSize4"
-              :background="background"
-              :page-sizes="[5, 10, 15, 20]"
-              :small="small"
-              :total="60"
-              layout="total, sizes, prev, pager, next, jumper"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
+              @current-change="updateOrderLogPage"
           />
         </div>
       </div>
@@ -129,71 +55,101 @@
 
 <script>
 import {ref} from "vue";
+import {deleteChatMsgLog, getChatMsgDetail, getOrderDetail} from "@/api/log";
+import {JCMFormatTimestamp} from "@/util/util";
 
 export default {
   name: "App",
   computed() {
   },
   props: {
-    // tableData: [],
     default() {
       return {};
     },
   },
   data() {
     return {
-      currentPage4: 4,
-      pageSize4: 100,
-      small: false,
-      background: ref(true),
-      tableData: [
-        {
-          date: '2016-05-03',
-          name: 'Tom1',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom2',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-04',
-          name: 'Tom3',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-        {
-          date: '2016-05-01',
-          name: 'Tom4',
-          address: 'No. 189, Grove St, Los Angeles',
-        },
-      ]
+      orderLog: [],
+      orderLogTotal: 0,
+      chatMsgLog: [],
+      chatMsgTotal: 0,
     };
   },
   methods: {
-    handleDelete(event) {
-      console.log(this.tableData[event].name)
-      console.log(this.tableData[event].date)
+    //获得订单的信息
+    getOrderDetail(page) {
+      if (page === undefined || page === '' || page === 0) page = 0
+      new Promise((resolve, reject) => {
+        getOrderDetail(page, 5).then((res) => {
+          const resData = res.data.records
+          this.orderLog = resData.map(item => ({
+            ...item,
+            createTime: JCMFormatTimestamp(item.createTime),
+            payTime: item.payTime === null ? '未支付' : JCMFormatTimestamp(item.payTime)
+          }));
+          this.orderLogTotal = res.data.total
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
     },
-    handleCurrentChange(event) {
-      console.log(event)
+    //修改订单日志的页数
+    updateOrderLogPage(event) {
+      this.getOrderDetail(event)
     },
-    handleSizeChange(event) {
-      console.log(event)
-    }
+    //获得对话记录
+    getChtMsgDetail(page) {
+      if (page === undefined || page === '' || page === 0) page = 0
+      new Promise((resolve, reject) => {
+        getChatMsgDetail(page, 5).then((res) => {
+          const resData = res.data.records
+          this.chatMsgLog = resData.map(item => ({
+            ...item,
+            time: JCMFormatTimestamp(item.time),
+            free: item.free === true ? '是' : '否'
+          }));
+          this.chatMsgTotal = res.data.total
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    //修改对话记录日志的页数
+    updateChtMsgPage(event) {
+      this.getChtMsgDetail(event)
+    },
+    //删除某一条对话日志
+    deleteChatMsgDetail(event) {
+      deleteChatMsgLog(this.chatMsgLog[event].id)
+      this.getChtMsgDetail();
+    },
   },
   mounted() {
+    this.getOrderDetail();
+    this.getChtMsgDetail();
   },
 };
 </script>
 
 <style>
+.order-chatMsg-detail {
+  font-size: 30px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center
+}
+
 .contain-log {
   height: 100%;
-  background: rgb(39, 42, 55);
   max-height: 95vh;
   overflow: auto;
   overflow-x: scroll;
   overflow-y: scroll;
+}
+
+.my-table {
+  width: 80%;
 }
 </style>

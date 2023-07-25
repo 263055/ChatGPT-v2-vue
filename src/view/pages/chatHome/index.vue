@@ -127,7 +127,10 @@
       </div>
       <!--展示聊天窗口-->
       <div v-if="showChatWindow" v-show="showMainContent">
-        <ChatWindow ref="chatWindow" :frinedInfo="chatWindowInfo" :settingInfo="SettingInfo" :storeStatu="storeStatus"
+        <ChatWindow ref="chatWindow"
+                    :frinedInfo="chatWindowInfo"
+                    :settingInfo="SettingInfo"
+                    :storeStatu="storeStatus"
                     @personCardSort="personCardSort">
         </ChatWindow>
       </div>
@@ -140,7 +143,7 @@
     </div>
     <!--右侧栏是否展示-->
     <div class="chatLeft" v-show="showSetupList">
-      <!--api key-->
+      <!--欢迎用户-->
       <el-card shadow="hover" id="jianbian" style="line-height: 120%;text-align: center;">
         <div>{{ getUserEmail }}</div>
       </el-card>
@@ -869,7 +872,7 @@ export default {
     //会话被点击
     clickSession(info) {
       this.sessionCurrent = info.id;
-      // TODO 获取聊天记录到这里
+      // 获取聊天记录到这里
       this.$refs.chatWindow.getMessage(info.id)
     },
     //文件被点击

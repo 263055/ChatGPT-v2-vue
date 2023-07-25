@@ -2,7 +2,7 @@
   <el-container style="height: 94vh;">
     <div class="login-contain-log">
       <div class="login-loginLeft-card1">
-        In the simplest and cheapest way possible to access chatgpt different model
+        In the simplest and cheapest way possible to access chatgpt model
       </div>
       <br>
       <div class="login-loginLeft-card2">
@@ -12,76 +12,90 @@
         使用Tokenizer分词器精准计费，支持微信支付，价格实惠
       </div>
       <div class="login-loginLeft-card2">
-        支持第三方api调用
+        无需付费，也有机会体验gpt4的使用
       </div>
     </div>
 
     <!--登录表格所在的卡片-->
     <div class="login-card">
-      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-        <!--最顶端的文字描述部分-->
-        <div class="login-title">登录/注册</div>
-        <el-form-item prop="email">
-          <el-input
-              v-model="loginForm.email"
-              auto-complete="off"
-              placeholder="账号"
-              type="text"
-          >
-            <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="user"/>
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input
-              v-model="loginForm.password"
-              auto-complete="off"
-              placeholder="密码"
-              type="password"
-              @keyup.enter.native="handleLogin"
-          >
-            <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="password"/>
-          </el-input>
-        </el-form-item>
-        <el-form-item v-if="captchaEnabled" prop="code">
-          <el-input
-              v-model="loginForm.code"
-              auto-complete="off"
-              placeholder="验证码"
-              style="width: 63%"
-              @keyup.enter.native="handleLogin"
-          >
-            <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
-          </el-input>
-          <div class="login-code">
-            <img :src="codeUrl" alt="" class="login-code-img" @click="getCode"/>
+      <div v-show="!this.haveLogin">
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
+          <!--最顶端的文字描述部分-->
+          <div class="login-title">登录/注册</div>
+          <el-form-item prop="email">
+            <el-input
+                v-model="loginForm.email"
+                auto-complete="off"
+                placeholder="账号"
+                type="text"
+            >
+              <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="user"/>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
+                v-model="loginForm.password"
+                auto-complete="off"
+                placeholder="密码"
+                type="password"
+                @keyup.enter.native="handleLogin"
+            >
+              <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="password"/>
+            </el-input>
+          </el-form-item>
+          <el-form-item v-if="captchaEnabled" prop="code">
+            <el-input
+                v-model="loginForm.code"
+                auto-complete="off"
+                placeholder="验证码"
+                style="width: 63%"
+                @keyup.enter.native="handleLogin"
+            >
+              <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
+            </el-input>
+            <div class="login-code">
+              <img :src="codeUrl" alt="" class="login-code-img" @click="getCode"/>
+            </div>
+          </el-form-item>
+          <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
+            记住密码
+          </el-checkbox>
+          <el-form-item style="width:100%;">
+            <el-button
+                :loading="loading"
+                size="medium"
+                style="width:100%;"
+                type="primary"
+                @click.native.prevent="handleLogin"
+            >
+              <span v-if="!loading">登录/注册</span>
+              <span v-else>加载中...</span>
+            </el-button>
+          </el-form-item>
+          <el-form-item style="width:100%;">
+            <el-button
+                size="medium"
+                style="width:100%;"
+                type="info"
+                @click.native.prevent="handleLogin"
+            >
+              <span>忘记密码</span>
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div v-show="this.haveLogin">
+        <el-form class="login-form1">
+          <div class="login-title">{{ getUserEmail }}</div>
+          <div>{{ welcomeMsg }}</div>
+          <div>{{ welcomeMsg1 }}</div>
+          <div class="welcome-button">
+            <el-button type="primary">
+              退出登录
+            </el-button>
           </div>
-        </el-form-item>
-        <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
-          记住密码
-        </el-checkbox>
-        <el-form-item style="width:100%;">
-          <el-button
-              :loading="loading"
-              size="medium"
-              style="width:100%;"
-              type="primary"
-              @click.native.prevent="handleLogin"
-          >
-            <span v-if="!loading">登录/注册</span>
-            <span v-else>加载中...</span>
-          </el-button>
-        </el-form-item>
-        <el-form-item style="width:100%;">
-          <el-button
-              size="medium"
-              style="width:100%;"
-              type="info"
-              @click.native.prevent="handleLogin"
-          >
-            <span>忘记密码</span>
-          </el-button>
-        </el-form-item>
-      </el-form>
+        </el-form>
+      </div>
     </div>
 
     <!--  底部  -->
@@ -97,11 +111,15 @@ import {decrypt, encrypt} from '@/util/jsencrypt'
 import SvgIcon from "../../../components/SvgIcon.vue";
 import {getCodeImg} from "@/api/login";
 import Cookies from "js-cookie";
+import {getToken} from "@/util/auth";
 
 export default {
   name: "Login",
-  // computed() {
-  // },
+  computed: {
+    getUserEmail() {
+      return '4gai 欢迎你的到来'
+    }
+  },
   props: {
     default() {
       return {};
@@ -152,11 +170,17 @@ export default {
           });
         }
       });
+    },
+    isLogin() {
+      const token = getToken();
+      this.haveLogin = !(token === undefined || token === '' || token === null);
+      console.log(this.haveLogin)
     }
   },
   created() {
     this.getCode();
     this.getCookie();
+    this.isLogin();
   },
   mounted() {
   },
@@ -184,6 +208,11 @@ export default {
       redirect: undefined,
       captchaEnabled: true,
       codeUrl: '',
+      haveLogin: false,
+      welcomeMsg1: '你的支持，就是我做下去的动力！',
+      welcomeMsg: '如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +
+          '网站已经持续运行了接近三个月，始终秉承着以廉价为主。' +
+          '希望这次的更新能为你提供更好的服务。',
     };
   },
 };
@@ -269,5 +298,26 @@ export default {
     width: 14px;
     margin-left: 2px;
   }
+}
+
+.login-form1 {
+  border-radius: 6px;
+  background: #ffffff;
+  width: 400px;
+  height: 400px;
+  padding: 25px 25px 5px 25px;
+}
+
+.welcome-card {
+  text-align: center;
+}
+
+.login-title {
+  text-align: center;
+}
+
+.welcome-button {
+  text-align: center;
+  margin-top: 10px;
 }
 </style>

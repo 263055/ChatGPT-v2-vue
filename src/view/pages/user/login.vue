@@ -9,10 +9,10 @@
         使用与官网相同的token计费方式，同时降低了chatgpt的使用价格
       </div>
       <div class="login-loginLeft-card2">
-        使用Tokenizer分词器精准计费，支持微信支付，价格实惠
+        使用Tokenizer分词器精准计费，支持微信支付
       </div>
       <div class="login-loginLeft-card2">
-        无需付费，也有机会体验gpt4的使用
+        免费用户，也有机会体验gpt4的使用
       </div>
     </div>
 

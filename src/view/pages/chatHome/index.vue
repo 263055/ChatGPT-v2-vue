@@ -131,7 +131,7 @@
                     :frinedInfo="chatWindowInfo"
                     :settingInfo="SettingInfo"
                     :storeStatu="storeStatus"
-                    @personCardSort="personCardSort">
+        >
         </ChatWindow>
       </div>
       <div v-else class="showIcon">
@@ -185,20 +185,20 @@
               <!--</div>-->
               <!--不联网-->
               <div v-show="!SettingInfo.openNet">
-                <!--后缀-->
-                <div class="block">
-                  <!--<el-tooltip class="item" effect="dark" :content="$t('model.suffix')" placement="top">-->
-                  <!--  <span class="demonstration">{{ $t('model.suffix_title') }}</span>-->
-                  <!--</el-tooltip>-->
-                  <input v-model="SettingInfo.chat.suffix" :placeholder="$t('placeholder.suffix')" class="weitiao"/>
-                </div>
                 <!--停用词-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.stop')" placement="top">
-                    <span class="demonstration" is>{{ $t('model.stop_title') }}</span>
+                    <span class="demonstration">{{ $t('model.stop_title') }}</span>
                   </el-tooltip>
-
                   <input v-model="SettingInfo.chat.stop" :placeholder="$t('placeholder.stop')" class="weitiao"/>
+                </div>
+                <!--最大上下文-->
+                <div class="block">
+                  <el-tooltip :content="$t('model.n')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('model.n') }}</span>
+                  </el-tooltip>
+                  <el-slider v-model="SettingInfo.chat.n" :max="10"
+                             :min="0" :step="1" class="astrict"></el-slider>
                 </div>
                 <!--单词重复度-->
                 <div class="block">
@@ -240,13 +240,6 @@
                   </el-tooltip>
                   <el-switch v-model="SettingInfo.chat.stream" :width="defaulWidth"
                              style="margin-left: 15%;"></el-switch>
-                </div>
-                <!--回显词-->
-                <div class="block">
-                  <el-tooltip class="item" effect="dark" :content="$t('model.echo')" placement="top">
-                    <span class="demonstration">{{ $t('model.echo_title') }}</span>
-                  </el-tooltip>
-                  <el-switch v-model="SettingInfo.chat.echo" :width="defaulWidth" style="margin-left: 22%;"></el-switch>
                 </div>
                 <!--是否联网-->
                 <!--<div class="block">-->
@@ -467,8 +460,8 @@ export default {
           stream: localStorage.getItem("stream") == null ? true :
               Boolean(localStorage.getItem("stream")),
           // 回显词
-          echo: localStorage.getItem("echo") == null ? false :
-              Boolean(localStorage.getItem("echo")),
+          n: localStorage.getItem("n") == null ? false :
+              parseInt(localStorage.getItem("n")),
         },
         openNet: false,
         // max_results: 3,
@@ -576,10 +569,8 @@ export default {
       showHeadImg: true
     }
     // TODO 修改keyMsg
-    if (this.SettingInfo.KeyMsg) {
-      this.getModelList(this.SettingInfo.KeyMsg);
-    }
     this.getRolesList();
+    this.getModelList();
     this.getSessionList();
     this.$watch('fileSearch', this.watchFileSearch);
   },
@@ -620,15 +611,6 @@ export default {
         if (newVal.openProductionPicture) {
           this.SettingInfo.openChangePicture = false
         }
-        if (newVal.KeyMsg && newVal !== oldVal) {
-          //获取模型列表
-          getModels(newVal).then((res) => {
-            this.personList = res;
-            this.personListCache = res;
-          }).catch(e => {
-            this.$message.error(this.$t('message.get_model_fail'))
-          })
-        }
       },
       deep: true
     }
@@ -649,7 +631,7 @@ export default {
       localStorage.setItem("MaxTokens", this.SettingInfo.chat.MaxTokens)
       localStorage.setItem("Temperature", this.SettingInfo.chat.Temperature)
       localStorage.setItem("stream", this.SettingInfo.chat.stream)
-      localStorage.setItem("echo", this.SettingInfo.chat.echo)
+      localStorage.setItem("n", this.SettingInfo.chat.n)
     },
     deleteSettingInfo() {
       localStorage.removeItem("suffix")
@@ -659,7 +641,7 @@ export default {
       localStorage.removeItem("MaxTokens")
       localStorage.removeItem("Temperature")
       localStorage.removeItem("stream")
-      localStorage.removeItem("echo")
+      localStorage.removeItem("n")
       this.SettingInfo.chat.suffix = ""
       this.SettingInfo.chat.stop = ""
       this.SettingInfo.chat.FrequencyPenalty = 0
@@ -667,7 +649,7 @@ export default {
       this.SettingInfo.chat.MaxTokens = 1024
       this.SettingInfo.chat.Temperature = 1
       this.SettingInfo.chat.stream = true
-      this.SettingInfo.chat.echo = false
+      this.SettingInfo.chat.n = 0
     },
     getSessionList() {
       return new Promise((resolve, reject) => {
@@ -690,7 +672,6 @@ export default {
     },
     // 点击切换显示状态
     toggleLeft() {
-      console.log("left clicked")
       this.showPersonList = !this.showPersonList;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
       if (isMobile && (this.showPersonList || this.showSetupList)) {
@@ -716,16 +697,10 @@ export default {
       }
     },
     // 获取模型列表
-    getModelList(key) {
-      getModels(key).then((modelsRes) => {
-        // 提取fineTunesRes集合中所有id属性值
-        getFineTunesList(key).then((fineTunesRes) => {
-          const fineTunesIds = fineTunesRes.map(item => item.id);
-          const models = modelsRes.filter(item => !fineTunesIds.includes(item.id));
-          this.personList = models;
-          this.personListCache = models;
-        })
-        // this.updateMoneyInfo()
+    getModelList() {
+      getModels().then((modelsRes) => {
+        this.personList = modelsRes;
+        this.personListCache = modelsRes;
       }).catch(e => {
         this.$message.error(this.$t('message.get_model_fail'))
       })
@@ -810,7 +785,6 @@ export default {
     //模型列表被点击
     modelClick() {
       this.clearCurrent()
-      // this.getModelList(this.SettingInfo.KeyMsg)
       this.cutSetting = 0
     },
     promptClick() {
@@ -825,16 +799,6 @@ export default {
       this.SettingStatus = 0
       this.cutSetting = 1
       this.SettingInfo.cutSetting = 1
-      this.chatWindowInfo = {
-        img: "",
-        name: "ChatGPT",
-        detail: "chatgpt v3.5 所基于的模型",
-        lastMsg: "chatgpt v3.5 所基于的模型",
-        id: "gpt-3.5-turbo",
-        headImg: AI_HEAD_IMG_URL,
-        showHeadImg: true
-      }
-      // this.showChatWindow = true;
     },
     //角色列表被点击
     roleClick(info) {

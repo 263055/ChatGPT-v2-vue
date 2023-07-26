@@ -393,14 +393,14 @@ export default {
           this.options.parentMessageId = this.lastChatMsg.id
 
           this.setting.model = this.frinedInfo.id
-          this.setting.suffix = this.settingInfo.chat.suffix
+          // this.setting.suffix = this.settingInfo.chat.suffix
           this.setting.stop = this.settingInfo.chat.stop
           this.setting.frequencyPenalty = this.settingInfo.chat.FrequencyPenalty
           this.setting.presencePenalty = this.settingInfo.chat.PresencePenalty
           this.setting.maxTokens = this.settingInfo.chat.MaxTokens
           this.setting.temperature = this.settingInfo.chat.Temperature
           this.setting.stream = this.settingInfo.chat.stream
-          this.setting.echo = this.settingInfo.chat.echo
+          this.setting.n = this.settingInfo.chat.n
           //新增一个空的消息
           let chatBeforResMsg = {
             time: JCMFormatDate(getNowTime()),

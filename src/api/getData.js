@@ -1,6 +1,5 @@
 import base from './index'
 import {AI_HEAD_IMG_URL} from '@/store/mutation-types'
-import {generateUUID} from "@/util/util";
 
 let axios = base.axios
 let baseUrl = base.baseUrl
@@ -17,6 +16,9 @@ function findIndexByName(arr, name) {
 
 const desp_model = {
   "gpt-3.5-turbo": "chatgpt v3.5 所基于的模型",
+  "gpt-3.5-turbo-0301": "chatgpt v3.5 衍生而来",
+  "gpt4": "chatgpt v4.0 所基于的模型，规模大，速度慢，价钱贵",
+  "gpt-4-0314": "chatgpt v4.0 所基于的模型，规模大，速度慢，价钱贵",
   "ada": "自然语言模型，OpenAI提供的最快，最便宜的模型，但性能也最差，含有ada字眼的模型都是基于ada训练而来",
   "babbage": "自然语言模型，性能比ada强，价格比ada贵，规模比ada大，含有babbage字眼的模型都是基于babbage训练而来",
   "curie": "自然语言模型，性能优于ada，babbage，价钱也更贵，规模更大，含有curie字眼的模型都是基于curie训练而来",
@@ -64,25 +66,24 @@ function produceModelDesc(model) {
 
 
 // 获取模型列表
-export const getModels = token => {
+export const getModels = () => {
   return axios({
     method: 'get',
-    baseURL: `${baseUrl}/v1/models`,
+    baseURL: `model_custom.json`,
     headers: {
-      'Authorization': 'Bearer ' + token,
       'Content-Type': 'application/json'
     }
   }).then(res => {
     const modelsObj = []
     //获取所有的模型
-    const models = [...new Set(res.data.data.map(model => model.id))].sort();
+    const models = [...new Set(res.data.map(model => model))].sort();
     models.forEach(model => {
       let modelObj = {
         img: "",
-        name: model,
-        detail: produceModelDesc(model),
-        lastMsg: produceModelDesc(model),
-        id: model,
+        name: model.model,
+        detail: produceModelDesc(model.model),
+        lastMsg: produceModelDesc(model.model),
+        id: model.model,
         headImg: AI_HEAD_IMG_URL,
         showHeadImg: true
       }
@@ -184,54 +185,54 @@ export const createTranslation = (formData, token) => {
   })
 }
 
-// 创建微调
-export const createFineTune = (formData, token) => {
-  return axios({
-    method: 'post',
-    baseURL: `${baseUrl}/v1/fine-tunes`,
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Content-Type':  'application/json'
-    },
-    data: formData
-  }).then(res => {
-    return res.data;
-  }).catch(e => {
-    console.log(e)
-  })
-}
+// // 创建微调
+// export const createFineTune = (formData, token) => {
+//   return axios({
+//     method: 'post',
+//     baseURL: `${baseUrl}/v1/fine-tunes`,
+//     headers: {
+//       'Authorization': 'Bearer ' + token,
+//       'Content-Type':  'application/json'
+//     },
+//     data: formData
+//   }).then(res => {
+//     return res.data;
+//   }).catch(e => {
+//     console.log(e)
+//   })
+// }
 
 
-// 列出微调
-export const getFineTunesList = token => {
-  return axios({
-    method: 'get',
-    baseURL: `${baseUrl}/v1/fine-tunes`,
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Content-Type': 'application/json'
-    }
-  }).then(res => {
-    console.log(res)
-    const fineTunesObjs = []
-    res.data.data.forEach(fineTunes => {
-      let fineTunesObj = {
-        img: "",
-        name: fineTunes.fine_tuned_model,
-        detail: "基于"+fineTunes.model+"微调创建的模型",
-        lastMsg: "基于"+fineTunes.model+"微调创建的模型",
-        id: fineTunes.fine_tuned_model?fineTunes.fine_tuned_model:generateUUID(),
-        headImg: AI_HEAD_IMG_URL,
-        showHeadImg: true,
-        createTime: fineTunes.created_at,
-        fineTunesId:fineTunes.id,
-        fineTunesStatus:fineTunes.status
-      }
-      fineTunesObjs.push(fineTunesObj)
-    });
-    return fineTunesObjs.sort((a, b) => b.createTime - a.createTime);
-  })
-}
+// // 列出微调
+// export const getFineTunesList = token => {
+//   return axios({
+//     method: 'get',
+//     baseURL: `${baseUrl}/v1/fine-tunes`,
+//     headers: {
+//       'Authorization': 'Bearer ' + token,
+//       'Content-Type': 'application/json'
+//     }
+//   }).then(res => {
+//     console.log(res)
+//     const fineTunesObjs = []
+//     res.data.data.forEach(fineTunes => {
+//       let fineTunesObj = {
+//         img: "",
+//         name: fineTunes.fine_tuned_model,
+//         detail: "基于"+fineTunes.model+"微调创建的模型",
+//         lastMsg: "基于"+fineTunes.model+"微调创建的模型",
+//         id: fineTunes.fine_tuned_model?fineTunes.fine_tuned_model:generateUUID(),
+//         headImg: AI_HEAD_IMG_URL,
+//         showHeadImg: true,
+//         createTime: fineTunes.created_at,
+//         fineTunesId:fineTunes.id,
+//         fineTunesStatus:fineTunes.status
+//       }
+//       fineTunesObjs.push(fineTunesObj)
+//     });
+//     return fineTunesObjs.sort((a, b) => b.createTime - a.createTime);
+//   })
+// }
 
 
 // 检索微调信息

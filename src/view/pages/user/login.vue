@@ -89,8 +89,9 @@
           <div class="login-title">{{ getUserEmail }}</div>
           <div>{{ welcomeMsg }}</div>
           <div>{{ welcomeMsg1 }}</div>
+          <div>{{ welcomeMsg2 }}</div>
           <div class="welcome-button">
-            <el-button type="primary">
+            <el-button type="primary" @click="layout">
               退出登录
             </el-button>
           </div>
@@ -160,8 +161,6 @@ export default {
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
             this.loading = false;
-            // this.$router.push({path: "/ChatHome"}).catch(() => {
-            // });
           }).catch(() => {
             this.loading = false;
             if (this.captchaEnabled) {
@@ -174,7 +173,9 @@ export default {
     isLogin() {
       const token = getToken();
       this.haveLogin = !(token === undefined || token === '' || token === null);
-      console.log(this.haveLogin)
+    },
+    layout() {
+      localStorage.removeItem('4gai-Token');
     }
   },
   created() {
@@ -209,8 +210,9 @@ export default {
       captchaEnabled: true,
       codeUrl: '',
       haveLogin: false,
-      welcomeMsg1: '你的支持，就是我做下去的动力！',
-      welcomeMsg: '如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +
+      welcomeMsg1: '2.你的支持，就是我做下去的动力！',
+      welcomeMsg2: '3.目前暂不支持图片和语音的调用，我后续会一一加入，敬请期待',
+      welcomeMsg: '1.如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +
           '网站已经持续运行了接近三个月，始终秉承着以廉价为主。' +
           '希望这次的更新能为你提供更好的服务。',
     };

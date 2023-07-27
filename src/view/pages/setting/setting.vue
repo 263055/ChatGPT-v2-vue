@@ -32,7 +32,7 @@
           />
         </div>
         <!--支付记录-->
-        <div style="font-size: 30px; margin-top: 20px">使用记录：</div>
+        <div style="font-size: 30px; margin-top: 20px">支付记录：</div>
         <el-table :data="orderLog" background-color="#FAFAFA" class="">
           <el-table-column label="订单id" prop="aoid" width="280"/>
           <el-table-column label="订单金额" prop="balance"/>

@@ -366,7 +366,8 @@ export default {
         this.lastChatMsg = this.chatList[this.chatList.length - 1] === undefined ? [] : this.chatList[this.chatList.length - 1];
         this.sendMsg(chatMsg);
         //如果是图片模式则进入待开发不过可用改状态使用
-        if (this.settingInfo.openProductionPicture) {
+        if (false) {
+          // if (this.settingInfo.openProductionPicture) { // aaaaa
           params.prompt = this.inputMsg
           params.n = this.settingInfo.n
           params.size = this.settingInfo.size
@@ -627,19 +628,23 @@ export default {
       e.target.files = null;
     },
     // 开始录音
-    startRecording() {
-      navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
-        this.recorder = new MediaRecorder(stream);
-        this.recorder.addEventListener('dataavailable', event => {
-          this.audioChunks.push(event.data)
-        })
-        this.recording = true
-        this.recorder.start()
-        // 在这里使用录音器
-        this.$message.success(this.$t('message.start_recording'))
-      }).catch((error) => {
-        this.$message.error(this.$t('message.fail_audio'))
+    startRecording() {  // aaaaa
+      this.$message({
+        type: 'info',
+        message: '暂不支持语音转文字哦o.O~~我会尽快加入这个操作的'
       });
+      // navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+      //   this.recorder = new MediaRecorder(stream);
+      //   this.recorder.addEventListener('dataavailable', event => {
+      //     this.audioChunks.push(event.data)
+      //   })
+      //   this.recording = true
+      //   this.recorder.start()
+      //   // 在这里使用录音器
+      //   this.$message.success(this.$t('message.start_recording'))
+      // }).catch((error) => {
+      //   this.$message.error(this.$t('message.fail_audio'))
+      // });
     },
     // 停止录音
     async stopRecording() {

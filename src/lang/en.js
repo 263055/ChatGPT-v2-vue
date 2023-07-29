@@ -33,6 +33,8 @@ export default {
         savePrompt: "save Prompt",
         resetSetting: "reset Chat Setting",
         resetPrompt: "reset Prompt",
+        upButton: "up session",
+        bottomButton: "bottom session",
         online_title: "online",
         online: "Online query after opening",
         suffix_title: "suffix",

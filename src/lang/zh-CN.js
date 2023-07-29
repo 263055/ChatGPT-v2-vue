@@ -31,6 +31,8 @@ export default {
         talk: "对话",
         saveSetting: "保存对话设置",
         resetSetting: "重置对话设置",
+        upButton: "对话移动顶部",
+        bottomButton: "对话移动底部",
         savePrompt: "保存系统预设",
         resetPrompt: "重置系统预设",
         online_title: "联网",

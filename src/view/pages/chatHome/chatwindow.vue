@@ -18,9 +18,6 @@
         <!--聊天室上方,右侧的快捷按钮-->
         <el-col :span="personInfoSpan[2]">
           <div class="other-fun">
-            <!--<label @click="clearMsgList">-->
-            <!--  <span class="iconfont icon-qingchu"></span>-->
-            <!--</label>-->
             <label @click="exportObjArrToJson">
               <span class="iconfont icon-daochu"></span>
             </label>
@@ -52,7 +49,7 @@
     <!--聊天室页面-->
     <div class="botoom" style="background-color:rgb(50, 54, 68);">
       <!--聊天室主页面,正常的用户对话-->
-      <div class="chat-content" id="chat-content" ref="chatContent" @scroll="onScroll">
+      <div id="chat-content" ref="chatContent" class="chat-content">
         <div class="chat-wrapper" v-for="item in chatList" :key="item.id">
           <!--gpt回答-->
           <div v-if="item.messageType === 'ANSWER'" class="chat-friend">
@@ -100,7 +97,7 @@
             <!--文字部分-->
             <div class="chat-text">
               <!--<div class="chat-text" v-if="item.chatType === 0">-->
-              <span style="font-size:16px">{{ item.content }}</span>
+              <markdown-it-vue :content="item.content.trim()" style="font-size:16px"/>
             </div>
             <!--发送照片-->
             <div class="chat-img" v-if="item.chatType === 1">
@@ -506,18 +503,17 @@ export default {
         return this.readStream(reader, _this, currentResLocation, type);
       });
     },
-    // 打开页面时滚动窗口到最底层
-    onScroll() {
-      const scrollDom = this.$refs.chatContent;
-      const scrollTop = scrollDom.scrollTop;
-      const offsetHeight = scrollDom.offsetHeight;
-      const scrollHeight = scrollDom.scrollHeight;
-    },
     // 获取窗口高度并滚动至最底层
     scrollBottom() {
       this.$nextTick(() => {
         const scrollDom = this.$refs.chatContent;
         animation(scrollDom, scrollDom.scrollHeight - scrollDom.offsetHeight);
+      });
+    },
+    scrollUp() {
+      this.$nextTick(() => {
+        const scrollDom = this.$refs.chatContent;
+        animation(scrollDom, 0);
       });
     },
     // 关闭标签框
@@ -687,13 +683,11 @@ export default {
 
 <style lang="scss" scoped>
 .iconfont:hover {
-
   color: rgb(29, 144, 245);
 
   .block {
     opacity: 1;
   }
-
 }
 
 ::v-deep {

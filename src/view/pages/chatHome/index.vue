@@ -169,6 +169,14 @@
                   {{ $t('model.resetSetting') }}
                 </el-button>
               </div>
+              <div class="button-group">
+                <el-button class="left-btn" round size="small" type="primary" @click="upButton">
+                  {{ $t('model.upButton') }}
+                </el-button>
+                <el-button class="right-btn" round size="small" type="primary" @click="bottomButton">
+                  {{ $t('model.bottomButton') }}
+                </el-button>
+              </div>
               <!--联网设置-->
               <!--<div class="block" v-show="SettingInfo.openNet">-->
               <!--  <div class="block">-->
@@ -651,6 +659,12 @@ export default {
       this.SettingInfo.chat.stream = true
       this.SettingInfo.chat.n = 0
     },
+    bottomButton() {
+      this.$refs.chatWindow.scrollBottom()
+    },
+    upButton() {
+      this.$refs.chatWindow.scrollUp()
+    },
     getSessionList() {
       return new Promise((resolve, reject) => {
         getChatRoom().then(res => {
@@ -881,6 +895,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .left-btn {

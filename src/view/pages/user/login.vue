@@ -161,6 +161,7 @@ export default {
           }
           this.$store.dispatch("Login", this.loginForm).then(() => {
             this.loading = false;
+            this.isLogin()
           }).catch(() => {
             this.loading = false;
             if (this.captchaEnabled) {
@@ -176,6 +177,7 @@ export default {
     },
     layout() {
       localStorage.removeItem('4gai-Token');
+      this.isLogin()
     }
   },
   created() {

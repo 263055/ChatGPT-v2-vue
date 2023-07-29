@@ -77,7 +77,7 @@
                 size="medium"
                 style="width:100%;"
                 type="info"
-                @click.native.prevent="handleLogin"
+                @click.native.prevent="resetPassword"
             >
               <span>忘记密码</span>
             </el-button>
@@ -178,6 +178,28 @@ export default {
     layout() {
       localStorage.removeItem('4gai-Token');
       this.isLogin()
+    },
+    resetPassword() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          if (this.loginForm.rememberMe) {
+            Cookies.set("email", this.loginForm.email, {expires: 30});
+            Cookies.set("password", encrypt(this.loginForm.password), {expires: 30});
+            Cookies.set('rememberMe', this.loginForm.rememberMe, {expires: 30});
+          } else {
+            Cookies.remove("email");
+            Cookies.remove("password");
+            Cookies.remove('rememberMe');
+          }
+          this.$store.dispatch("resetPassword", this.loginForm).then(() => {
+            this.isLogin()
+          }).catch(() => {
+            if (this.captchaEnabled) {
+              this.getCode();
+            }
+          });
+        }
+      });
     }
   },
   created() {

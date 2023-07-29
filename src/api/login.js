@@ -38,3 +38,22 @@ export function getCodeImg() {
     timeout: 20000
   })
 }
+
+// 重置密码
+export function resetPassword(email, password, code, uuid) {
+  const data = {
+    email,
+    password,
+    code,
+    uuid
+  }
+  return request({
+    url: '/user/reset',
+    headers: {
+      isToken: false
+    },
+    method: 'post',
+    data: data,
+    timeout: 20000
+  })
+}

@@ -62,7 +62,8 @@ service.interceptors.request.use(config => {
     return config
 }, error => {
     console.log(error)
-    Promise.reject(error)
+    Promise.reject(error).then(() => {
+    })
 })
 
 // 响应拦截器
@@ -85,7 +86,7 @@ service.interceptors.response.use(res => {
                 }).then(() => {
                     isRelogin.show = false;
                     store.dispatch('Logout').then(() => {
-                        location.href = '/#/Login';
+                        location.href = '/Login';
                     })
                 }).catch(() => {
                     isRelogin.show = false;

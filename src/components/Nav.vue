@@ -33,14 +33,7 @@ export default {
     };
   },
   created() {
-    // 判断localStorage中是否存在token
-    const token = localStorage.getItem('4gai-Token')
-    if (token) {
-      this.current = 1
-      location.href = '/#/ChatHome';
-    } else {
-      this.current = 0
-    }
+    this.updateCurrent()
   },
 
   methods: {
@@ -72,6 +65,18 @@ export default {
 
       this.current = index;
     },
+    updateCurrent() {
+      const url = this.$route.path;
+      if (url === '/Login') {
+        this.current = 0
+      } else if (url === '/ChatHome') {
+        this.current = 1
+      } else if (url === '/Setting') {
+        this.current = 2
+      } else {
+        this.current = 1
+      }
+    }
   },
 };
 </script>

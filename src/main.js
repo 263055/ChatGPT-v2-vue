@@ -7,6 +7,7 @@ import router from './router/index'
 import {copyToClipboard} from '@/util/util'
 import i18n from '@/config/i18n'
 import store from './store'
+import './permission' // permission control 加入了路由控制
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false

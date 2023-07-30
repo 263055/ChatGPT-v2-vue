@@ -90,6 +90,9 @@
           <div>{{ welcomeMsg }}</div>
           <div>{{ welcomeMsg1 }}</div>
           <div>{{ welcomeMsg2 }}</div>
+          <div class="login-renew">最新一次更新：</div>
+          <div>{{ reNewMsg1 }}</div>
+          <div>{{ reNewMsg2 }}</div>
           <div class="welcome-button">
             <el-button type="primary" @click="layout">
               退出登录
@@ -177,6 +180,11 @@ export default {
     },
     layout() {
       localStorage.removeItem('4gai-Token');
+      this.$notify({
+        message: '注销成功',
+        duration: 5000,
+        type: 'success'
+      })
       this.isLogin()
     },
     resetPassword() {
@@ -234,6 +242,8 @@ export default {
       captchaEnabled: true,
       codeUrl: '',
       haveLogin: false,
+      reNewMsg1: '1.加入了聊天室页面的上下滚动，加入了加载聊天室的加载动画',
+      reNewMsg2: '2.加入了重置密码，加入了相关提示词',
       welcomeMsg1: '2.你的支持，就是我做下去的动力！',
       welcomeMsg2: '3.目前暂不支持图片和语音的调用，我后续会一一加入，敬请期待',
       welcomeMsg: '1.如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +
@@ -291,6 +301,13 @@ export default {
 .login-title {
   font-size: 35px;
   margin-bottom: 20px;
+  text-align: center;
+}
+
+.login-renew {
+  font-size: 25px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .el-login-footer {
@@ -338,9 +355,6 @@ export default {
   text-align: center;
 }
 
-.login-title {
-  text-align: center;
-}
 
 .welcome-button {
   text-align: center;

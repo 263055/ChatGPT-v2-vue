@@ -171,6 +171,8 @@ import 'markdown-it-vue/dist/markdown-it-vue.css'
 import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
 import {saveAs} from 'file-saver';
 import {getMessage} from "@/api/chatMsg";
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 export default {
   //用于自适应文本框的高度
@@ -234,6 +236,7 @@ export default {
       //是否显示表情和录音按钮
       buttonStatus: true,
       isAutoScroll: false, // 是否滚动到了最底部
+      loadPage: false, // 是否滚动到了最底部
       lastChatMsg: {
         id: "",
         sessionId: "",
@@ -316,7 +319,9 @@ export default {
     },
     //获得聊天室所有消息
     getMessage(id) {
+      this.chatList = []
       this.isAutoScroll = false;
+      NProgress.start()
       this.curSessionId = id;
       new Promise((resolve, reject) => {
         getMessage(id).then((res) => {
@@ -324,8 +329,10 @@ export default {
             ...item,
             time: JCMFormatDate(item.time)
           }));
+          NProgress.done()
           resolve()
         }).catch(error => {
+          NProgress.done()
           reject(error)
         })
       })
@@ -634,7 +641,7 @@ export default {
       e.target.files = null;
     },
     // 开始录音
-    startRecording() {  // aaaaa
+    startRecording() {  //
       this.$message({
         type: 'info',
         message: '暂不支持语音转文字哦o.O~~我会尽快加入这个操作的'

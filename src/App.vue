@@ -43,6 +43,11 @@ export default {
   margin: 0;
   font-family: 'SSFY', serif;
 }
+
+#nprogress .bar {
+  background: rgb(117, 120, 137) !important; //自定义颜色
+}
+
 #app {
   width: 100vw;
   height: 100vh;

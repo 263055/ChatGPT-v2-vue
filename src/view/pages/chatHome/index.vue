@@ -626,10 +626,20 @@ export default {
   methods: {
     savePrompt() {
       localStorage.setItem("prompt", this.SettingInfo.prompt)
+      this.$notify({
+        message: '系统预设保存成功',
+        duration: 5000,
+        type: 'success'
+      })
     },
     deletePrompt() {
       localStorage.removeItem("prompt")
       this.SettingInfo.prompt = ""
+      this.$notify({
+        message: '系统预设重置成功',
+        duration: 5000,
+        type: 'success'
+      })
     },
     saveSettingInfo() {
       localStorage.setItem("suffix", this.SettingInfo.chat.suffix)
@@ -640,6 +650,11 @@ export default {
       localStorage.setItem("Temperature", this.SettingInfo.chat.Temperature)
       localStorage.setItem("stream", this.SettingInfo.chat.stream)
       localStorage.setItem("n", this.SettingInfo.chat.n)
+      this.$notify({
+        message: '对话设置保存成功',
+        duration: 5000,
+        type: 'success'
+      })
     },
     deleteSettingInfo() {
       localStorage.removeItem("suffix")
@@ -658,6 +673,11 @@ export default {
       this.SettingInfo.chat.Temperature = 1
       this.SettingInfo.chat.stream = true
       this.SettingInfo.chat.n = 0
+      this.$notify({
+        message: '对话设置重置成功',
+        duration: 5000,
+        type: 'success'
+      })
     },
     bottomButton() {
       this.$refs.chatWindow.scrollBottom()

@@ -2,6 +2,7 @@
   <div class="contain-log">
     <el-card>
       <div class="order-chatMsg-detail">使用记录和充值记录</div>
+      <!--<svg ref="markmap" style="width: 800px; height: 800px"></svg>-->
       <div class="my-table">
         <!--对话记录-->
         <div style="font-size: 30px;">使用记录：</div>
@@ -54,13 +55,15 @@
 </template>
 
 <script>
-import {ref} from "vue";
 import {deleteChatMsgLog, getChatMsgDetail, getOrderDetail} from "@/api/log";
 import {JCMFormatTimestamp} from "@/util/util";
+import {Markmap} from 'markmap-view';
+import {Transformer} from 'markmap-lib';
 
 export default {
   name: "App",
   computed() {
+
   },
   props: {
     default() {
@@ -73,9 +76,16 @@ export default {
       orderLogTotal: 0,
       chatMsgLog: [],
       chatMsgTotal: 0,
+      transformer: null,
+      markmap: null,
     };
   },
   methods: {
+    createMarkMap(content) {
+      const {transformer} = this
+      const {root, features} = transformer.transform(content);
+      this.markmap.setData(root, features);
+    },
     //获得订单的信息
     getOrderDetail(page) {
       if (page === undefined || page === '' || page === 0) page = 0
@@ -127,8 +137,23 @@ export default {
     },
   },
   mounted() {
+//     this.transformer = new Transformer();
+//     this.markmap = Markmap.create(this.$refs.markmap, null, {
+//       autoFit: false,
+//     });
+//     const markdown = `
+// # markmap
+// ## Links
+// - <https://markmap.js.org/>
+// - [GitHub](https://github.com/gera2ld/markmap)
+// ## Related
+// - [coc-markmap](https://github.com/gera2ld/coc-markmap)
+// - [gatsby-remark-markmap](https://github.com/gera2ld/gatsby-remark-markmap)
+// `
+
     this.getOrderDetail();
     this.getChtMsgDetail();
+    // this.createMarkMap(markdown)
   },
 };
 </script>

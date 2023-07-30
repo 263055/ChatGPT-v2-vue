@@ -21,6 +21,8 @@
     "js-cookie": "^3.0.5",
     "jsencrypt": "^3.3.2",
     "markdown-it-vue": "^1.1.7",
+    "markmap-lib": "^0.15.4",
+    "markmap-view": "^0.15.4",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "nprogress": "^0.2.0",
     "openai": "^3.2.1",

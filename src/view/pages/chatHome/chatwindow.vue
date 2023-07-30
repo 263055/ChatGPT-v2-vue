@@ -49,7 +49,7 @@
     <!--聊天室页面-->
     <div class="botoom" style="background-color:rgb(50, 54, 68);">
       <!--聊天室主页面,正常的用户对话-->
-      <div id="chat-content" ref="chatContent" class="chat-content">
+      <div id="chat-content" ref="chatContent" class="chat-content" @scroll="onScroll">
         <div class="chat-wrapper" v-for="item in chatList" :key="item.id">
           <!--gpt回答-->
           <div v-if="item.messageType === 'ANSWER'" class="chat-friend">
@@ -233,6 +233,7 @@ export default {
       rows: 1,
       //是否显示表情和录音按钮
       buttonStatus: true,
+      isAutoScroll: false, // 是否滚动到了最底部
       lastChatMsg: {
         id: "",
         sessionId: "",
@@ -315,6 +316,7 @@ export default {
     },
     //获得聊天室所有消息
     getMessage(id) {
+      this.isAutoScroll = false;
       this.curSessionId = id;
       new Promise((resolve, reject) => {
         getMessage(id).then((res) => {
@@ -502,6 +504,13 @@ export default {
         })
         return this.readStream(reader, _this, currentResLocation, type);
       });
+    },
+    onScroll() {
+      if (this.isAutoScroll === true) {
+        return
+      }
+      this.scrollBottom()
+      this.isAutoScroll = true;
     },
     // 滚动至最底层
     scrollBottom() {

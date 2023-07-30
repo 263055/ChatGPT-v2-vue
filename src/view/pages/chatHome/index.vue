@@ -700,9 +700,10 @@ export default {
     },
     //导出所有会话到json文件
     exportObjArrAllToJson() {
-      let jsonString = JSON.stringify(this.sessionList); // 将数组转为JSON字符串
-      let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
-      saveAs(blob, "data.json");
+      this.$refs.chatWindow.exportObjArrToJson()
+      // let jsonString = JSON.stringify(this.sessionList); // 将数组转为JSON字符串
+      // let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
+      // saveAs(blob, "data.json");
     },
     // 点击切换显示状态
     toggleLeft() {

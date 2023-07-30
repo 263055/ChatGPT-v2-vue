@@ -282,8 +282,15 @@ export default {
     },
     // 导出当前会话到json文件
     exportObjArrToJson() {
-      console.log(this.chatList)
-      let jsonString = JSON.stringify(this.chatList); // 将数组转为JSON字符串
+      const res = this.chatList.map(item => {
+        return {
+          content: item.content,
+          type: item.messageType,
+          time: item.time
+        };
+      });
+      let jsonString = JSON.stringify(res);
+      console.log(jsonString);
       let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
       saveAs(blob, "data.json");
     },
@@ -317,9 +324,8 @@ export default {
         });
       }
     },
-    //获得聊天室所有消息
+    //获得聊天室所有消
     getMessage(id) {
-      this.chatList = []
       this.isAutoScroll = false;
       NProgress.start()
       this.curSessionId = id;

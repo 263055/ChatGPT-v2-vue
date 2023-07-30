@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import {animation, getNowTime, JCMFormatDate} from "@/util/util";
+import {animation, animationToUp, getNowTime, JCMFormatDate} from "@/util/util";
 import {getToken} from '@/util/auth'
 import {
   createImage,
@@ -503,17 +503,18 @@ export default {
         return this.readStream(reader, _this, currentResLocation, type);
       });
     },
-    // 获取窗口高度并滚动至最底层
+    // 滚动至最底层
     scrollBottom() {
       this.$nextTick(() => {
         const scrollDom = this.$refs.chatContent;
         animation(scrollDom, scrollDom.scrollHeight - scrollDom.offsetHeight);
       });
     },
+    // 滚动至最高层
     scrollUp() {
       this.$nextTick(() => {
         const scrollDom = this.$refs.chatContent;
-        animation(scrollDom, 0);
+        animationToUp(scrollDom, 0)
       });
     },
     // 关闭标签框

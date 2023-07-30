@@ -1,4 +1,11 @@
 export default {
+    icon: {
+        up: "Move the chat room to the top",
+        down: "Move the chat room to the bottom",
+        export: "Export Conversation",
+        image: "Upload Image",
+        language: "Switch Language",
+    },
     placeholder: {
         question: "Enter your question here~",
         openai_key: "Please enter OpenAI KEY",

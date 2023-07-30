@@ -1,4 +1,11 @@
 export default {
+    icon: {
+        up: "将聊天室移到顶部",
+        down: "将聊天室移到底部",
+        export: "导出对话",
+        image: "上传图片",
+        language: "切换语言",
+    },
     placeholder: {
         question: "在此输入您的问题~",
         openai_key: "请输入OpenAI KEY",

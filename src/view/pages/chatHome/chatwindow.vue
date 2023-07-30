@@ -1,5 +1,6 @@
 <template>
   <div class="chat-window">
+    <!--聊天室顶部按钮-->
     <div class="top">
       <el-row style="height: 70px;">
         <!--主页面的头像-->
@@ -18,25 +19,45 @@
         <!--聊天室上方,右侧的快捷按钮-->
         <el-col :span="personInfoSpan[2]">
           <div class="other-fun">
-            <label @click="exportObjArrToJson">
-              <span class="iconfont icon-daochu"></span>
-            </label>
-            <label for="imgFile">
-              <span class="iconfont icon-tupian"></span>
-            </label>
-            <label @click="changeLanguage">
-              <span class="iconfont icon-iconyuanbanben_fanyi"></span>
-            </label>
-            <!--<label @click="importFromJsonArr">-->
-            <!--  <span class="iconfont icon-daoru"></span>-->
-            <!--</label>-->
-            <!--<label for="docFile">-->
-            <!--  <span class="iconfont icon-wenben"></span>-->
-            <!--</label>-->
-            <input type="file" name="" id="imgFile" @change="sendImg" accept="image/*"/>
-            <!--<input type="file" name="" id="docFile" @change="sendFile" accept="application/*,text/*"/>-->
-            <!--&lt;!&ndash; 导入当前会话内容 &ndash;&gt;-->
-            <!--<input type="file" ref="onupdateJosnArr" @change="handleFileUpload" style="display: none;">-->
+            <!--滚动上方-->
+            <el-tooltip :content="$t('icon.up')" effect="dark" placement="top">
+              <label @click="scrollUp">
+                <svg class="iconfont" fill="currentColor" height="30" viewBox="0 0 16 16"
+                     width="30" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+                </svg>
+              </label>
+            </el-tooltip>
+            <!--滚动下方-->
+            <el-tooltip :content="$t('icon.down')" effect="dark" placement="top">
+              <label @click="scrollBottom">
+                <svg class="iconfont" fill="currentColor" height="30"
+                     viewBox="0 0 16 16" width="30" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/>
+                </svg>
+              </label>
+            </el-tooltip>
+            <!--导出会话-->
+            <el-tooltip :content="$t('icon.export')" effect="dark" placement="top">
+              <label @click="exportObjArrToJson">
+                <span class="iconfont icon-daochu"></span>
+              </label>
+            </el-tooltip>
+            <!--导入图片-->
+            <el-tooltip :content="$t('icon.image')" effect="dark" placement="top">
+              <label for="imgFile">
+                <span class="iconfont icon-tupian"></span>
+              </label>
+            </el-tooltip>
+            <input id="imgFile" accept="image/*" name="" type="file" @change="sendImg"/>
+            <!--切换 中英文-->
+            <el-tooltip :content="$t('icon.language')" effect="dark" placement="top">
+              <label @click="changeLanguage">
+                <span class="iconfont icon-iconyuanbanben_fanyi"></span>
+              </label>
+            </el-tooltip>
           </div>
         </el-col>
       </el-row>
@@ -45,7 +66,6 @@
     <div v-show="!acqStatus">
       <div class="line"></div>
     </div>
-
     <!--聊天室页面-->
     <div class="botoom" style="background-color:rgb(50, 54, 68);">
       <!--聊天室主页面,正常的用户对话-->
@@ -260,7 +280,7 @@ export default {
       contentBackImageUrl: "https://bpic.51yuansu.com/backgd/cover/00/31/39/5bc8088deeedd.jpg?x-oss-process=image/resize,w_780",
       updateImage: null,
       // 是否隐藏对话框上方介绍（空间局促时隐藏）
-      personInfoSpan: [1, 17, 6],
+      personInfoSpan: [1, 13, 10],
 
     };
   },
@@ -308,7 +328,7 @@ export default {
           this.buttonStatus = false
           const textareaMsg = document.getElementById("textareaMsg");
           textareaMsg.style.marginLeft = "0px";
-          this.personInfoSpan = [14, 0, 10];
+          this.personInfoSpan = [10, 0, 14];
           const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
           if (isMobile) {
             document.querySelectorAll('.chatInputs')[0].style.margin = '0%';
@@ -320,7 +340,7 @@ export default {
         this.$nextTick(() => {
           document.querySelectorAll('.chat-content')[0].style.height = '88%';
           this.buttonStatus = true
-          this.personInfoSpan = [1, 17, 6];
+          this.personInfoSpan = [1, 13, 10]
         });
       }
     },
@@ -713,6 +733,11 @@ export default {
   }
 }
 
+.iconfont {
+  margin-left: 20px;
+  cursor: pointer;
+}
+
 ::v-deep {
   .el-textarea__inner {
     background-color: rgb(66, 70, 86);
@@ -811,14 +836,6 @@ textarea::-webkit-scrollbar-thumb {
       float: right;
       margin-top: 20px;
 
-      span {
-        margin-left: 30px;
-        cursor: pointer;
-      }
-
-      // .icon-tupian {
-
-      // }
       input {
         display: none;
       }

@@ -77,7 +77,7 @@ const user = {
                 resetPassword(email, password, code, uuid).then(() => {
                     Notification.success({
                         title: '邮件已发送',
-                        message: '请点击邮箱的连接完成注册',
+                        message: '请点击邮箱的连接完成密码的重置',
                         duration: 5000
                     })
                     resolve()

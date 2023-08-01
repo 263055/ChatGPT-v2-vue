@@ -946,7 +946,6 @@ input[type=number]::-webkit-outer-spin-button {
   margin-right: 20px;
   width: 90%;
   text-align: center;
-  //height: 50px;
   background-color: rgb(66, 70, 86);
   border-radius: 15px;
   border: 1px solid rgb(80, 85, 103);
@@ -1114,7 +1113,6 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .chatHome {
-  // margin-top: 20px;
   display: flex;
 
   .chatLeft {

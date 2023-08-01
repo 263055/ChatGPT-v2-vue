@@ -2,7 +2,7 @@
   <div class="chat-window">
     <!--聊天室顶部按钮-->
     <div class="top">
-      <el-row style="height: 70px;">
+      <el-row style="height: 30px;">
         <!--主页面的头像-->
         <el-col :span="personInfoSpan[0]">
           <div class="head-pic">
@@ -351,7 +351,7 @@ export default {
         this.$nextTick(() => {
           document.querySelectorAll('.chat-content')[0].style.height = '88%';
           this.buttonStatus = true
-          this.personInfoSpan = [1, 1, 22]
+          this.personInfoSpan = [1, 3, 20]
         });
       }
     },
@@ -845,7 +845,6 @@ textarea::-webkit-scrollbar-thumb {
 
     .other-fun {
       float: right;
-      margin-top: 20px;
       margin-right: 40px;
 
       input {
@@ -863,7 +862,7 @@ textarea::-webkit-scrollbar-thumb {
 
   .botoom {
     width: 100%;
-    height: 85vh;
+    height: 84vh;
     background-size: 100% 100%;
     // background-color: rgb(50, 54, 68);
     border-radius: 20px;
@@ -1159,9 +1158,14 @@ textarea::-webkit-scrollbar-thumb {
   .chat-window {
     margin-left: 20px;
 
-    .botoom {
-      padding: 20px;
+    .top {
+      .other-fun {
+        margin-top: 20px;
+      }
     }
+  }
+  .botoom {
+    height: 84vh;
   }
   .chat-window {
     .botoom {

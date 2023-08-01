@@ -94,18 +94,18 @@ export default {
     transform: translate(0, -50%);
 
     .menu-list {
-      margin-left: 10px;
 
       li {
-        margin: 40px 0 0 30px;
+        margin: 40px 0 0 20px;
         list-style: none;
         cursor: pointer;
         position: relative;
 
+        //最左边的蓝色提示
         .block {
           background-color: rgb(29, 144, 245);
           position: absolute;
-          left: -40px;
+          left: -20px;
           width: 6px;
           height: 25px;
           transition: 0.5s;
@@ -114,11 +114,11 @@ export default {
           opacity: 0;
         }
 
+        // 点击按钮的时候高亮显示
         &:hover {
           span {
             color: rgb(29, 144, 245);
           }
-
           .block {
             opacity: 1;
           }
@@ -126,14 +126,9 @@ export default {
       }
     }
   }
-
-  .own-pic {
-    position: absolute;
-    bottom: 10%;
-    margin-left: 25px;
-  }
 }
 
+// 点击按钮之后保持高亮
 .activeNav {
   span {
     color: rgb(29, 144, 245);

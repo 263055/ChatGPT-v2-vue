@@ -1,7 +1,7 @@
 <template>
   <div class="home" :class="{'is-pc':isPc}">
     <el-container height="100%">
-      <el-aside width="100px" v-show="asideStatus">
+      <el-aside v-show="asideStatus" width="50px">
         <Nav></Nav>
       </el-aside>
       <el-main>

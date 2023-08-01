@@ -96,7 +96,7 @@ export default {
     .menu-list {
 
       li {
-        margin: 40px 0 0 20px;
+        margin: 60px 0 0 25px;
         list-style: none;
         cursor: pointer;
         position: relative;

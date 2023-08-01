@@ -701,9 +701,6 @@ export default {
     //导出所有会话到json文件
     exportObjArrAllToJson() {
       this.$refs.chatWindow.exportObjArrToJson()
-      // let jsonString = JSON.stringify(this.sessionList); // 将数组转为JSON字符串
-      // let blob = new Blob([jsonString], {type: "application/json;charset=utf-8"});
-      // saveAs(blob, "data.json");
     },
     // 点击切换显示状态
     toggleLeft() {
@@ -719,7 +716,6 @@ export default {
       }
     },
     toggleRight() {
-      console.log("right clicked")
       this.showSetupList = !this.showSetupList;
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
       if (isMobile && (this.showPersonList || this.showSetupList)) {

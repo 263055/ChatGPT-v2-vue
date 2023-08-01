@@ -116,7 +116,6 @@
           <div class="chat-me" v-else>
             <!--文字部分-->
             <div class="chat-text">
-              <!--<div class="chat-text" v-if="item.chatType === 0">-->
               <markdown-it-vue :content="item.content.trim()" style="font-size:16px"/>
             </div>
             <!--发送照片-->
@@ -284,16 +283,28 @@ export default {
 
     };
   },
-
+  mounted() {
+    this.setChatContentWidth();
+    window.addEventListener('resize', this.setChatContentWidth);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.setChatContentWidth);
+  },
   created() {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
   },
-
   destoryed() {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    // 改变聊天室的宽度
+    setChatContentWidth() {
+      const botoom = this.$el.querySelector('.botoom');
+      const chatContent = botoom.querySelector('.chat-content');
+      const width = botoom.offsetWidth;
+      chatContent.style.width = `${width}px`;
+    },
     // 聊天室按回车键发消息发送函数
     handleKeyDown(event) {
       if (event.keyCode === 13 && (!event.shiftKey)) {  // 按下回车键，没按shift
@@ -328,7 +339,7 @@ export default {
           this.buttonStatus = false
           const textareaMsg = document.getElementById("textareaMsg");
           textareaMsg.style.marginLeft = "0px";
-          this.personInfoSpan = [10, 0, 14];
+          this.personInfoSpan = [4, 0, 20];
           const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
           if (isMobile) {
             document.querySelectorAll('.chatInputs')[0].style.margin = '0%';
@@ -894,6 +905,9 @@ textarea::-webkit-scrollbar-thumb {
           padding: 15px;
           border-radius: 20px 20px 20px 5px;
           background-color: #fff;
+          word-break: break-all;
+          overflow-wrap: anywhere;
+          color: #000;
         }
 
         .chat-img {
@@ -949,6 +963,7 @@ textarea::-webkit-scrollbar-thumb {
           background-color: #95ec69;
           color: #000;
           word-break: break-all;
+          overflow-wrap: anywhere;
         }
 
         .chat-img {

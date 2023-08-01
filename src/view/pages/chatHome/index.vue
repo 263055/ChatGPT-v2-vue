@@ -82,12 +82,12 @@
 
       </div>
     </div>
-    <!--聊天室右侧-->
+    <!--聊天室-->
     <div class="chatRight">
       <!--折叠面板-->
       <div class="top-left" @click="toggleLeft">
         <svg x="1679366341860" class="icon" v-show="!showPersonList" viewBox="0 0 1024 1024" version="1.1"
-             xmlns="http://www.w3.org/2000/svg" p-id="5764" width="30" height="30">
+             height="50" p-id="5764" width="50" xmlns="http://www.w3.org/2000/svg">
           <path
               d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
               fill="#BDD2EF" p-id="5765"></path>
@@ -96,7 +96,7 @@
               fill="#2867CE" p-id="5766"></path>
         </svg>
         <svg x="1679366707602" class="icon" v-show="showPersonList" viewBox="0 0 1024 1024" version="1.1"
-             height="30" p-id="7551" width="30" xmlns="http://www.w3.org/2000/svg">
+             height="50" p-id="7551" width="50" xmlns="http://www.w3.org/2000/svg">
           <path
               d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
               fill="#BDD2EF" p-id="7552"></path>
@@ -107,7 +107,7 @@
       </div>
       <div class="top-right" @click="toggleRight">
         <svg x="1679366707602" class="icon" v-show="!showSetupList" viewBox="0 0 1024 1024" version="1.1"
-             height="30" p-id="7551" width="30" xmlns="http://www.w3.org/2000/svg">
+             height="50" p-id="7551" width="50" xmlns="http://www.w3.org/2000/svg">
           <path
               d="M514 912c-219.9 0-398.8-178.9-398.8-398.9 0-219.9 178.9-398.8 398.8-398.8s398.8 178.9 398.8 398.8c0 220-178.9 398.9-398.8 398.9z m0-701.5c-166.9 0-302.7 135.8-302.7 302.7S347.1 815.9 514 815.9s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5z"
               fill="#BDD2EF" p-id="7552"></path>
@@ -116,7 +116,7 @@
               fill="#2867CE" p-id="7553"></path>
         </svg>
         <svg x="1679366341860" class="icon" v-show="showSetupList" viewBox="0 0 1024 1024" version="1.1"
-             height="30" p-id="5764" width="30" xmlns="http://www.w3.org/2000/svg">
+             height="50" p-id="5764" width="50" xmlns="http://www.w3.org/2000/svg">
           <path
               d="M912.8 513.2C912.8 733.1 733.9 912 514 912S115.2 733.1 115.2 513.2 294.1 114.3 514 114.3s398.8 179 398.8 398.9z m-701.5 0c0 166.9 135.8 302.7 302.7 302.7s302.7-135.8 302.7-302.7S680.9 210.5 514 210.5 211.3 346.3 211.3 513.2z"
               fill="#BDD2EF" p-id="5765"></path>
@@ -909,7 +909,7 @@ export default {
 .top-right {
   position: absolute;
   top: 5px;
-  cursor: pointer;
+  z-index: 9999;
 }
 
 .button-group {
@@ -1158,7 +1158,7 @@ input[type=number]::-webkit-outer-spin-button {
 
   .chatRight {
     flex: 1;
-    padding-right: 0px;
+    padding-right: 0;
 
     .showIcon {
       position: absolute;

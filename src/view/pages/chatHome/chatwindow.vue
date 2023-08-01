@@ -339,7 +339,7 @@ export default {
           this.buttonStatus = false
           const textareaMsg = document.getElementById("textareaMsg");
           textareaMsg.style.marginLeft = "0px";
-          this.personInfoSpan = [4, 0, 20];
+          this.personInfoSpan = [0, 0, 24];
           const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
           if (isMobile) {
             document.querySelectorAll('.chatInputs')[0].style.margin = '0%';
@@ -351,7 +351,7 @@ export default {
         this.$nextTick(() => {
           document.querySelectorAll('.chat-content')[0].style.height = '88%';
           this.buttonStatus = true
-          this.personInfoSpan = [1, 13, 10]
+          this.personInfoSpan = [1, 1, 22]
         });
       }
     },
@@ -846,6 +846,7 @@ textarea::-webkit-scrollbar-thumb {
     .other-fun {
       float: right;
       margin-top: 20px;
+      margin-right: 40px;
 
       input {
         display: none;

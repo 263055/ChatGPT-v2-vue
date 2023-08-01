@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     resize(){
-      this.asideStatus = window.innerWidth > 1150;
+      this.asideStatus = window.innerWidth > 500;
     },
    //监听窗口尺寸的变化
     handleResize() {

@@ -2,12 +2,12 @@
   <div class="home" :class="{'is-pc':isPc}">
     <el-container height="100%">
       <template v-if="asideStatus">
-        <el-aside v-show="asideStatus" width="50px">
+        <el-aside width="50px">
           <Nav></Nav>
         </el-aside>
       </template>
       <template v-else>
-        <el-header v-show="!asideStatus" height="25px">
+        <el-header height="25px">
           <Nav1></Nav1>
         </el-header>
       </template>
@@ -48,10 +48,11 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    resize(){
-      this.asideStatus = window.innerWidth > 500;
+    resize() {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+      this.asideStatus = !isMobile;
     },
-   //监听窗口尺寸的变化
+    //监听窗口尺寸的变化
     handleResize() {
       if (this.firstSize) {
         this.resize();

@@ -284,8 +284,8 @@ export default {
     };
   },
   mounted() {
-    this.setChatContentWidth();
     window.addEventListener('resize', this.setChatContentWidth);
+    this.setChatContentWidth();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.setChatContentWidth);
@@ -300,10 +300,13 @@ export default {
   methods: {
     // 改变聊天室的宽度
     setChatContentWidth() {
-      const botoom = this.$el.querySelector('.botoom');
-      const chatContent = botoom.querySelector('.chat-content');
-      const width = botoom.offsetWidth;
-      chatContent.style.width = `${width}px`;
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+      if (isMobile) {
+        const botoom = this.$el.querySelector('.botoom');
+        const chatContent = botoom.querySelector('.chat-content');
+        const width = botoom.offsetWidth;
+        chatContent.style.width = `${width}px`;
+      }
     },
     // 聊天室按回车键发消息发送函数
     handleKeyDown(event) {
@@ -901,11 +904,11 @@ textarea::-webkit-scrollbar-thumb {
 
         .chat-text {
           float: left;
-          max-width: 90%;
+          word-break: break-word;
+          max-width: 55ch;
           padding: 15px;
           border-radius: 20px 20px 20px 5px;
           background-color: #fff;
-          word-break: break-all;
           overflow-wrap: anywhere;
           color: #000;
         }
@@ -957,13 +960,13 @@ textarea::-webkit-scrollbar-thumb {
 
         .chat-text {
           float: right;
-          max-width: 90%;
+          max-width: 55ch;
           padding: 15px;
           border-radius: 20px 20px 5px 20px;
           background-color: #95ec69;
           color: #000;
+          white-space: pre-wrap;
           word-break: break-all;
-          overflow-wrap: anywhere;
         }
 
         .chat-img {
@@ -1169,6 +1172,14 @@ textarea::-webkit-scrollbar-thumb {
   }
   .chat-window {
     .botoom {
+      .chat-content {
+        .chat-me {
+          .chat-text {
+            //max-width: 55ch;
+          }
+        }
+      }
+
       .chatInputs {
         width: 90%;
       }

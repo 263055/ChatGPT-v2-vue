@@ -279,7 +279,7 @@ export default {
       contentBackImageUrl: "https://bpic.51yuansu.com/backgd/cover/00/31/39/5bc8088deeedd.jpg?x-oss-process=image/resize,w_780",
       updateImage: null,
       // 是否隐藏对话框上方介绍（空间局促时隐藏）
-      personInfoSpan: [1, 13, 10],
+      personInfoSpan: [2, 2, 20],
 
     };
   },
@@ -351,7 +351,7 @@ export default {
         this.$nextTick(() => {
           document.querySelectorAll('.chat-content')[0].style.height = '88%';
           this.buttonStatus = true
-          this.personInfoSpan = [1, 3, 20]
+          this.personInfoSpan = [1, 6, 17]
         });
       }
     },

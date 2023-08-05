@@ -1,5 +1,10 @@
 const {defineConfig} = require('@vue/cli-service')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
+const path = require("path");
+
+function resolve(dir) {
+    return path.join(__dirname, dir)
+}
 
 module.exports = defineConfig({
     configureWebpack: config => {
@@ -20,6 +25,9 @@ module.exports = defineConfig({
     transpileDependencies: true,
     publicPath: './', // 设置资源文件的根路径
     devServer: {
+        client: {
+            overlay: false
+        },
         host: '0.0.0.0',
         port: 5173,
         open: true,
@@ -55,5 +63,34 @@ module.exports = defineConfig({
                 }
             }
         }
+    },
+    chainWebpack(config) {
+        config.plugins.delete('preload') // TODO: need test
+        config.plugins.delete('prefetch') // TODO: need test
+
+        // set svg-sprite-loader
+        config.module
+            .rule('svg')
+            .exclude.add(resolve('src/assets/icons'))
+            .end()
+        config.module
+            .rule('icons')
+            .test(/\.svg$/)
+            .include.add(resolve('src/assets/icons'))
+            .end()
+            .use('svg-sprite-loader')
+            .loader('svg-sprite-loader')
+            .options({
+                symbolId: 'icon-[name]'
+            })
+            .end()
+
+        config.when(process.env.NODE_ENV !== 'development', config => {
+            config.optimization.runtimeChunk('single'),
+                {
+                    from: path.resolve(__dirname, './public/robots.txt'), //防爬虫文件
+                    to: './' //到根目录下
+                }
+        })
     }
 })

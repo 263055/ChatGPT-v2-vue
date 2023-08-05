@@ -383,7 +383,6 @@ import {
   getRoles,
 } from "@/api/getData";
 
-const {OpenAIApi} = require("openai");
 
 export default {
   directives: {

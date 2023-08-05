@@ -1,100 +1,201 @@
 <template>
   <el-container>
     <el-main>
-      <div class="login-page1">
-        <div class="grid">
-          <div class="page1-left">
-            <div>
-              <h1 class="page1-left-1">
+      <div class="main-box">
+        <div class="login-page1">
+          <div class="grid">
+            <div class="page1-left">
+              <div>
+                <h1 class="page1-left-1">
                 <span class="black">
                   Access to AI tech
                 </span>
-                <span class="page1-left-1-font">
+                  <span class="page1-left-1-font">
                   Easy, Cheap and Fast.
                 </span>
-              </h1>
-              <p class="page1-left-2">OhMyGPT.COM 可以让你便捷地访问ChatGPT、GPT-3.5-turbo-16k、GPT-4、DALL-E、whisper等先进的AI模型。</p>
-              <p class="page1-left-2">使用Tokenizer分词器精准计费，价格实惠。</p>
-              <p class="page1-left-2">同时提供兼容API调用，目前已接入并可提供OpenAI的Completions、Chat、Images、Audio以及Embeddings接口。</p>
-              <p class="page1-left-2">更多模型能力接入中。</p>
+                </h1>
+                <p class="page1-left-2">OhMyGPT.COM 可以让你便捷地访问ChatGPT、GPT-3.5-turbo-16k、GPT-4、DALL-E、whisper等先进的AI模型。</p>
+                <p class="page1-left-2">使用Tokenizer分词器精准计费，价格实惠。</p>
+                <p class="page1-left-2">同时提供兼容API调用，目前已接入并可提供OpenAI的Completions、Chat、Images、Audio以及Embeddings接口。</p>
+                <p class="page1-left-2">更多模型能力接入中。</p>
+              </div>
+            </div>
+            <div class="page1-right">
+              <!--登录第一页右边的内容，表格所在的卡片-->
+              <div class="right-login-div">
+                <div class="login-card">
+                  <template v-if="!this.haveLogin">
+                    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
+                      <!--最顶端的文字描述部分-->
+                      <div class="login-title">登录/注册</div>
+                      <el-form-item prop="email">
+                        <el-input v-model="loginForm.email"
+                                  auto-complete="off"
+                                  placeholder="账号"
+                                  type="text">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="user"/>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item prop="password">
+                        <el-input v-model="loginForm.password"
+                                  auto-complete="off"
+                                  placeholder="密码"
+                                  type="password"
+                                  @keyup.enter.native="handleLogin">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="password"/>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item v-if="captchaEnabled" prop="code">
+                        <el-input v-model="loginForm.code"
+                                  auto-complete="off"
+                                  placeholder="验证码"
+                                  style="width: 63%"
+                                  @keyup.enter.native="handleLogin">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
+                        </el-input>
+                        <div class="login-code">
+                          <img :src="codeUrl" alt="" class="login-code-img" @click="getCode"/>
+                        </div>
+                      </el-form-item>
+                      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
+                        记住密码
+                      </el-checkbox>
+                      <el-form-item style="width:100%;">
+                        <el-button :loading="loading"
+                                   size="medium"
+                                   style="width:100%;"
+                                   type="primary"
+                                   @click.native.prevent="handleLogin">
+                          <span v-if="!loading">登录/注册</span>
+                          <span v-else>加载中...</span>
+                        </el-button>
+                      </el-form-item>
+                      <el-form-item style="width:100%;">
+                        <el-button size="medium"
+                                   style="width:100%;"
+                                   type="info"
+                                   @click.native.prevent="resetPassword">
+                          <span>忘记密码</span>
+                        </el-button>
+                      </el-form-item>
+                    </el-form>
+                  </template>
+                  <template v-else>
+                    <el-form class="login-form1">
+                      <div class="login-title">{{ getUserEmail }}</div>
+                      <div>{{ welcomeMsg }}</div>
+                      <div>{{ welcomeMsg1 }}</div>
+                      <div>{{ welcomeMsg2 }}</div>
+                      <div class="login-renew">最新一次更新：</div>
+                      <div>{{ reNewMsg1 }}</div>
+                      <div>{{ reNewMsg2 }}</div>
+                      <div class="welcome-button">
+                        <el-button type="primary" @click="layout">
+                          退出登录
+                        </el-button>
+                      </div>
+                    </el-form>
+                  </template>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="page1-right">
-            <!--登录第一页右边的内容，表格所在的卡片-->
-            <div class="right-login-div">
-              <div class="login-card">
-                <template v-if="!this.haveLogin">
-                  <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-                    <!--最顶端的文字描述部分-->
-                    <div class="login-title">登录/注册</div>
-                    <el-form-item prop="email">
-                      <el-input v-model="loginForm.email"
-                                auto-complete="off"
-                                placeholder="账号"
-                                type="text">
-                        <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="user"/>
-                      </el-input>
-                    </el-form-item>
-                    <el-form-item prop="password">
-                      <el-input v-model="loginForm.password"
-                                auto-complete="off"
-                                placeholder="密码"
-                                type="password"
-                                @keyup.enter.native="handleLogin">
-                        <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="password"/>
-                      </el-input>
-                    </el-form-item>
-                    <el-form-item v-if="captchaEnabled" prop="code">
-                      <el-input v-model="loginForm.code"
-                                auto-complete="off"
-                                placeholder="验证码"
-                                style="width: 63%"
-                                @keyup.enter.native="handleLogin">
-                        <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
-                      </el-input>
-                      <div class="login-code">
-                        <img :src="codeUrl" alt="" class="login-code-img" @click="getCode"/>
+        </div>
+        <div class="login-page1">
+          <div class="grid">
+            <div class="page1-left">
+              <div>
+                <h1 class="page1-left-1">
+                <span class="black">
+                  Access to AI tech
+                </span>
+                  <span class="page1-left-1-font">
+                  Easy, Cheap and Fast.
+                </span>
+                </h1>
+                <p class="page1-left-2">OhMyGPT.COM 可以让你便捷地访问ChatGPT、GPT-3.5-turbo-16k、GPT-4、DALL-E、whisper等先进的AI模型。</p>
+                <p class="page1-left-2">使用Tokenizer分词器精准计费，价格实惠。</p>
+                <p class="page1-left-2">同时提供兼容API调用，目前已接入并可提供OpenAI的Completions、Chat、Images、Audio以及Embeddings接口。</p>
+                <p class="page1-left-2">更多模型能力接入中。</p>
+              </div>
+            </div>
+            <div class="page1-right">
+              <!--登录第一页右边的内容，表格所在的卡片-->
+              <div class="right-login-div">
+                <div class="login-card">
+                  <template v-if="!this.haveLogin">
+                    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
+                      <!--最顶端的文字描述部分-->
+                      <div class="login-title">登录/注册</div>
+                      <el-form-item prop="email">
+                        <el-input v-model="loginForm.email"
+                                  auto-complete="off"
+                                  placeholder="账号"
+                                  type="text">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="user"/>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item prop="password">
+                        <el-input v-model="loginForm.password"
+                                  auto-complete="off"
+                                  placeholder="密码"
+                                  type="password"
+                                  @keyup.enter.native="handleLogin">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="password"/>
+                        </el-input>
+                      </el-form-item>
+                      <el-form-item v-if="captchaEnabled" prop="code">
+                        <el-input v-model="loginForm.code"
+                                  auto-complete="off"
+                                  placeholder="验证码"
+                                  style="width: 63%"
+                                  @keyup.enter.native="handleLogin">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
+                        </el-input>
+                        <div class="login-code">
+                          <img :src="codeUrl" alt="" class="login-code-img" @click="getCode"/>
+                        </div>
+                      </el-form-item>
+                      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
+                        记住密码
+                      </el-checkbox>
+                      <el-form-item style="width:100%;">
+                        <el-button :loading="loading"
+                                   size="medium"
+                                   style="width:100%;"
+                                   type="primary"
+                                   @click.native.prevent="handleLogin">
+                          <span v-if="!loading">登录/注册</span>
+                          <span v-else>加载中...</span>
+                        </el-button>
+                      </el-form-item>
+                      <el-form-item style="width:100%;">
+                        <el-button size="medium"
+                                   style="width:100%;"
+                                   type="info"
+                                   @click.native.prevent="resetPassword">
+                          <span>忘记密码</span>
+                        </el-button>
+                      </el-form-item>
+                    </el-form>
+                  </template>
+                  <template v-else>
+                    <el-form class="login-form1">
+                      <div class="login-title">{{ getUserEmail }}</div>
+                      <div>{{ welcomeMsg }}</div>
+                      <div>{{ welcomeMsg1 }}</div>
+                      <div>{{ welcomeMsg2 }}</div>
+                      <div class="login-renew">最新一次更新：</div>
+                      <div>{{ reNewMsg1 }}</div>
+                      <div>{{ reNewMsg2 }}</div>
+                      <div class="welcome-button">
+                        <el-button type="primary" @click="layout">
+                          退出登录
+                        </el-button>
                       </div>
-                    </el-form-item>
-                    <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
-                      记住密码
-                    </el-checkbox>
-                    <el-form-item style="width:100%;">
-                      <el-button :loading="loading"
-                                 size="medium"
-                                 style="width:100%;"
-                                 type="primary"
-                                 @click.native.prevent="handleLogin">
-                        <span v-if="!loading">登录/注册</span>
-                        <span v-else>加载中...</span>
-                      </el-button>
-                    </el-form-item>
-                    <el-form-item style="width:100%;">
-                      <el-button size="medium"
-                                 style="width:100%;"
-                                 type="info"
-                                 @click.native.prevent="resetPassword">
-                        <span>忘记密码</span>
-                      </el-button>
-                    </el-form-item>
-                  </el-form>
-                </template>
-                <template v-else>
-                  <el-form class="login-form1">
-                    <div class="login-title">{{ getUserEmail }}</div>
-                    <div>{{ welcomeMsg }}</div>
-                    <div>{{ welcomeMsg1 }}</div>
-                    <div>{{ welcomeMsg2 }}</div>
-                    <div class="login-renew">最新一次更新：</div>
-                    <div>{{ reNewMsg1 }}</div>
-                    <div>{{ reNewMsg2 }}</div>
-                    <div class="welcome-button">
-                      <el-button type="primary" @click="layout">
-                        退出登录
-                      </el-button>
-                    </div>
-                  </el-form>
-                </template>
+                    </el-form>
+                  </template>
+                </div>
               </div>
             </div>
           </div>
@@ -575,5 +676,14 @@ export default {
   font-size: 35px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.main-box {
+  width: 100%;
+  height: 84vh;
+  border-radius: 20px;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
 }
 </style>

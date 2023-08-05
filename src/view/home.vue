@@ -1,16 +1,9 @@
 <template>
   <div class="home" :class="{'is-pc':isPc}">
     <el-container height="100%">
-      <template v-if="asideStatus">
-        <el-aside width="50px">
-          <Nav></Nav>
-        </el-aside>
-      </template>
-      <template v-else>
-        <el-header height="25px">
-          <Nav1></Nav1>
-        </el-header>
-      </template>
+      <el-header style="padding: 0;">
+        <Nav/>
+      </el-header>
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -20,14 +13,12 @@
 
 <script>
 import Nav from "../components/Nav.vue";
-import Nav1 from "../components/Nav1.vue";
 import {isPc} from '@/util/util.js'
 
 export default {
   name: "App",
   components: {
     Nav,
-    Nav1,
   },
   computed:{
     isPc:()=>isPc()

@@ -1,15 +1,18 @@
 <template>
   <div class="nav">
+    <!--顶部栏左斌-->
+    <div class="left-header">4gai Manager</div>
+    <!--图标-->
     <div class="nav-menu-wrapper">
       <ul class="menu-list">
-        <li
-            v-for="(item, index) in menuList"
+        <li v-for="(item, index) in menuList"
             :key="index"
             :class="{ activeNav: index === current }"
-            @click="changeMenu(index)"
-        >
+            @click="changeMenu(index)">
+          <!--按钮上方的蓝色显示-->
           <div class="block"></div>
-          <span class="iconfont" :class="item"></span>
+          <!--按钮的具体展示-->
+          <span :class="item" class="iconfont"></span>
         </li>
       </ul>
     </div>
@@ -83,42 +86,64 @@ export default {
 
 <style lang="scss" scoped>
 .nav {
-  width: 100%;
-  height: 90vh;
+  color: #fff;
   position: relative;
-  border-radius: 20px 0 0 20px;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+  height: 10vh;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .8)), to(rgba(0, 0, 0, .2)));
+  background: linear-gradient(180deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .2));
+  //background: #159957;
+  //background-image: -webkit-linear-gradient(330deg, #155799, #159957);
+  //background-image: linear-gradient(120deg, #155799, #159957);
+
+  .left-header {
+    width: 32%;
+    background: url("../assets/left-header.png") no-repeat;
+    background-size: 100% 100%;
+    font-weight: 700;
+    text-align: center;
+    line-height: 60px;
+    font-size: 1.45833vw;
+  }
 
   .nav-menu-wrapper {
-    position: absolute;
-    top: 40%;
-    transform: translate(0, -50%);
+    box-sizing: border-box;
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 70px;
 
     .menu-list {
+      display: flex;
 
       li {
-        margin: 60px 0 0 25px;
+        margin: 0 30px;
         list-style: none;
-        cursor: pointer;
         position: relative;
 
         //最左边的蓝色提示
         .block {
           background-color: rgb(29, 144, 245);
           position: absolute;
-          left: -20px;
-          width: 6px;
-          height: 25px;
+          top: -10px;
+          left: -3px;
+          width: 30px;
+          height: 6px;
           transition: 0.5s;
-          border-top-right-radius: 4px;
           border-bottom-right-radius: 4px;
+          border-bottom-left-radius: 4px;
           opacity: 0;
         }
 
         // 点击按钮的时候高亮显示
         &:hover {
           span {
-            color: rgb(29, 144, 245);
+            color: rgb(29, 76, 162);
           }
+
           .block {
             opacity: 1;
           }
@@ -131,7 +156,7 @@ export default {
 // 点击按钮之后保持高亮
 .activeNav {
   span {
-    color: rgb(29, 144, 245);
+    color: rgb(22, 81, 134);
   }
 
   .block {

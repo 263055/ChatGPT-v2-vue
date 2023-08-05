@@ -4,8 +4,8 @@
       <el-header style="padding: 0;">
         <Nav/>
       </el-header>
-      <el-main>
-        <router-view></router-view>
+      <el-main style="padding: 0;">
+        <router-view/>
       </el-main>
     </el-container>
   </div>

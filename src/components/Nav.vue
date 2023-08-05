@@ -91,7 +91,6 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100vw;
-  height: 10vh;
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .8)), to(rgba(0, 0, 0, .2)));
   background: linear-gradient(180deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .2));
   //background: #159957;

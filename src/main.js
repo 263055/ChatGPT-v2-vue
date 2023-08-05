@@ -8,6 +8,7 @@ import {copyToClipboard} from '@/util/util'
 import i18n from '@/config/i18n'
 import store from './store'
 import './permission' // permission control 加入了路由控制
+import './assets/icons' // icon
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import {isExternal} from '@/util/validate'
 
 export default {
   name: 'SvgIcon',
@@ -21,7 +22,7 @@ export default {
   },
   computed: {
     isExternal() {
-      return /^(https?:|mailto:|tel:)/.test(this.iconClass)
+      return isExternal(this.iconClass)
     },
     iconName() {
       return `#icon-${this.iconClass}`

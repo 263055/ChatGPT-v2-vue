@@ -57,8 +57,8 @@
 <script>
 import {deleteChatMsgLog, getChatMsgDetail, getOrderDetail} from "@/api/log";
 import {JCMFormatTimestamp} from "@/util/util";
-import {Markmap} from 'markmap-view';
-import {Transformer} from 'markmap-lib';
+// import {Markmap} from 'markmap-view';
+// import {Transformer} from 'markmap-lib';
 
 export default {
   name: "App",
@@ -81,11 +81,11 @@ export default {
     };
   },
   methods: {
-    createMarkMap(content) {
-      const {transformer} = this
-      const {root, features} = transformer.transform(content);
-      this.markmap.setData(root, features);
-    },
+    // createMarkMap(content) {
+    //   const {transformer} = this
+    //   const {root, features} = transformer.transform(content);
+    //   this.markmap.setData(root, features);
+    // },
     //获得订单的信息
     getOrderDetail(page) {
       if (page === undefined || page === '' || page === 0) page = 0

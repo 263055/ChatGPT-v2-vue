@@ -3,7 +3,7 @@
     <!--聊天室左侧-->
     <div class="chatLeft" style="width:20%" v-show="showPersonList">
       <div class="title" style="text-align: center;">
-        <h2>4gai Manager</h2>
+        <h2>GPT Session</h2>
       </div>
       <div class="online-person" style="margin-top: 5%;">
         <!--上方的按钮-->
@@ -1113,6 +1113,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .chatHome {
   display: flex;
+  height: 90vh;
 
   .chatLeft {
     width: 20%;
@@ -1120,6 +1121,7 @@ input[type=number]::-webkit-outer-spin-button {
     .title {
       color: #fff;
       padding-left: 10px;
+      margin-top: 10px;
     }
 
     .online-person {

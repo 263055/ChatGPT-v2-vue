@@ -1,7 +1,9 @@
 <template>
   <div class="nav">
     <!--顶部栏左斌-->
-    <div class="left-header">4gai Manager</div>
+    <div v-show="asideStatus" class="left-header">
+      4gai Manager
+    </div>
     <!--图标-->
     <div class="nav-menu-wrapper">
       <ul class="menu-list">
@@ -32,11 +34,18 @@ export default {
         "icon-shezhi",
       ],
       current: 0,
+      asideStatus: true,
       imgUrl: USER_HEAD_IMG_URL
     };
   },
   created() {
     this.updateCurrent()
+    window.addEventListener('resize', this.resize)
+    this.resize()
+  },
+
+  destoryed() {
+    window.removeEventListener('resize', this.resize)
   },
 
   methods: {
@@ -79,9 +88,14 @@ export default {
       } else {
         this.current = 1
       }
-    }
+    },
+    //监听窗口尺寸的变化
+    resize() {
+      this.asideStatus = window.innerWidth > 800;
+    },
   },
-};
+}
+;
 </script>
 
 <style lang="scss" scoped>
@@ -91,6 +105,7 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100vw;
+  height: 9vh;
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .8)), to(rgba(0, 0, 0, .2)));
   background: linear-gradient(180deg, rgba(0, 0, 0, .8), rgba(0, 0, 0, .2));
   //background: #159957;
@@ -160,6 +175,16 @@ export default {
 
   .block {
     opacity: 1 !important;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .nav {
+    .nav-menu-wrapper {
+      width: 100%;
+      justify-content: center;
+      padding-right: 10px;
+    }
   }
 }
 </style>

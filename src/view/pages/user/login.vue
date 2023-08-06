@@ -282,131 +282,6 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-//.login-contain {
-//  width: 100%;
-//  height: 100%;
-//
-//  .one-page {
-//    display: flex;
-//
-//    .login-contain-log {
-//      height: 100%;
-//      width: 80%;
-//      background: rgb(39, 42, 55);
-//      max-height: 95vh;
-//      margin-top: 20px;
-//      margin-left: 20px;
-//
-//      .login-loginLeft-card {
-//        font-size: 30px;
-//        margin-bottom: 30px;
-//        color: white;
-//      }
-//    }
-//
-//    .login-card {
-//      display: flex;
-//      justify-content: center;
-//      word-wrap: anywhere;
-//      width: 100%;
-//      background: rgb(39, 42, 55);
-//      margin-top: 40px;
-//
-//      .login-form {
-//        border-radius: 6px;
-//        background: #ffffff;
-//        width: 400px;
-//        padding: 25px 25px 5px 25px;
-//
-//        .el-input {
-//          height: 38px;
-//
-//          input {
-//            height: 38px;
-//          }
-//        }
-//
-//        .input-icon {
-//          height: 39px;
-//          margin-left: 2px;
-//        }
-//
-//        .login-code {
-//          width: 36%;
-//          height: 38px;
-//          float: right;
-//
-//          img {
-//            cursor: pointer;
-//            vertical-align: middle;
-//          }
-//        }
-//      }
-//
-//      .login-form1 {
-//        border-radius: 6px;
-//        background: #ffffff;
-//        width: 400px;
-//        height: 400px;
-//        padding: 0 25px 5px 25px;
-//      }
-//    }
-//  }
-//}
-//
-//.login-title {
-//  font-size: 35px;
-//  margin-bottom: 20px;
-//  text-align: center;
-//}
-//
-//.login-renew {
-//  font-size: 25px;
-//  margin-bottom: 20px;
-//  text-align: center;
-//}
-//
-//.welcome-card {
-//  text-align: center;
-//}
-//
-//.welcome-button {
-//  text-align: center;
-//  margin-top: 10px;
-//}
-//
-//@media only screen and (max-width: 768px) { // 当屏幕宽度小于或等于768px时
-//  .login-contain {
-//    width: auto;
-//
-//    .one-page {
-//      flex-direction: column;
-//
-//      .login-card {
-//        width: 300px;
-//
-//        .login-form {
-//          .login-code {
-//            img {
-//              width: 110px;
-//            }
-//          }
-//        }
-//
-//        .login-form1 {
-//          width: 300px;
-//          height: 500px;
-//        }
-//      }
-//    }
-//
-//    .el-login-footer {
-//      position: relative;
-//      color: #09030d;
-//    }
-//  }
-//}
-
 .el-login-footer {
   height: 40px;
   line-height: 40px;
@@ -483,6 +358,7 @@ export default {
         box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, #0000), var(--tw-shadow);
         padding: 1.5rem;
         border-radius: 0.5rem;
+        color: #fff;
 
         .input-icon {
           height: 39px;

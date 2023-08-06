@@ -142,9 +142,9 @@
       <!--下面的按钮部分-->
       <div class="chatInputs">
         <!--表情-->
-        <div class="emoji boxinput" @click="clickEmoji" v-show="buttonStatus">
-          <img src="@/assets/img/emoji/smiling-face.png" alt=""/>
-        </div>
+        <!--<div class="emoji boxinput" @click="clickEmoji" v-show="buttonStatus">-->
+        <!--  <img src="@/assets/img/emoji/smiling-face.png" alt=""/>-->
+        <!--</div>-->
         <!--录音-->
         <div class="luyin boxinput" @click="stopRecording" v-if="recording" v-show="buttonStatus">
           <i class="el-icon-microphone" style="margin-top: 17%;"></i>
@@ -576,9 +576,11 @@ export default {
     // 关闭标签框
     clickEmoji() {
       this.showEmoji = !this.showEmoji;
+      console.log(124)
     },
     // 发送表情
     sendEmoji(msg) {
+      console.log(123)
       const dateNow = JCMFormatDate(getNowTime());
       let chatMsg = {
         headImg: USER_HEAD_IMG_URL,

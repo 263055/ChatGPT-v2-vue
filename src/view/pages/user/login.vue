@@ -45,18 +45,20 @@
                       </el-input>
                     </el-form-item>
                     <el-form-item v-if="captchaEnabled" prop="code">
-                      <el-input v-model="loginForm.code"
-                                auto-complete="off"
-                                placeholder="验证码"
-                                style="width: 63%"
-                                @keyup.enter.native="handleLogin">
-                        <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
-                      </el-input>
-                      <div class="login-code">
-                        <img :src="codeUrl" alt="" class="login-code-img" @click="getCode"/>
+                      <div style="display: flex;">
+                        <el-input v-model="loginForm.code"
+                                  auto-complete="off"
+                                  class="login-card-input"
+                                  placeholder="验证码"
+                                  @keyup.enter.native="handleLogin">
+                          <svg-icon slot="prefix" class="el-input__icon input-icon" icon-class="validCode"/>
+                        </el-input>
+                        <div class="login-code">
+                          <img :src="codeUrl" alt="" @click="getCode"/>
+                        </div>
                       </div>
                     </el-form-item>
-                    <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
+                    <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 10px 0;">
                       记住密码
                     </el-checkbox>
                     <el-form-item style="width:100%;">
@@ -486,6 +488,19 @@ export default {
           height: 39px;
           width: 14px;
           margin-left: 2px;
+        }
+
+        .login-card-input {
+          width: 60%;
+          flex: 1; /*将输入框自动调整为剩余空间的大小*/
+          margin-right: 10px; /*为了在输入框和图片之间添加一些间距，你可以调整这个数值*/
+        }
+
+        .login-code {
+          img {
+            height: 38px;
+            float: right;
+          }
         }
       }
     }

@@ -524,10 +524,11 @@ export default {
   max-width: 80rem;
 
   .page1-left {
-    margin-left: 5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
 
     .page1-left-1 {
       --tw-text-opacity: 1;
@@ -612,7 +613,7 @@ export default {
 
     .page1-right {
       .right-login-div {
-        min-width: 24rem;
+        min-width: 15rem;
       }
     }
   }
@@ -634,6 +635,10 @@ export default {
         padding-right: 0;
         align-items: center;
         display: flex;
+
+        .page1-left-1 {
+          padding-top: 6rem;
+        }
       }
 
       .page1-right {

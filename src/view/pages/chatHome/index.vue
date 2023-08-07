@@ -262,23 +262,23 @@
           <!--图片设置-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 1">
-
+              <!--产图模式-->
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('image.production_title')" placement="top">
                   <span class="demonstration">{{ $t('image.production') }}</span>
                 </el-tooltip>
-                <el-switch v-model="SettingInfo.openProductionPicture" :width="defaulWidth"
-                           style="margin-left: 15%;"></el-switch>
+                <el-switch v-model="SettingInfo.openProductionPicture"
+                           :width="defaulWidth" style="margin-left: 15%;"/>
               </div>
-
+              <!--改图模式-->
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('image.change_title')" placement="top">
                   <span class="demonstration">{{ $t('image.change') }}</span>
                 </el-tooltip>
-                <el-switch v-model="SettingInfo.openChangePicture" :width="defaulWidth"
-                           style="margin-left: 15%;"></el-switch>
+                <el-switch v-model="SettingInfo.openChangePicture"
+                           :width="defaulWidth" style="margin-left: 15%;"/>
               </div>
-
+              <!--图片大小-->
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('image.size_title')" placement="top">
                   <span class="demonstration">{{ $t('image.size') }}</span>
@@ -290,14 +290,13 @@
                   </el-select>
                 </div>
               </div>
-
+              <!--图片数量-->
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('image.count_title')" placement="top">
                   <span class="demonstration">{{ $t('image.count') }}</span>
                 </el-tooltip>
-                <el-slider class="astrict" v-model="SettingInfo.n" :step="1" :min="-1" :max="10"></el-slider>
+                <el-slider v-model="SettingInfo.n" :max="5" :min="-1" :step="1" class="astrict"></el-slider>
               </div>
-
             </div>
           </el-collapse-transition>
           <!--音频设置-->

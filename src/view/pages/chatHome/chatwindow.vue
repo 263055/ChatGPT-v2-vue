@@ -75,24 +75,26 @@
           <div v-if="item.messageType === 'ANSWER'" class="chat-friend">
             <!--如果是文字,提供复制按钮-->
             <div class="chat-text">
-              <!--<div class="chat-text" v-if="item.chatType === 0">-->
-              <el-row :gutter="20">
-                <el-col :span="2">
-                  <svg class="icon" viewBox="0 0 1024 1024" x="1679666016648" @click="$copy(item.content, '已复制')"
-                       xmlns="http://www.w3.org/2000/svg" p-id="6241" width="22" height="22">
-                    <path
-                        d="M661.333333 234.666667A64 64 0 0 1 725.333333 298.666667v597.333333a64 64 0 0 1-64 64h-469.333333A64
+              <div v-if="item.chatType === 0" class="chat-text">
+                <el-row :gutter="20">
+                  <el-col :span="2">
+                    <svg class="icon" height="22" p-id="6241" viewBox="0 0 1024 1024"
+                         width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
+                         @click="$copy(item.content, '已复制')">
+                      <path
+                          d="M661.333333 234.666667A64 64 0 0 1 725.333333 298.666667v597.333333a64 64 0 0 1-64 64h-469.333333A64
                         64 0 0 1 128 896V298.666667a64 64 0 0 1 64-64z m-21.333333 85.333333H213.333333v554.666667h426.666667v-554.666667z m191.829333-256a64
                         64 0 0 1 63.744 57.856l0.256 6.144v575.701333a42.666667 42.666667 0 0 1-85.034666
                         4.992l-0.298667-4.992V149.333333H384a42.666667 42.666667 0 0 1-42.368-37.674666L341.333333
                         106.666667a42.666667 42.666667 0 0 1 37.674667-42.368L384 64h447.829333z"
-                        fill="#909399" p-id="6242"></path>
-                  </svg>
-                </el-col>
-                <el-col :span="21">
-                </el-col>
-              </el-row>
-              <markdown-it-vue :content="item.content.trim()"/>
+                          fill="#909399" p-id="6242"></path>
+                    </svg>
+                  </el-col>
+                  <el-col :span="21">
+                  </el-col>
+                </el-row>
+                <markdown-it-vue :content="item.content.trim()"/>
+              </div>
             </div>
             <!--如果是图片,就直接展示-->
             <div class="chat-img" v-if="item.chatType === 1">
@@ -115,18 +117,18 @@
           <!--用户提问-->
           <div class="chat-me" v-else>
             <!--文字部分-->
-            <div class="chat-text">
+            <div v-if="item.chatType === 0" class="chat-text">
               <markdown-it-vue :content="item.content.trim()" style="font-size:16px"/>
             </div>
             <!--发送照片-->
-            <div class="chat-img" v-if="item.chatType === 1">
+            <div v-else-if="item.chatType === 1" class="chat-img">
               <img :src="item.msg" alt="表情" v-if="item.extend.imgType === 1" style="width: 100px; height: 100px"/>
-              <el-image style="max-width: 300px; border-radius: 10px" :src="item.msg" :preview-src-list="srcImgList"
-                        v-else>
+              <el-image v-else
+                        :preview-src-list="srcImgList" :src="item.msg" style="max-width: 300px; border-radius: 10px">
               </el-image>
             </div>
             <!--发送文件-->
-            <div class="chat-img" v-if="item.chatType === 2">
+            <div v-else-if="item.chatType === 2" class="chat-img">
               <div class="word-file">
                 <FileCard :fileType="item.extend.fileType" :file="item.msg"></FileCard>
               </div>
@@ -177,7 +179,6 @@
 import {animation, animationToUp, getNowTime, JCMFormatDate} from "@/util/util";
 import {getToken} from '@/util/auth'
 import {
-  createImage,
   createImageVariations,
   createTranscription,
   createTranslation,
@@ -189,7 +190,7 @@ import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
 import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
 import {saveAs} from 'file-saver';
-import {getMessage} from "@/api/chatMsg";
+import {getMessage, getImages, createImageEdit} from "@/api/chatMsg";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -411,14 +412,56 @@ export default {
         };
         this.lastChatMsg = this.chatList[this.chatList.length - 1] === undefined ? [] : this.chatList[this.chatList.length - 1];
         this.sendMsg(chatMsg);
-        //如果是图片模式则进入待开发不过可用改状态使用
-        if (false) {
-          // if (this.settingInfo.openProductionPicture) { // aaaaa
+        if (this.settingInfo.openChangePicture) // 首先是编辑图片，根据提示词去修改图片
+        {
+          // 如果未上传图片，则报错
+          if (this.updateImage == null) {
+            this.$nextTick(() => {
+              this.acqStatus = true
+            });
+            this.$message.warning(this.$t('message.edit_picture'))
+            return
+          } else {
+            // 通过验证后，上传文件
+            const formData = new FormData();
+            formData.append("image", this.updateImage);
+            formData.append("prompt", this.inputMsg);
+            formData.append("n", this.settingInfo.n);
+            formData.append("size", this.settingInfo.size);
+            this.inputMsg = "";
+
+            createImageEdit(formData).then(data => {
+              for (const imgInfo of data) {
+                let imgResMsg = {
+                  headImg: AI_HEAD_IMG_URL,
+                  name: this.frinedInfo.name,
+                  time: JCMFormatDate(getNowTime()),
+                  msg: imgInfo.url,
+                  chatType: 1, //信息类型，0文字，1图片
+                  extend: {
+                    imgType: 2, //(1表情，2本地图片)
+                  },
+                  uid: this.frinedInfo.id, //uid
+                };
+                this.sendMsg(imgResMsg);
+                this.srcImgList.push(imgInfo.url);
+              }
+              this.updateImage = null
+              this.acqStatus = true
+            })
+            return
+          }
+        } //
+        else if (this.settingInfo.openProductionPicture) // 产图模式
+        {
+          let params = {}
           params.prompt = this.inputMsg
           params.n = this.settingInfo.n
           params.size = this.settingInfo.size
-          createImage(params, this.settingInfo.KeyMsg).then(data => {
+          getImages(params).then(res => {
+            const data = res.data
             for (const imgInfo of data) {
+              console.log(imgInfo)
               let imgResMsg = {
                 headImg: AI_HEAD_IMG_URL,
                 name: this.frinedInfo.name,
@@ -428,19 +471,24 @@ export default {
                 extend: {
                   imgType: 2, //(1表情，2本地图片)
                 },
-                uid: this.frinedInfo.id, //uid
+                messageType: "ANSWER",
+                id: "",
+                sessionId: "",
+                parentId: "",
+                childrenId: "",
               };
               this.sendMsg(imgResMsg);
               this.srcImgList.push(imgInfo.url);
             }
             this.acqStatus = true
           })
-        } else {
+        } //
+        else // 普通的gpt对话
+        {
           this.options.sessionId = this.curSessionId
           this.options.parentMessageId = this.lastChatMsg.id
 
           this.setting.model = this.frinedInfo.id
-          // this.setting.suffix = this.settingInfo.chat.suffix
           this.setting.stop = this.settingInfo.chat.stop
           this.setting.frequencyPenalty = this.settingInfo.chat.FrequencyPenalty
           this.setting.presencePenalty = this.settingInfo.chat.PresencePenalty
@@ -591,7 +639,7 @@ export default {
         extend: {
           imgType: 1, //(1表情，2本地图片)
         },
-        uid: "QUESTION",
+        messageType: "QUESTION",
       };
       this.sendMsg(chatMsg);
       this.clickEmoji();
@@ -629,57 +677,6 @@ export default {
         });
         return
       }
-      // 通过验证后，上传文件
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("n", this.settingInfo.n);
-      formData.append("size", this.settingInfo.size);
-
-      const dateNow = JCMFormatDate(getNowTime());
-      let _this = this;
-
-      let chatMsg = {
-        headImg: USER_HEAD_IMG_URL,
-        name: USER_NAME,
-        time: dateNow,
-        msg: "",
-        chatType: 1, //信息类型，0文字，1图片, 2文件
-        extend: {
-          imgType: 2, //(1表情，2本地图片)
-        },
-        uid: "jcm",
-      };
-
-      if (!e || !window.FileReader) return; // 看是否支持FileReader
-      let reader = new FileReader();
-      reader.readAsDataURL(file); // 关键一步，在这里转换的
-      reader.onloadend = function () {
-        chatMsg.msg = this.result; //赋值
-        _this.srcImgList.push(chatMsg.msg);
-      };
-      this.sendMsg(chatMsg);
-
-      createImageVariations(formData, this.settingInfo.KeyMsg).then(data => {
-        for (var imgInfo of data) {
-          let imgResMsg = {
-            headImg: AI_HEAD_IMG_URL,
-            name: this.frinedInfo.name,
-            time: JCMFormatDate(getNowTime()),
-            msg: imgInfo.url,
-            chatType: 1, //信息类型，0文字，1图片
-            extend: {
-              imgType: 2, //(1表情，2本地图片)
-            },
-            uid: this.frinedInfo.id, //uid
-          };
-          this.sendMsg(imgResMsg);
-          this.srcImgList.push(imgInfo.url);
-        }
-        this.acqStatus = true
-      }).catch(e => {
-        console.log("错误")
-        console.log(e)
-      })
       e.target.files = null;
     },
     // 开始录音

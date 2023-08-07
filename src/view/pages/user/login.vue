@@ -13,10 +13,9 @@
                   Easy, Cheap and Fast.
                 </span>
               </h1>
-              <p class="page1-left-2">OhMyGPT.COM 可以让你便捷地访问ChatGPT、GPT-3.5-turbo-16k、GPT-4、DALL-E、whisper等先进的AI模型。</p>
-              <p class="page1-left-2">使用Tokenizer分词器精准计费，价格实惠。</p>
-              <p class="page1-left-2">同时提供兼容API调用，目前已接入并可提供OpenAI的Completions、Chat、Images、Audio以及Embeddings接口。</p>
-              <p class="page1-left-2">更多模型能力接入中。</p>
+              <p class="page1-left-2">4gai 可以让你便捷地访问ChatGPT等AI模型。</p>
+              <p class="page1-left-2">使用Tokenizer分词器精准计费，目前完全免费。</p>
+              <p class="page1-left-2">正在努力接入更多的新功能。</p>
             </div>
           </div>
           <div class="page1-right">

@@ -262,14 +262,6 @@
           <!--图片设置-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 1">
-              <!--产图模式-->
-              <div class="block">
-                <el-tooltip class="item" effect="dark" :content="$t('image.production_title')" placement="top">
-                  <span class="demonstration">{{ $t('image.production') }}</span>
-                </el-tooltip>
-                <el-switch v-model="SettingInfo.openProductionPicture"
-                           :width="defaulWidth" style="margin-left: 15%;"/>
-              </div>
               <!--改图模式-->
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('image.change_title')" placement="top">
@@ -278,34 +270,67 @@
                 <el-switch v-model="SettingInfo.openChangePicture"
                            :width="defaulWidth" style="margin-left: 15%;"/>
               </div>
-              <!--图片大小-->
-              <div class="block">
-                <el-tooltip class="item" effect="dark" :content="$t('image.size_title')" placement="top">
-                  <span class="demonstration">{{ $t('image.size') }}</span>
-                </el-tooltip>
-                <div>
-                  <el-select v-model="SettingInfo.size" placeholder="请选择" style="margin-top: 10px;">
-                    <el-option v-for="item in imgSizes" :key="item.value" :value="item.value">
-                    </el-option>
-                  </el-select>
+              <template v-if="SettingInfo.openChangePicture">
+                <!--图片展示-->
+                <div class="block">
+                  <!--导入图片-->
+                  <span style="color: #ad4040;">{{ $t('message.upload_image1') }}</span>
+                  <div style="display: flex;margin-top: 10px">
+                    <span style="color: #ad4040">{{ $t('message.upload_image2') }}</span>
+                    <div class="upload-image">
+                      <el-tooltip :content="$t('icon.image')" effect="dark" placement="top">
+                        <label for="imgFile">
+                          <span class="iconfont icon-tupian"></span>
+                        </label>
+                      </el-tooltip>
+                      <input id="imgFile" accept="image/*" name="" type="file" @change="sendImg"/>
+                    </div>
+                  </div>
+                  <!--发送照片-->
+                  <div v-if="picture" class="chat-img">
+                    <el-image :src="picture" style="max-width: 300px; border-radius: 10px"/>
+                    <span style="color: #ad4040">{{ $t('message.upload_image3') }}</span>
+                  </div>
                 </div>
-              </div>
-              <!--图片数量-->
-              <div class="block">
-                <el-tooltip class="item" effect="dark" :content="$t('image.count_title')" placement="top">
-                  <span class="demonstration">{{ $t('image.count') }}</span>
-                </el-tooltip>
-                <el-slider v-model="SettingInfo.n" :max="5" :min="-1" :step="1" class="astrict"></el-slider>
-              </div>
-              <!--提示文字-->
-              <div class="block">
-                <h3 style="color: #ad4040">
-                  {{ $t('message.create_image1') }}
-                </h3>
-                <h3 style="color: #ad4040">
-                  {{ $t('message.create_image2') }}
-                </h3>
-              </div>
+              </template>
+              <template v-else>
+                <!--产图模式-->
+                <div class="block">
+                  <el-tooltip :content="$t('image.production_title')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('image.production') }}</span>
+                  </el-tooltip>
+                  <el-switch v-model="SettingInfo.openProductionPicture"
+                             :width="defaulWidth" style="margin-left: 15%;"/>
+                </div>
+                <!--图片大小-->
+                <div class="block">
+                  <el-tooltip :content="$t('image.size_title')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('image.size') }}</span>
+                  </el-tooltip>
+                  <div>
+                    <el-select v-model="SettingInfo.size" placeholder="请选择" style="margin-top: 10px;">
+                      <el-option v-for="item in imgSizes" :key="item.value" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </div>
+                </div>
+                <!--图片数量-->
+                <div class="block">
+                  <el-tooltip :content="$t('image.count_title')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('image.count') }}</span>
+                  </el-tooltip>
+                  <el-slider v-model="SettingInfo.n" :max="5" :min="-1" :step="1" class="astrict"></el-slider>
+                </div>
+                <!--提示文字-->
+                <div class="block">
+                  <h3 style="color: #ad4040">
+                    {{ $t('message.create_image1') }}
+                  </h3>
+                  <h3 style="color: #ad4040">
+                    {{ $t('message.create_image2') }}
+                  </h3>
+                </div>
+              </template>
             </div>
           </el-collapse-transition>
           <!--音频设置-->
@@ -391,7 +416,6 @@ import {
   getRoles,
 } from "@/api/getData";
 
-
 export default {
   directives: {
     autoheight: {
@@ -418,10 +442,12 @@ export default {
     PersonCard,
     ChatWindow,
     Session,
-    File
+    File,
   },
   data() {
     return {
+      picture: "",
+      updateImage: null,
       fileSearch: "",
       sessionSearch: "",
       showFineSetting: false,
@@ -631,6 +657,47 @@ export default {
     }
   },
   methods: {
+    // 发送本地图片
+    sendImg(e) {
+      this.acqStatus = false
+      //获取文件
+      const file = e.target.files[0];
+
+      // 验证文件类型是否为PNG格式
+      if (file.type !== "image/png") {
+        this.$message.warning(this.$t('message.valid_png'))
+        this.$nextTick(() => {
+          this.acqStatus = true
+        });
+        return;
+      }
+      // 验证文件大小是否小于4MB
+      if (file.size > 4 * 1024 * 1024) {
+        this.$message.warning(this.$t('message.less_4M'))
+        this.$nextTick(() => {
+          this.acqStatus = true
+        });
+        return;
+      }
+      let _this = this;
+      if (this.SettingInfo.openChangePicture) {
+        this.updateImage = file
+        this.$message.success(this.$t('message.upload_complete'))
+        e.target.files = null;
+        this.$nextTick(() => {
+          this.acqStatus = true
+        });
+        if (!e || !window.FileReader) return; // 看是否支持FileReader
+        let reader = new FileReader();
+        reader.readAsDataURL(file); // 关键一步，在这里转换的
+        reader.onloadend = function () {
+          _this.picture = this.result; //赋值
+        };
+        return
+      }
+      this.acqStatus = true
+      e.target.files = null;
+    },
     savePrompt() {
       localStorage.setItem("prompt", this.SettingInfo.prompt)
       this.$notify({
@@ -1097,6 +1164,32 @@ input[type=number]::-webkit-outer-spin-button {
   .demonstration {
     color: aliceblue;
     text-align: center;
+  }
+
+  .chat-img {
+    img {
+      max-width: 300px;
+      max-height: 200px;
+      border-radius: 10px;
+    }
+  }
+
+  .upload-image {
+    span {
+      font-size: 30px
+    }
+
+    input {
+      display: none;
+    }
+  }
+}
+
+.iconfont:hover {
+  color: rgb(29, 144, 245);
+
+  .block {
+    opacity: 1;
   }
 }
 

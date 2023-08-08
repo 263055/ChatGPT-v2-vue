@@ -46,12 +46,12 @@
               </label>
             </el-tooltip>
             <!--导入图片-->
-            <el-tooltip :content="$t('icon.image')" effect="dark" placement="top">
-              <label for="imgFile">
-                <span class="iconfont icon-tupian"></span>
-              </label>
-            </el-tooltip>
-            <input id="imgFile" accept="image/*" name="" type="file" @change="sendImg"/>
+            <!--<el-tooltip :content="$t('icon.image')" effect="dark" placement="top">-->
+            <!--  <label for="imgFile">-->
+            <!--    <span class="iconfont icon-tupian"></span>-->
+            <!--  </label>-->
+            <!--</el-tooltip>-->
+            <!--<input id="imgFile" accept="image/*" name="" type="file" @change="sendImg"/>-->
             <!--切换 中英文-->
             <el-tooltip :content="$t('icon.language')" effect="dark" placement="top">
               <label @click="changeLanguage">
@@ -112,10 +112,6 @@
             <!--文字部分-->
             <div v-if="item.chatType === 0" class="chat-text">
               <markdown-it-vue :content="item.content.trim()" style="font-size:16px"/>
-            </div>
-            <!--发送照片-->
-            <div v-else-if="item.chatType === 1" class="chat-img">
-              <el-image :preview-src-list="srcImgList" :src="item.msg" style="max-width: 300px; border-radius: 10px"/>
             </div>
             <!--展示名字和时间-->
             <div class="info-time">
@@ -627,6 +623,7 @@ export default {
       //获取文件
       const file = e.target.files[0];
 
+      console.log(1)
       // 验证文件类型是否为PNG格式
       if (file.type !== "image/png") {
         this.$message.warning(this.$t('message.valid_png'))
@@ -647,13 +644,14 @@ export default {
 
       if (this.settingInfo.openChangePicture) {
         this.updateImage = file
-        this.$message.info(this.$t('message.upload_complete'))
+        this.$message.success(this.$t('message.upload_complete'))
         e.target.files = null;
         this.$nextTick(() => {
           this.acqStatus = true
         });
         return
       }
+      this.acqStatus = true
       e.target.files = null;
     },
     // 开始录音

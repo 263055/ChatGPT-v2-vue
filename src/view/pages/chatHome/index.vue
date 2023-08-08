@@ -264,13 +264,13 @@
           <el-collapse-transition>
             <div v-show="SettingStatus === 1">
               <!--改图模式-->
-              <div class="block">
-                <el-tooltip class="item" effect="dark" :content="$t('image.change_title')" placement="top">
-                  <span class="demonstration">{{ $t('image.change') }}</span>
-                </el-tooltip>
-                <el-switch v-model="SettingInfo.openChangePicture"
-                           :width="defaulWidth" style="margin-left: 15%;"/>
-              </div>
+              <!--<div class="block">-->
+              <!--  <el-tooltip class="item" effect="dark" :content="$t('image.change_title')" placement="top">-->
+              <!--    <span class="demonstration">{{ $t('image.change') }}</span>-->
+              <!--  </el-tooltip>-->
+              <!--  <el-switch v-model="SettingInfo.openChangePicture"-->
+              <!--             :width="defaulWidth" style="margin-left: 15%;"/>-->
+              <!--</div>-->
               <template v-if="SettingInfo.openChangePicture">
                 <!--图片展示-->
                 <div class="block">

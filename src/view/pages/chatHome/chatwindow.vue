@@ -413,8 +413,6 @@ export default {
             this.inputMsg = "";
             createImageEdit(formData).then(res => {
               const data = res.data.data
-              console.log(11111111)
-              console.log(data)
               for (const imgInfo of data) {
                 let imgResMsg = {
                   time: JCMFormatDate(getNowTime()),

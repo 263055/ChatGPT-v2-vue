@@ -11,15 +11,14 @@ export function getMessage(sessionId) {
     })
 }
 
-export function getImages(params) {
+export function getImages(setting) {
     return request({
         url: `/chatMsg/generations`,
         headers: {
             isToken: true
         },
         method: 'post',
-        timeout: 20000,
-        data: params
+        data: setting,
     })
 }
 
@@ -31,7 +30,6 @@ export const createImageEdit = (formData) => {
             isToken: true
         },
         method: 'post',
-        timeout: 20000,
         data: formData
     })
 }

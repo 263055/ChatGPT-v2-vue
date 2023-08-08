@@ -13,6 +13,7 @@
           <el-table-column label="总共token" prop="totalToken"/>
           <el-table-column label="剩余token" prop="consume"/>
           <el-table-column label="是否免费" prop="free"/>
+          <el-table-column label="问答类型" prop="chatType"/>
           <el-table-column align="right">
             <template #default="scope">
               <el-button
@@ -117,7 +118,8 @@ export default {
           this.chatMsgLog = resData.map(item => ({
             ...item,
             time: JCMFormatTimestamp(item.time),
-            free: item.free === true ? '是' : '否'
+            free: item.free === true ? '是' : '否',
+            chatType: item.chatType === 0 ? '文字' : '照片',
           }));
           this.chatMsgTotal = res.data.total
           resolve()

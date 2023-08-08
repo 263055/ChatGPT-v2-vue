@@ -2,7 +2,6 @@ import i18n from '@/config/i18n'
 
 //防抖
 export function debounce(fn) {
-  console.log(1)
   let t = null //只会执行一次
   debugger
 
@@ -53,7 +52,6 @@ export function animation(obj, target, fn1) {
     } else {
       // 每30毫秒就将新的值给obj.left
       obj.scrollTop = obj.scrollTop + step;
-      console.log(1)
     }
   }, 10);
 }

@@ -9,7 +9,6 @@ const allUrl = ['/Login', '/ChatHome', '/Setting']
 router.beforeEach((to, from, next) => {
     NProgress.start()
     const curUrl = to.path
-    console.log(curUrl)
     if (curUrl !== '/404' && allUrl.indexOf(curUrl) === -1) {
         next('/404');
     } else {

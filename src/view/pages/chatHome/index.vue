@@ -297,6 +297,15 @@
                 </el-tooltip>
                 <el-slider v-model="SettingInfo.n" :max="5" :min="-1" :step="1" class="astrict"></el-slider>
               </div>
+              <!--提示文字-->
+              <div class="block">
+                <h3 style="color: #ad4040">
+                  {{ $t('message.create_image1') }}
+                </h3>
+                <h3 style="color: #ad4040">
+                  {{ $t('message.create_image2') }}
+                </h3>
+              </div>
             </div>
           </el-collapse-transition>
           <!--音频设置-->

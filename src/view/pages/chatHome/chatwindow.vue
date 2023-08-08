@@ -98,15 +98,8 @@
             </div>
             <!--如果是图片,就直接展示-->
             <div class="chat-img" v-if="item.chatType === 1">
-              <img :src="item.msg" alt="表情" v-if="item.extend.imgType === 1" style="width: 100px; height: 100px"/>
-              <el-image style="border-radius: 10px" :src="item.msg" :preview-src-list="srcImgList" v-else>
-              </el-image>
-            </div>
-            <!--图片,不知道有什么用-->
-            <div class="chat-img" v-if="item.chatType === 2">
-              <div class="word-file">
-                <FileCard :fileType="item.extend.fileType" :file="item.msg"></FileCard>
-              </div>
+              <!-- v-else 表示gpt发送的图片-->
+              <el-image :preview-src-list="srcImgList" :src="item.msg" style="border-radius: 10px"/>
             </div>
             <!--展示名字和时间-->
             <div class="info-time">
@@ -122,16 +115,7 @@
             </div>
             <!--发送照片-->
             <div v-else-if="item.chatType === 1" class="chat-img">
-              <img :src="item.msg" alt="表情" v-if="item.extend.imgType === 1" style="width: 100px; height: 100px"/>
-              <el-image v-else
-                        :preview-src-list="srcImgList" :src="item.msg" style="max-width: 300px; border-radius: 10px">
-              </el-image>
-            </div>
-            <!--发送文件-->
-            <div v-else-if="item.chatType === 2" class="chat-img">
-              <div class="word-file">
-                <FileCard :fileType="item.extend.fileType" :file="item.msg"></FileCard>
-              </div>
+              <el-image :preview-src-list="srcImgList" :src="item.msg" style="max-width: 300px; border-radius: 10px"/>
             </div>
             <!--展示名字和时间-->
             <div class="info-time">
@@ -362,13 +346,15 @@ export default {
     //获得聊天室所有消
     getMessage(id) {
       this.isAutoScroll = false;
+      this.acqStatus = true;
       NProgress.start()
       this.curSessionId = id;
       new Promise((resolve, reject) => {
         getMessage(id).then((res) => {
           this.chatList = res.list.map(item => ({
             ...item,
-            time: JCMFormatDate(item.time)
+            time: JCMFormatDate(item.time),
+            chatType: 0,
           }));
           NProgress.done()
           resolve()
@@ -402,7 +388,7 @@ export default {
       if (curMessage) {
         let chatMsg = {
           time: dateNow,
-          content: this.inputMsg,
+          content: this.inputMsg.trim(),
           chatType: 0, //信息类型，0文字，1图片
           messageType: "QUESTION",
           id: "",
@@ -433,8 +419,6 @@ export default {
             createImageEdit(formData).then(data => {
               for (const imgInfo of data) {
                 let imgResMsg = {
-                  headImg: AI_HEAD_IMG_URL,
-                  name: this.frinedInfo.name,
                   time: JCMFormatDate(getNowTime()),
                   msg: imgInfo.url,
                   chatType: 1, //信息类型，0文字，1图片
@@ -459,23 +443,16 @@ export default {
           params.n = this.settingInfo.n
           params.size = this.settingInfo.size
           getImages(params).then(res => {
-            const data = res.data
+            const data = res.data.data
+            console.log(data)
             for (const imgInfo of data) {
-              console.log(imgInfo)
               let imgResMsg = {
                 headImg: AI_HEAD_IMG_URL,
                 name: this.frinedInfo.name,
                 time: JCMFormatDate(getNowTime()),
                 msg: imgInfo.url,
                 chatType: 1, //信息类型，0文字，1图片
-                extend: {
-                  imgType: 2, //(1表情，2本地图片)
-                },
                 messageType: "ANSWER",
-                id: "",
-                sessionId: "",
-                parentId: "",
-                childrenId: "",
               };
               this.sendMsg(imgResMsg);
               this.srcImgList.push(imgInfo.url);

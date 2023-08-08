@@ -139,6 +139,8 @@ export default {
     },
     message: {
         start_recording: "Start recording~",
+        create_image1: "Note: Questions and answers about photos will not be saved in the database",
+        create_image2: "When refreshing the page or switching conversations, the photos will disappear!!",
         fail_audio: "Failed to get audio stream~",
         end_recording: "End recording~",
         edit_picture: "Edit picture mode: Please upload the picture in the upper right corner of the chat window first, and then send the modified content~",

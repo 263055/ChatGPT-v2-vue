@@ -27,7 +27,8 @@ export const createImageEdit = (formData) => {
     return request({
         url: `/chatMsg/editsImage`,
         headers: {
-            isToken: true
+            isToken: true,
+            'Content-Type': 'multipart/form-data'
         },
         method: 'post',
         data: formData

@@ -131,6 +131,7 @@
                     :frinedInfo="chatWindowInfo"
                     :settingInfo="SettingInfo"
                     :storeStatu="storeStatus"
+                    :updateImage="updateImage"
         >
         </ChatWindow>
       </div>

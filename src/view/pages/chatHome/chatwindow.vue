@@ -204,6 +204,7 @@ export default {
   },
   props: {
     storeStatu: Number,
+    updateImage: File,
     settingInfo: Object,
     frinedInfo: Object,
 
@@ -258,7 +259,6 @@ export default {
       audioChunks: [],
       screenshot: "",
       contentBackImageUrl: "https://bpic.51yuansu.com/backgd/cover/00/31/39/5bc8088deeedd.jpg?x-oss-process=image/resize,w_780",
-      updateImage: null,
       // 是否隐藏对话框上方介绍（空间局促时隐藏）
       personInfoSpan: [2, 2, 20],
 
@@ -393,7 +393,6 @@ export default {
           childrenId: "",
         };
         this.lastChatMsg = this.chatList[this.chatList.length - 1] === undefined ? [] : this.chatList[this.chatList.length - 1];
-        this.sendMsg(chatMsg);
         if (this.settingInfo.openChangePicture) // 首先是编辑图片，根据提示词去修改图片
         {
           // 如果未上传图片，则报错
@@ -404,6 +403,7 @@ export default {
             this.$message.warning(this.$t('message.edit_picture'))
             return
           } else {
+            this.sendMsg(chatMsg);
             // 通过验证后，上传文件
             const formData = new FormData();
             formData.append("image", this.updateImage);
@@ -411,17 +411,18 @@ export default {
             formData.append("n", this.settingInfo.n);
             formData.append("size", this.settingInfo.size);
             this.inputMsg = "";
-
-            createImageEdit(formData).then(data => {
+            createImageEdit(formData).then(res => {
+              const data = res.data.data
+              console.log(11111111)
+              console.log(data)
               for (const imgInfo of data) {
                 let imgResMsg = {
                   time: JCMFormatDate(getNowTime()),
                   msg: imgInfo.url,
                   chatType: 1, //信息类型，0文字，1图片
-                  extend: {
-                    imgType: 2, //(1表情，2本地图片)
-                  },
-                  uid: this.frinedInfo.id, //uid
+                  headImg: AI_HEAD_IMG_URL,
+                  name: this.frinedInfo.name,
+                  messageType: "ANSWER",
                 };
                 this.sendMsg(imgResMsg);
                 this.srcImgList.push(imgInfo.url);
@@ -434,6 +435,7 @@ export default {
         } //
         else if (this.settingInfo.openProductionPicture) // 产图模式
         {
+          this.sendMsg(chatMsg);
           let params = {}
           params.prompt = this.inputMsg
           params.n = this.settingInfo.n
@@ -458,6 +460,7 @@ export default {
         } //
         else // 普通的gpt对话
         {
+          this.sendMsg(chatMsg);
           this.options.sessionId = this.curSessionId
           this.options.parentMessageId = this.lastChatMsg.id
 

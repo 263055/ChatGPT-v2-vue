@@ -1,3 +1,4 @@
+node--16.14.0
 
 
 <div align=center>
@@ -38,7 +39,6 @@
 ## 应用程序
 https://wweu.lanzoub.com/ia2Zy0v2fxqd  蓝奏云下载地址
 
-
 ## 参考视频
 https://www.bilibili.com/video/BV1BM4y187bp 使用API调用StableDiffusion生成图片简单案例
 https://www.bilibili.com/video/BV1iL411k7pC 本地+云服务器 部署此项目视频
@@ -52,10 +52,11 @@ npm install
 npm run serve
 npm run build
 ```
- # 在线体验地址 (需要使用OpenAI KEY)
 
- > https://huggingface.co/spaces/junchenmo/OpenAI-Manager
- 
+# 在线体验地址 (需要使用OpenAI KEY)
+
+> https://huggingface.co/spaces/junchenmo/OpenAI-Manager
+
 # 国内在线体验地址 (没kx再或者没有KEY--省点用)
 
 > https://175.178.88.119/learn.html
@@ -68,7 +69,6 @@ VUE_APP_OPENAI_API_KEY='你的openai api key'
 ### 在/src/store/mutation-types.js
 
 可以在此文件中设置AI头像+用户头像+用户名称
-
 
 # Docker部署(暂时不是最新的镜像)
 
@@ -135,7 +135,6 @@ docker run --name my-chatgpt -p 80:80 jcm-chatgpt
     <img src="https://contrib.rocks/image?repo=202252197/ChatGPT_JCM" />
   </a>
 </div>
-
 
 # 进学习群加V&商务合作
 <div>

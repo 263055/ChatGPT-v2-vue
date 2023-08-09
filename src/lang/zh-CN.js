@@ -113,7 +113,7 @@ export default {
         to_text_title: "语音转文字",
         to_text: "语音转文字",
         language_title: "将一个或多个来源语言的语音或音频文件翻译成目标语言",
-        language: "语言",
+        language: "目标语言",
         temperature_title: "指定语音识别的随机性，范围是0到1，越高表示越多样化和创造性，越低表示越保守和确定性。",
         temperature: "随机度（0-1）",
     },

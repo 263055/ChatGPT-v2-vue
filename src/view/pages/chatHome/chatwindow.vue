@@ -688,10 +688,17 @@ export default {
           lastModified: Date.now()
         });
         const formData = new FormData()
+        let language = this.settingInfo.language;
+        if (language === '中文') language = 'zh'
+        else if (language === '英语') language = 'en'
+        else if (language === '法语') language = 'fr'
+        else if (language === '德语') language = 'de'
+        else if (language === '日语') language = 'ja'
+        else language = 'zh'
         formData.append('file', file)
         formData.append('prompt', '')
         formData.append('temperature', this.settingInfo.TemperatureAudio)
-        formData.append('language', this.settingInfo.language)
+        formData.append('language', language)
         transcriptions(formData).then(res => {
           const data = res.data.text
           this.$nextTick(() => {

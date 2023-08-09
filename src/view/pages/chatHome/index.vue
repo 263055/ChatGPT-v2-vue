@@ -351,7 +351,7 @@
                 </el-tooltip>
                 <div>
                   <el-select v-model="SettingInfo.language" placeholder="请选择" style="margin-top: 10px;">
-                    <el-option v-for="item in languages" :key="item.value" :value="item.value">
+                    <el-option v-for="item in languages" :key="item.key" :value="item.value">
                     </el-option>
                   </el-select>
                 </div>
@@ -479,7 +479,7 @@ export default {
         TemperatureAudio: 0,
         n: 1,
         size: "256x256",
-        language: "zh",
+        language: "中文",
         prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
         chat: {
           // 后缀
@@ -555,15 +555,20 @@ export default {
       }],
       //语音定义的参数
       languages: [{
-        value: 'zh'
+        key: 'zh',
+        value: '中文'
       }, {
-        value: 'en'
+        key: 'en',
+        value: '英语'
       }, {
-        value: 'fr'
+        key: 'fr',
+        value: '法语'
       }, {
-        value: 'de'
+        key: 'de',
+        value: '德语'
       }, {
-        value: 'ja'
+        key: 'ja',
+        value: '日语'
       }],
       // 是否隐藏模型列表和功能设置选择列表
       showPersonList: true,

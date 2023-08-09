@@ -86,9 +86,9 @@
                     <div>{{ welcomeMsg }}</div>
                     <div>{{ welcomeMsg1 }}</div>
                     <div>{{ welcomeMsg2 }}</div>
-                    <div class="login-renew">最新一次更新：</div>
-                    <div>{{ reNewMsg1 }}</div>
-                    <div>{{ reNewMsg2 }}</div>
+                    <div class="login-renew" style="color: #d44141">最新一次更新：</div>
+                    <div style="color: #d44141">{{ reNewMsg1 }}</div>
+                    <div style="color: #d44141">{{ reNewMsg2 }}</div>
                     <div class="welcome-button">
                       <el-button type="primary" @click="layout">
                         退出登录

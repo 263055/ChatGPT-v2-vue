@@ -103,6 +103,46 @@
       </div>
     </div>
 
+    <!--底部通知栏-->
+    <template v-if="logInfo">
+      <div class="bottom-alert">
+        <div class="bottom-alert1">
+          <div class="bottom-alert2">
+            <div class="bottom-alert3">
+              <div class="bottom-alert-left">
+              <span>
+                <svg class="bi bi-megaphone-fill" fill="currentColor" height="16"
+                     viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-11zm-1 .724c-2.067.95-4.539 1.481-7
+                  1.656v6.237a25.222 25.222 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56V3.224zm-8 7.841V4.93
+                  4c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009a68.14 68.1
+                  4 0 0 1 .496.008 64 64 0 0 1 1.51.048zm1.39 1.081c.285.021.569.047.85.078l.253 1.69a1 1 0 0 1-
+                  .983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a65.81 65.81 0 0 1 1.692.064c.327.017.65.037.966.06z"/>
+                </svg>
+              </span>
+                <p>
+                  GPT-3.5/GPT-3.5-16k(ChatGPT)免费使用，欢迎注册
+                </p>
+              </div>
+              <div class="bottom-alert-right">
+                <button class="bottom-alert-right-button" @click="getCode">立即注册</button>
+              </div>
+              <div class="bottom-alert-button">
+              <span class="bottom-alert-right-close" @click="closeInfo">
+                <svg class="bottom-alert-right-closes bi bi-x-circle" fill="currentColor" height="16"
+                     viewBox="0 0 16 16"
+                     width="16" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
     <!--  底部  -->
     <el-footer style="height: 0;">
       <div class="el-login-footer">
@@ -154,6 +194,9 @@ export default {
     //     this.width = window.innerWidth;
     //   }
     // },
+    closeInfo() {
+      this.logInfo = false
+    },
     getCode() {
       getCodeImg().then(res => {
         this.codeUrl = "data:image/gif;base64," + res.data.img;
@@ -244,6 +287,7 @@ export default {
     return {
       // asideStatus: true,
       firstSize: true,
+      logInfo: true,
       width: 0,
       loginForm: {
         email: "",
@@ -382,7 +426,147 @@ export default {
   }
 }
 
+
+.bottom-alert {
+  padding-bottom: 0.5rem;
+  z-index: 20;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  position: fixed;
+
+  .bottom-alert1 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    .bottom-alert2 {
+      padding: 0.5rem;
+      --tw-bg-opacity: 1;
+      background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+      border-radius: 0.5rem;
+      --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
+      --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, #0000), var(--tw-shadow);
+
+      .bottom-alert3 {
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        display: flex;
+
+        .bottom-alert-left {
+          align-items: center;
+          flex: 1 1 0%;
+          width: 0px;
+          display: flex;
+
+          span {
+            padding: 0.5rem;
+            --tw-bg-opacity: 1;
+            background-color: rgb(55 48 163 / var(--tw-bg-opacity));
+            border-radius: 0.5rem;
+            display: flex;
+          }
+
+          p {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255 / var(--tw-text-opacity));
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-left: 0.75rem;
+          }
+        }
+
+        .bottom-alert-right {
+          .bottom-alert-right-button {
+            --tw-text-opacity: 1;
+            color: rgb(79 70 229 / var(--tw-text-opacity));
+            font-size: .875rem;
+            line-height: 1.25rem;
+            padding: 0.5rem;
+            --tw-bg-opacity: 1;
+            border-color: transparent;
+            border-radius: 0.375rem;
+          }
+        }
+
+        .bottom-alert-button {
+          flex-shrink: 0;
+          order: 2;
+
+          button {
+            --tw-bg-opacity: 1;
+            background-color: rgb(55 48 163 / var(--tw-bg-opacity));
+            border-radius: 0.5rem;
+            display: flex;
+          }
+
+          .bottom-alert-right-close {
+            background-color: transparent;
+            margin-left: 10px;
+
+            .bottom-alert-right-closes {
+              --tw-text-opacity: 1;
+              color: rgb(255 255 255 / var(--tw-text-opacity));
+              width: 1.5rem;
+              height: 1.5rem;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 640px) {
+  .bottom-alert {
+    padding-bottom: 1.25rem;
+
+    .bottom-alert1 {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+
+      .bottom-alert2 {
+        padding: 0.75rem;
+
+        .bottom-alert-right {
+          width: auto;
+          margin-top: 0;
+          order: 2;
+
+          a {
+            --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / .05);
+            --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, #0000), var(--tw-shadow);
+            --tw-text-opacity: 1;
+            color: rgb(79 70 229 / var(--tw-text-opacity));
+            font-weight: 500;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            padding: 0.5rem;
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            border-color: transparent;
+            border-width: 1px;
+            border-radius: 0.375rem;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+
+        .bottom-alert-button {
+          margin-left: 0.5rem;
+          order: 3;
+        }
+      }
+    }
+  }
   .main-box {
   }
   .login-page1 {
@@ -417,6 +601,12 @@ export default {
 }
 
 @media only screen and (min-width: 1024px) {
+  .bottom-alert {
+    .bottom-alert1 {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
   .login-page1 {
     overflow: hidden;
     padding: 2rem 2rem 14rem;

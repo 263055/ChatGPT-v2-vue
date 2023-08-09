@@ -34,3 +34,16 @@ export const createImageEdit = (formData) => {
         data: formData
     })
 }
+
+// 语音转文字
+export const transcriptions = (formData) => {
+    return request({
+        url: `/chatMsg/transcriptions`,
+        headers: {
+            isToken: true,
+            'Content-Type': 'multipart/form-data'
+        },
+        method: 'post',
+        data: formData
+    })
+}

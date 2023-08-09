@@ -170,7 +170,7 @@ import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
 import {AI_HEAD_IMG_URL, USER_HEAD_IMG_URL, USER_NAME} from '@/store/mutation-types'
 import {saveAs} from 'file-saver';
-import {getMessage, getImages, createImageEdit} from "@/api/chatMsg";
+import {getMessage, getImages, createImageEdit, transcriptions} from "@/api/chatMsg";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -656,23 +656,26 @@ export default {
       e.target.files = null;
     },
     // 开始录音
-    startRecording() {  //
-      this.$message({
-        type: 'info',
-        message: '暂不支持语音转文字哦o.O~~我会尽快加入这个操作的'
+    startRecording() {
+      if (this.settingInfo.translateEnglish === false) {
+        this.$message({
+          type: 'info',
+          message: '请先在右侧栏打开 "语音转文字" 按钮之后在使用哦(⊙o⊙)？'
+        });
+        return;
+      }
+      navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+        this.recorder = new MediaRecorder(stream);
+        this.recorder.addEventListener('dataavailable', event => {
+          this.audioChunks.push(event.data)
+        })
+        this.recording = true
+        this.recorder.start()
+        // 在这里使用录音器
+        this.$message.success(this.$t('message.start_recording'))
+      }).catch((error) => {
+        this.$message.error(this.$t('message.fail_audio'))
       });
-      // navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
-      //   this.recorder = new MediaRecorder(stream);
-      //   this.recorder.addEventListener('dataavailable', event => {
-      //     this.audioChunks.push(event.data)
-      //   })
-      //   this.recording = true
-      //   this.recorder.start()
-      //   // 在这里使用录音器
-      //   this.$message.success(this.$t('message.start_recording'))
-      // }).catch((error) => {
-      //   this.$message.error(this.$t('message.fail_audio'))
-      // });
     },
     // 停止录音
     async stopRecording() {
@@ -686,25 +689,15 @@ export default {
         });
         const formData = new FormData()
         formData.append('file', file)
-        formData.append('model', "whisper-1")
+        formData.append('prompt', '')
         formData.append('temperature', this.settingInfo.TemperatureAudio)
-        formData.append('response_format', "text")
-
-        if (this.settingInfo.translateEnglish) {
-          createTranslation(formData, this.settingInfo.KeyMsg).then(data => {
-            this.$nextTick(() => {
-              this.inputMsg = data;
-            });
-          })
-        } else {
-          formData.append('language', this.settingInfo.language)
-
-          createTranscription(formData, this.settingInfo.KeyMsg).then(data => {
-            this.$nextTick(() => {
-              this.inputMsg = data;
-            });
-          })
-        }
+        formData.append('language', this.settingInfo.language)
+        transcriptions(formData).then(res => {
+          const data = res.data.text
+          this.$nextTick(() => {
+            this.inputMsg = data;
+          });
+        })
       }
       this.$message.success(this.$t('message.end_recording'))
     },

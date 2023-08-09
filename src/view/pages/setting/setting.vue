@@ -10,7 +10,7 @@
           <el-table-column label="对话时间" prop="time" width="220"/>
           <el-table-column label="问题token" prop="promptToken"/>
           <el-table-column label="回答token" prop="completeToken"/>
-          <el-table-column label="总共token" prop="totalToken"/>
+          <el-table-column label="总共消耗token" prop="totalToken"/>
           <el-table-column label="剩余token" prop="consume"/>
           <el-table-column label="是否免费" prop="free"/>
           <el-table-column label="问答类型" prop="chatType"/>
@@ -119,7 +119,6 @@ export default {
             ...item,
             time: JCMFormatTimestamp(item.time),
             free: item.free === true ? '是' : '否',
-            chatType: item.chatType === 0 ? '文字' : '照片',
           }));
           this.chatMsgTotal = res.data.total
           resolve()

@@ -15,7 +15,7 @@
               </h1>
               <p class="page1-left-2">4gai 可以让你便捷地访问ChatGPT等AI模型。</p>
               <p class="page1-left-2">使用Tokenizer分词器精准计费，目前完全免费。</p>
-              <p class="page1-left-2">正在努力接入更多的新功能。</p>
+              <p class="page1-left-2">已经接入了chatgpt模型，whisper-1语音模型以及generations产图模型，目前正在努力接入更多的新功能。</p>
             </div>
           </div>
           <div class="page1-right">
@@ -268,8 +268,8 @@ export default {
       captchaEnabled: true,
       codeUrl: '',
       haveLogin: false,
-      reNewMsg1: '1.加入了聊天室页面的上下滚动，加入了加载聊天室的加载动画',
-      reNewMsg2: '2.加入了重置密码，加入了相关提示词',
+      reNewMsg1: '1.加入了语音模型和照片模型',
+      reNewMsg2: '2.完善了登录页面以及聊天页面的样式',
       welcomeMsg1: '2.你的支持，就是我做下去的动力！',
       welcomeMsg2: '3.目前暂不支持图片和语音的调用，我后续会一一加入，敬请期待',
       welcomeMsg: '1.如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +

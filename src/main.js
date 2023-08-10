@@ -9,8 +9,11 @@ import i18n from '@/config/i18n'
 import store from './store'
 import './permission' // permission control 加入了路由控制
 import './assets/icons' // icon
+import introJs from 'intro.js'
+import 'intro.js/introjs.css'
 
 Vue.use(VueRouter)
+Vue.use(introJs)
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 

@@ -11,6 +11,8 @@ import './permission' // permission control 加入了路由控制
 import './assets/icons' // icon
 import introJs from 'intro.js'
 import 'intro.js/introjs.css'
+import './assets/css/intro.css'
+// import 'intro.js/themes/introjs-flattener.css'
 
 Vue.use(VueRouter)
 Vue.use(introJs)

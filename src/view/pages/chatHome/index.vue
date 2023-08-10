@@ -7,7 +7,7 @@
       </div>
       <div class="online-person" style="margin-top: 5%;">
         <!--上方的按钮-->
-        <el-row :gutter="18">
+        <el-row :gutter="18" data-intro="第二步:选择ai模型和ai角色" data-step="2" data-title="使用步骤">
           <el-col :span="6">
             <div class="setting" style="text-align: center;">
               <span class="" @click="sessionClick" :class="{ whiteText: cutSetting === 1 }">
@@ -44,7 +44,7 @@
           <input class="inputs" v-model="sessionSearch" style=" margin-top: 10px;"
                  :placeholder="$t('placeholder.session_name')"/>
           <div class="s-wrapper">
-            <div class="session boxinput" @click="newSession">
+            <div class="session boxinput" data-intro="第一步:创建聊天对话" data-step="1" data-title="使用步骤" @click="newSession">
               <svg class="icon" height="25" p-id="3128" version="1.1"
                    viewBox="0 0 1024 1024" width="25" x="1679215361568" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -151,7 +151,7 @@
 
       <div class="online-person">
         <!--展示右侧栏的上方按钮-->
-        <el-row :gutter="20">
+        <el-row :gutter="20" data-intro="第五步:对话参数设置,以及语音,图片模型,更多新功能,等你尝试!!!" data-step="5" data-title="使用步骤">
           <el-col v-for="(setting, index) in getSettings" :key="index" :span="6">
             <span :class="{ active: SettingStatus === index }" class="setting"
                   @click="SettingStatus = index">{{ setting.name }}</span>
@@ -411,6 +411,7 @@ import RoleCard from "@/components/RoleCard.vue";
 import {createChatRoom, getChatRoom} from "@/api/session";
 import {generateUUID} from "@/util/util";
 import Cookies from "js-cookie";
+import introJs from 'intro.js'
 
 import {
   getModels,
@@ -615,7 +616,7 @@ export default {
       headImg: AI_HEAD_IMG_URL,
       showHeadImg: true
     }
-    // TODO 修改keyMsg
+    this.guide()
     this.getRolesList();
     this.getModelList();
     this.getSessionList();
@@ -663,6 +664,21 @@ export default {
     }
   },
   methods: {
+    // 指导栏
+    guide() {
+      introJs().setOptions({
+        nextLabel: '下一个',  // 下一个按钮文字
+        prevLabel: '上一个',  // 上一个按钮文字
+        doneLabel: '立即体验',// 完成按钮文字
+        hidePrev: true,       // 在第一步中是否隐藏上一个按钮
+        disableInteraction: true,   // 是否禁用与突出显示的框内的元素的交互，就是禁止点击
+        keyboardNavigation: true /* 是否允许键盘来操作 */,
+        showButtons: true /* 是否按键来操作 */,
+        showProgress: false /* 是否显示进度条 */,
+        dontShowAgain: true /* 是否再次显示 */,
+        dontShowAgainLabel: '不再显示', /* 是否再次的具体文字 */
+      }).start()
+    },
     // 发送本地图片
     sendImg(e) {
       this.acqStatus = false

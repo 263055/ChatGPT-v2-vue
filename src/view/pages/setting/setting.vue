@@ -1,7 +1,7 @@
 <template>
   <div class="contain-log">
     <el-card>
-      <div class="order-chatMsg-detail" data-intro="导航菜单" data-step="1">使用记录和充值记录</div>
+      <div class="order-chatMsg-detail">使用记录和充值记录</div>
       <!--<svg ref="markmap" style="width: 800px; height: 800px"></svg>-->
       <div class="my-table">
         <!--对话记录-->
@@ -58,7 +58,6 @@
 <script>
 import {deleteChatMsgLog, getChatMsgDetail, getOrderDetail} from "@/api/log";
 import {JCMFormatTimestamp} from "@/util/util";
-import introJs from 'intro.js'
 // import {Markmap} from 'markmap-view';
 // import {Transformer} from 'markmap-lib';
 
@@ -83,20 +82,6 @@ export default {
     };
   },
   methods: {
-    guide() {
-      introJs().setOptions({
-        nextLabel: '下一个',  // 下一个按钮文字
-        prevLabel: '上一个',  // 上一个按钮文字
-        skipLabel: '跳过',    // 跳过按钮文字
-        doneLabel: '立即体验',// 完成按钮文字
-        hidePrev: true,       // 在第一步中是否隐藏上一个按钮
-        hideNext: true,       // 在最后一步中是否隐藏下一个按钮
-        exitOnOverlayClick: false,  // 点击叠加层时是否退出介绍
-        showStepNumbers: false,     // 是否显示红色圆圈的步骤编号
-        disableInteraction: true,   // 是否禁用与突出显示的框内的元素的交互，就是禁止点击
-        showBullets: false          // 是否显示面板指示点
-      }).start()
-    },
     // createMarkMap(content) {
     //   const {transformer} = this
     //   const {root, features} = transformer.transform(content);
@@ -153,7 +138,6 @@ export default {
     },
   },
   mounted() {
-    this.guide()
 //     this.transformer = new Transformer();
 //     this.markmap = Markmap.create(this.$refs.markmap, null, {
 //       autoFit: false,

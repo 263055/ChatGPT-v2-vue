@@ -142,10 +142,11 @@
         <textarea id="textareaMsg" :placeholder="$t('placeholder.question')" class="inputs" v-autoheight
                   style="z-index: 9999999999;min-height: 50px;max-height:400px;max-width: 100%;min-width: 45%;"
                   maxlength="2048" rows="3" autocorrect="off" aria-autocomplete="both" spellcheck="false"
-                  autocapitalize="off" autocomplete="off" v-model="inputMsg" @keyup.enter="handleKeyDown"></textarea>
+                  v-model="inputMsg" autocapitalize="off" autocomplete="off" data-intro="第三步:输入你的聊天内容"
+                  data-step="3" data-title="使用步骤" @keyup.enter="handleKeyDown"></textarea>
         <!--发送-->
         <div>
-          <div class="send boxinput" @click="sendText">
+          <div class="send boxinput" data-intro="第四步:点击即可发送消息" data-step="4" data-title="使用步骤" @click="sendText">
             <img src="@/assets/img/emoji/rocket.png" alt=""/>
           </div>
         </div>

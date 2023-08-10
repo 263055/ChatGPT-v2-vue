@@ -33,7 +33,7 @@
           <input class="inputs" v-model="modelSearch" style=" margin-top: 10px;"
                  :placeholder="$t('placeholder.model_name')"/>
           <div class="s-wrapper">
-            <div class="personList" v-for="personInfo in personList" :key="personInfo.id"
+            <div v-for="personInfo in personList" :key="personInfo.id"
                  @click="clickPerson(personInfo)">
               <PersonCard :personInfo="personInfo" :pcCurrent="pcCurrent"></PersonCard>
             </div>
@@ -1220,7 +1220,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 .chatHome {
   display: flex;
-  height: 90vh;
+  height: 91vh;
 
   .chatLeft {
     width: 20%;

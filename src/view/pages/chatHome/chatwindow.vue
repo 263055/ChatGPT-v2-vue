@@ -840,7 +840,7 @@ textarea::-webkit-scrollbar-thumb {
 
   .botoom {
     width: 100%;
-    height: 84vh;
+    height: 82vh;
     background-size: 100% 100%;
     // background-color: rgb(50, 54, 68);
     border-radius: 20px;

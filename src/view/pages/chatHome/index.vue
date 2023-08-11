@@ -30,7 +30,7 @@
         </el-row>
         <!--ai模型-->
         <div v-show="cutSetting === 0">
-          <input class="inputs" v-model="modelSearch" style=" margin-top: 10px;"
+          <input v-model="modelSearch" class="inputs" style=" margin-top: 10px;"
                  :placeholder="$t('placeholder.model_name')"/>
           <div class="s-wrapper">
             <div v-for="personInfo in personList" :key="personInfo.id"
@@ -41,7 +41,7 @@
         </div>
         <!--聊天室-->
         <div v-show="cutSetting === 1">
-          <input class="inputs" v-model="sessionSearch" style=" margin-top: 10px;"
+          <input v-model="sessionSearch" class="inputs" style=" margin-top: 10px;"
                  :placeholder="$t('placeholder.session_name')"/>
           <div class="s-wrapper">
             <div class="session boxinput" data-intro="第一步:创建聊天对话" data-step="1" data-title="使用步骤" @click="newSession">
@@ -158,7 +158,7 @@
           </el-col>
         </el-row>
 
-        <div class="s-wrapper" style="height: 75vh;">
+        <div class="s-wrapper" style="height: 70vh;">
           <!--对话设置-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 0">
@@ -1256,7 +1256,7 @@ input[type=number]::-webkit-outer-spin-button {
 
       .s-wrapper {
         padding-left: 10px;
-        height: 70vh;
+        height: 67vh;
         margin-top: 10px;
         overflow: hidden;
         overflow-y: scroll;

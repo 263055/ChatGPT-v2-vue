@@ -70,7 +70,7 @@
         </div>
         <!--角色-->
         <div v-show="cutSetting === 2">
-          <div class="s-wrapper" style="height: 80vh;">
+          <div class="s-wrapper" style="height: 78vh;">
             <div class="block">
               <input v-model="roleSearch" :placeholder="$t('placeholder.role_name')" class="weitiao"/>
             </div>

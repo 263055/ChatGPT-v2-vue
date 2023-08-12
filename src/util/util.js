@@ -1,5 +1,15 @@
 import i18n from '@/config/i18n'
 
+export function compareLang(a, b) {
+  if (a.lang.includes("zh")) {
+    return -1; // 将 zh-CN 的对象排在前面
+  } else if (b.lang.includes("zh")) {
+    return 1; // 将 zh-CN 的对象排在前面
+  } else {
+    return b.lang.localeCompare(a.lang); // 使用默认的字符串排序
+  }
+}
+
 //防抖
 export function debounce(fn) {
   let t = null //只会执行一次

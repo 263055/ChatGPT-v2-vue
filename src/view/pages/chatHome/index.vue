@@ -206,49 +206,43 @@
                   <el-tooltip :content="$t('model.n')" class="item" effect="dark" placement="top">
                     <span class="demonstration">{{ $t('model.n') }}</span>
                   </el-tooltip>
-                  <el-slider v-model="SettingInfo.chat.n" :max="10"
-                             :min="0" :step="1" class="astrict"></el-slider>
+                  <el-slider v-model="SettingInfo.chat.n" :max="10" :min="0" :step="1" class="astrict"/>
                 </div>
                 <!--单词重复度-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.frequency_penalty')" placement="top">
                     <span class="demonstration">{{ $t('model.frequency_penalty_title') }}</span>
                   </el-tooltip>
-                  <el-slider class="astrict" v-model="SettingInfo.chat.FrequencyPenalty" :step="0.1" :min="-2"
-                             :max="2"></el-slider>
+                  <el-slider v-model="SettingInfo.chat.FrequencyPenalty" :max="2" :min="-2" :step="0.1"
+                             class="astrict"/>
                 </div>
                 <!--话题重复度-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.presence_penalty')" placement="top">
                     <span class="demonstration">{{ $t('model.presence_penalty_title') }}</span>
                   </el-tooltip>
-                  <el-slider class="astrict" v-model="SettingInfo.chat.PresencePenalty" :step="0.1" :min="-2"
-                             :max="2"></el-slider>
+                  <el-slider v-model="SettingInfo.chat.PresencePenalty" :max="2" :min="-2" :step="0.1" class="astrict"/>
                 </div>
                 <!--最大token-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.max_tokens')" placement="top">
                     <span class="demonstration" style="">{{ $t('model.max_tokens_title') }}</span>
                   </el-tooltip>
-
-                  <el-slider class="astrict" v-model="SettingInfo.chat.MaxTokens" :step="1" :min="0"
-                             :max="2048"></el-slider>
+                  <el-slider v-model="SettingInfo.chat.MaxTokens" :max="2048" :min="0" :step="1" class="astrict"/>
                 </div>
                 <!--随机性-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.temperature')" placement="top">
                     <span class="demonstration">{{ $t('model.temperature_title') }}</span>
                   </el-tooltip>
-                  <el-slider class="astrict" v-model="SettingInfo.chat.Temperature" :step="0.1" :min="0"
-                             :max="2"></el-slider>
+                  <el-slider v-model="SettingInfo.chat.Temperature" :max="2" :min="0" :step="0.1" class="astrict"/>
                 </div>
                 <!--流输出-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.stream')" placement="top">
                     <span class="demonstration">{{ $t('model.stream_title') }}</span>
                   </el-tooltip>
-                  <el-switch v-model="SettingInfo.chat.stream" :width="defaulWidth"
-                             style="margin-left: 15%;"></el-switch>
+                  <el-switch v-model="SettingInfo.chat.stream" :width="defaulWidth" style="margin-left: 15%;"/>
                 </div>
                 <!--是否联网-->
                 <!--<div class="block">-->
@@ -337,37 +331,108 @@
           <!--音频设置-->
           <el-collapse-transition>
             <div v-show="SettingStatus === 2">
+              <div class="button-group">
+                <el-button class="left-btn" round size="small" type="primary" @click="saveSettingInfo">
+                  {{ $t('model.saveSetting') }}
+                </el-button>
+                <el-button class="right-btn" round size="small" type="primary" @click="deleteSettingInfo">
+                  {{ $t('model.resetSetting') }}
+                </el-button>
+              </div>
+              <!--gpt回答后自动朗读-->
+              <div class="block">
+                <el-tooltip :content="$t('audio.autoRead')" class="item" effect="dark" placement="top">
+                  <span class="demonstration">{{ $t('audio.autoRead') }}</span>
+                </el-tooltip>
+                <el-switch v-model="SettingInfo.autoRead" :width="defaulWidth" style="margin-left: 15%;"/>
+              </div>
+              <!--语音转文字-->
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="$t('audio.to_text_title')" placement="top">
                   <span class="demonstration">{{ $t('audio.to_text') }}</span>
                 </el-tooltip>
-                <el-switch v-model="SettingInfo.translateEnglish" :width="defaulWidth"
-                           style="margin-left: 15%;"></el-switch>
+                <el-switch v-model="SettingInfo.translateEnglish" :width="defaulWidth" style="margin-left: 15%;"/>
               </div>
-
+              <!--朗读设置-->
               <div class="block">
-                <el-tooltip class="item" effect="dark" :content="$t('audio.language_title')" placement="top">
-                  <span class="demonstration">{{ $t('audio.language') }}</span>
+                <el-tooltip :content="$t('audio.read')" class="item" effect="dark" placement="top">
+                  <span class="demonstration">{{ $t('audio.read') }}</span>
                 </el-tooltip>
-                <div>
-                  <el-select v-model="SettingInfo.language" placeholder="请选择" style="margin-top: 10px;">
-                    <el-option v-for="item in languages" :key="item.key" :value="item.value">
-                    </el-option>
-                  </el-select>
+                <el-switch v-model="SettingInfo.talk.readSettingButton" :width="defaulWidth" style="margin-left: 15%;"/>
+              </div>
+              <!--自定义设置-->
+              <template v-if="SettingInfo.translateEnglish">
+                <div class="block">
+                  <h2 style="color: #ad4848;">{{ $t('audio.setting') }}</h2>
                 </div>
-              </div>
-
-
-              <div class="block">
-                <el-tooltip class="item" effect="dark" :content="$t('audio.temperature_title')" placement="top">
-                  <span class="demonstration">{{ $t('audio.temperature') }}</span>
-                </el-tooltip>
-
-                <el-slider class="astrict" v-model="SettingInfo.TemperatureAudio" :step="0.1" :min="0"
-                           :max="1"></el-slider>
-              </div>
-
-
+                <!--语音转文字的语言配置-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.language_title')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('audio.language') }}</span>
+                  </el-tooltip>
+                  <div>
+                    <el-select v-model="SettingInfo.language" placeholder="请选择" style="margin-top: 10px;">
+                      <el-option v-for="item in languages" :key="item.key" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </div>
+                </div>
+                <!--语音转文字的随机读配置-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.temperature_title')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('audio.temperature') }}</span>
+                  </el-tooltip>
+                  <el-slider v-model="SettingInfo.TemperatureAudio" :max="1" :min="0" :step="0.1" class="astrict"/>
+                </div>
+              </template>
+              <template v-else-if="SettingInfo.talk.readSettingButton">
+                <div class="block">
+                  <h2 style="color: #ad4848;">{{ $t('audio.setting') }}</h2>
+                </div>
+                <!--音量-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.volume')" class="item" effect="dark" placement="top">
+                    <span class="demonstration" style="">{{ $t('audio.volume') }}</span>
+                  </el-tooltip>
+                  <el-slider v-model="SettingInfo.talk.volume" :max="1" :min="0.1" :step="0.1" class="astrict"/>
+                </div>
+                <!--语速-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.rate')" class="item" effect="dark" placement="top">
+                    <span class="demonstration" style="">{{ $t('audio.rate') }}</span>
+                  </el-tooltip>
+                  <el-slider v-model="SettingInfo.talk.rate" :max="3" :min="0.5" :step="0.1" class="astrict"/>
+                </div>
+                <!--语调频率-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.pitch')" class="item" effect="dark" placement="top">
+                    <span class="demonstration" style="">{{ $t('audio.pitch') }}</span>
+                  </el-tooltip>
+                  <el-slider v-model="SettingInfo.talk.pitch" :max="3" :min="0" :step="0.1" class="astrict"/>
+                </div>
+                <!--语言-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.lang')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('audio.lang') }}</span>
+                  </el-tooltip>
+                  <div>
+                    <el-select v-model="SettingInfo.talk.langShow" placeholder="请选择" style="margin-top: 10px;">
+                      <el-option v-for="item in SettingInfo.talk.langAll" :key="item" :value="item"/>
+                    </el-select>
+                  </div>
+                </div>
+                <!--语种-->
+                <div class="block">
+                  <el-tooltip :content="$t('audio.type')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('audio.type') }}</span>
+                  </el-tooltip>
+                  <div>
+                    <el-select v-model="SettingInfo.talk.typeShow" placeholder="请选择" style="margin-top: 10px;">
+                      <el-option v-for="item in SettingInfo.talk.type" :key="item.name" :value="item.name"/>
+                    </el-select>
+                  </div>
+                </div>
+              </template>
             </div>
           </el-collapse-transition>
           <!--prompt-->
@@ -473,6 +538,23 @@ export default {
         cutSetting: 1,
         KeyMsg: "",
         readefile: false,
+        autoRead: false,
+        talk: {
+          speech: null, // 语音变量
+          support: true, // 浏览器是否支持
+          voiceList: [], // 浏览器支持的语音列表
+          isSpeech: false, // 浏览器支持的语音列表
+          readSettingButton: false,
+          autoRead: false, // 回答后自动朗读
+          volume: 1, // 朗读音量
+          rate: 1, // 朗读速度
+          pitch: 1, // 朗读语调频率
+          langAll: [], // 语言种类
+          langShow: "zh-CN", // 语言具体种类
+          type: [], // 语言对应的语种类型,比如全部都是中文的语种
+          typeShow: '', // 语种的具体展示
+          typeAll: [], // 语种所有类型
+        },
         inputStatus: true,
         translateEnglish: false,
         openProductionPicture: false,
@@ -616,11 +698,12 @@ export default {
       headImg: AI_HEAD_IMG_URL,
       showHeadImg: true
     }
-    this.guide()
+    if (window.innerWidth >= 1150) {
+      this.guide()
+    }
     this.getRolesList();
     this.getModelList();
     this.getSessionList();
-    this.$watch('fileSearch', this.watchFileSearch);
   },
   filters: {},
   watch: {
@@ -652,12 +735,20 @@ export default {
       }
     },
     SettingInfo: {
-      handler: function (newVal, oldVal) {
+      handler: function (newVal) {
         if (newVal.openChangePicture) {
           this.SettingInfo.openProductionPicture = false
         }
         if (newVal.openProductionPicture) {
           this.SettingInfo.openChangePicture = false
+        }
+        if (newVal.read && newVal.translateEnglish) {
+          this.SettingInfo.translateEnglish = false
+          this.SettingInfo.read = false
+        } else if (newVal.read) {
+          this.SettingInfo.translateEnglish = false
+        } else if (newVal.translateEnglish) {
+          this.SettingInfo.read = false
         }
       },
       deep: true

@@ -77,20 +77,29 @@
             <div class="chat-text">
               <div v-if="item.chatType === 0" class="chat-text">
                 <el-row :gutter="20">
-                  <el-col :span="2">
-                    <svg class="icon" height="22" p-id="6241" viewBox="0 0 1024 1024"
+                  <el-col :span="10">
+                    <svg class="icon" height="22" p-id="6241" viewBox="0 0 24 24"
                          width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
                          @click="$copy(item.content, '已复制')">
-                      <path
-                          d="M661.333333 234.666667A64 64 0 0 1 725.333333 298.666667v597.333333a64 64 0 0 1-64 64h-469.333333A64
-                        64 0 0 1 128 896V298.666667a64 64 0 0 1 64-64z m-21.333333 85.333333H213.333333v554.666667h426.666667v-554.666667z m191.829333-256a64
-                        64 0 0 1 63.744 57.856l0.256 6.144v575.701333a42.666667 42.666667 0 0 1-85.034666
-                        4.992l-0.298667-4.992V149.333333H384a42.666667 42.666667 0 0 1-42.368-37.674666L341.333333
-                        106.666667a42.666667 42.666667 0 0 1 37.674667-42.368L384 64h447.829333z"
-                          fill="#909399" p-id="6242"></path>
+                      <path d="M16.02 20.96H3.78c-.41 0-.75-.34-.75-.75V7.74c0-.41.34-.75.75-.75h7.87c.21 0
+                    .39.08.53.22l4.37 4.37c.14.14.22.32.22.53v8.11c0 .4-.34.74-.75.74ZM4.53 19.47h10.75v-6.61h-3.62c-.41
+                     0-.75-.34-.75-.75V8.48H4.53v10.99Z"/>
+                      <path d="m20.74 7.63-4.37-4.37c-.14-.14-.36-.2-.53-.22H8.01c-.41 0-.75.34-.75.75V5.5h1.49v-.97h6.34v3.62c0
+                    .41.34.75.75.75h3.62v8.19h-1.2v1.49h1.95c.41 0 .75-.34.75-.75V8.16c0-.21-.08-.4-.22-.53Z"/>
                     </svg>
                   </el-col>
-                  <el-col :span="21">
+                  <el-col :span="10">
+                    <svg class="icon" height="22" p-id="6241" viewBox="0 0 16 16"
+                         width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
+                         @click="$copy(item.content, '已复制')">
+                      <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476
+                    7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                      <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483
+                    5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+                      <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489
+                    3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825
+                     10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                    </svg>
                   </el-col>
                 </el-row>
                 <markdown-it-vue :content="item.content.trim()"/>
@@ -111,6 +120,33 @@
           <div class="chat-me" v-else>
             <!--文字部分-->
             <div v-if="item.chatType === 0" class="chat-text">
+              <el-row :gutter="20">
+                <!--复制文本-->
+                <el-col :span="10">
+                  <svg class="icon" height="22" p-id="6241" viewBox="0 0 24 24"
+                       width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
+                       @click="$copy(item.content, '已复制')">
+                    <path d="M16.02 20.96H3.78c-.41 0-.75-.34-.75-.75V7.74c0-.41.34-.75.75-.75h7.87c.21 0
+                    .39.08.53.22l4.37 4.37c.14.14.22.32.22.53v8.11c0 .4-.34.74-.75.74ZM4.53 19.47h10.75v-6.61h-3.62c-.41
+                     0-.75-.34-.75-.75V8.48H4.53v10.99Z"/>
+                    <path d="m20.74 7.63-4.37-4.37c-.14-.14-.36-.2-.53-.22H8.01c-.41 0-.75.34-.75.75V5.5h1.49v-.97h6.34v3.62c0
+                    .41.34.75.75.75h3.62v8.19h-1.2v1.49h1.95c.41 0 .75-.34.75-.75V8.16c0-.21-.08-.4-.22-.53Z"/>
+                  </svg>
+                </el-col>
+                <!--朗读文本-->
+                <el-col :span="10">
+                  <svg class="icon" height="22" p-id="6241" viewBox="0 0 16 16"
+                       width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg" @click=speechRead(item.content)>
+                    <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476
+                    7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
+                    <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483
+                    5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"/>
+                    <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489
+                    3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825
+                     10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                  </svg>
+                </el-col>
+              </el-row>
               <markdown-it-vue :content="item.content.trim()" style="font-size:16px"/>
             </div>
             <!--展示名字和时间-->
@@ -157,7 +193,7 @@
 </template>
 
 <script>
-import {animation, animationToUp, getNowTime, JCMFormatDate} from "@/util/util";
+import {animation, animationToUp, getNowTime, JCMFormatDate, compareLang} from "@/util/util";
 import {getToken} from '@/util/auth'
 import {
   createImageVariations,
@@ -174,6 +210,7 @@ import {saveAs} from 'file-saver';
 import {getMessage, getImages, createImageEdit, transcriptions} from "@/api/chatMsg";
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import Speech from "speak-tts";
 
 export default {
   //用于自适应文本框的高度
@@ -268,6 +305,7 @@ export default {
   mounted() {
     window.addEventListener('resize', this.setChatContentWidth);
     this.setChatContentWidth();
+    this.speechInit();
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.setChatContentWidth);
@@ -709,6 +747,82 @@ export default {
       }
       this.$message.success(this.$t('message.end_recording'))
     },
+    // 初始化语音模块
+    speechInit() {
+      this.settingInfo.talk.speech = new Speech();
+      this.settingInfo.talk.speech.init({
+        volume: 1, // 设置TTS所生成语音的音量大小。可以是0到1之间的浮点数，其中0表示完全静默，1表示最大可听到的音量
+        rate: 1, // 置TTS所生成语速。可以是小数或整数值，默认为1。较小值会使合成速度变慢，较大值会使合成速度加快
+        pitch: 1.5, // 设置TTS生成语调(频率)。它类似于录制时说话人"抬高"或"降低"他们说话时嗓子发出
+        lang: 'zh-CN', // 设置TTS的语言。它表示要说话文本或内容所使用的语言
+        splitSentences: true, // 拆分句子
+        listeners: {
+          onvoiceschanged: () => {
+          }
+        }
+      }).then((data) => {
+        this._addVoicesList(data.voices);
+      }).catch(() => {
+        this.$message.error('语音播报出现错误....请稍后再试,或更换浏览器再试')
+      });
+    },
+    // 增加浏览器支持的语音列表
+    _addVoicesList(voices) {
+      voices.sort(compareLang);
+      // 将所有的数据都赋值给 typeAll
+      this.settingInfo.talk.typeAll = voices
+      // 处理数组
+      this.settingInfo.talk.type = voices.filter(function (element) {
+        return element.lang.includes('zh-CN');
+      })
+      console.log(this.settingInfo.talk.type)
+      // 处理语言
+      const langSet = new Set();
+      voices.forEach(function (element) {
+        if (element.lang.length <= 8) {
+          langSet.add(element.lang);
+        }
+      });
+      // 将 Set 转换回数组
+      this.settingInfo.talk.langAll = Array.from(langSet);
+      console.log(this.settingInfo.talk.langAll)
+    },
+    speechRead(test) {
+      // const language = languages.value;
+      // const voice = languages.options[languages.selectedIndex].dataset.name;
+      // if (language) speech.setLanguage(languages.value);
+      // if (voice) speech.setVoice(voice);
+      this.settingInfo.talk.speech.speak({
+        text: test,
+        queue: false,
+        listeners: {
+          onstart: () => {
+            console.log("Start utterance");
+          },
+          onend: () => {
+            console.log("End utterance");
+          },
+          onresume: () => {
+            console.log("Resume utterance");
+          },
+          onboundary: event => {
+            console.log(
+                event.name +
+                " boundary reached after " +
+                event.elapsedTime +
+                " milliseconds."
+            );
+          }
+        }
+      }).then(data => {
+        console.log("Success !", data);
+      }).catch(e => {
+        console.error("An error occurred :", e);
+      });
+    },
+    speechStop() {
+      this.settingInfo.talk.speech.pause();
+    }
   },
 };
 </script>

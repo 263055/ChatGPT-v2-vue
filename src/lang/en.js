@@ -111,6 +111,8 @@ export default {
     audio: {
         title: "audio",
         to_text_title: "Speech to Text",
+        autoRead: "auto read",
+        setting: "Please select your custom settings",
         to_text: "Speech to Text",
         language_title: "Translate speech or audio files from one or more source languages to a target language",
         language: "Language",

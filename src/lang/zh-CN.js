@@ -111,6 +111,8 @@ export default {
     audio: {
         title: "音频",
         to_text_title: "语音转文字",
+        autoRead: "回答后自动朗读",
+        setting: "请选择你的自定义设置",
         to_text: "语音转文字",
         language_title: "将一个或多个来源语言的语音或音频文件翻译成目标语言",
         language: "目标语言",

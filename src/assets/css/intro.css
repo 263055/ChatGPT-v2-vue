@@ -39,6 +39,7 @@ tr.introjs-showElement > th {
     -ms-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
+    box-shadow: rgba(180, 41, 41, 0.8) 0 0 1px 2px, rgba(33, 33, 33, 0.5) 0 0 0 5000px !important;
 }
 
 .introjs-helperNumberLayer {

@@ -344,7 +344,7 @@
                 <el-tooltip :content="$t('audio.autoRead')" class="item" effect="dark" placement="top">
                   <span class="demonstration">{{ $t('audio.autoRead') }}</span>
                 </el-tooltip>
-                <el-switch v-model="SettingInfo.autoRead" :width="defaulWidth" style="margin-left: 15%;"/>
+                <el-switch v-model="SettingInfo.talk.autoRead" :width="defaulWidth" style="margin-left: 15%;"/>
               </div>
               <!--语音转文字-->
               <div class="block">
@@ -538,14 +538,13 @@ export default {
         cutSetting: 1,
         KeyMsg: "",
         readefile: false,
-        autoRead: false,
         talk: {
           speech: null, // 语音变量
           support: true, // 浏览器是否支持
-          voiceList: [], // 浏览器支持的语音列表
           isSpeech: false, // 浏览器支持的语音列表
           readSettingButton: false,
-          autoRead: false, // 回答后自动朗读
+          autoRead: localStorage.getItem("autoRead") == null ? 1 :
+              Boolean(localStorage.getItem("autoRead")), // 回答后自动朗读
           volume: localStorage.getItem("volume") == null ? 1 :
               parseFloat(localStorage.getItem("volume")), // 朗读音量
           rate: localStorage.getItem("rate") == null ? 1 :
@@ -563,10 +562,11 @@ export default {
         translateEnglish: false,
         openProductionPicture: false,
         openChangePicture: false,
-        TemperatureAudio: 0,
+        TemperatureAudio: localStorage.getItem("TemperatureAudio") == null ? 0.5 :
+            parseFloat(localStorage.getItem("TemperatureAudio")),
         n: 1,
         size: "256x256",
-        language: "中文",
+        language: localStorage.getItem("language") === null ? "中文" : localStorage.getItem("language"),
         prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
         chat: {
           // 后缀
@@ -746,13 +746,15 @@ export default {
         if (newVal.openProductionPicture) {
           this.SettingInfo.openChangePicture = false
         }
-        if (newVal.read && newVal.translateEnglish) {
+        if (newVal.translateEnglish && newVal.talk.readSettingButton) {
+          this.SettingInfo.talk.readSettingButton = false
           this.SettingInfo.translateEnglish = false
-          this.SettingInfo.read = false
-        } else if (newVal.read) {
+        }
+        if (newVal.translateEnglish) {
+          this.SettingInfo.talk.readSettingButton = false
+        }
+        if (newVal.talk.readSettingButton) {
           this.SettingInfo.translateEnglish = false
-        } else if (newVal.translateEnglish) {
-          this.SettingInfo.read = false
         }
         if (newVal.talk.langShow !== newVal.talk.langOldShow) {
           this.SettingInfo.talk.langOldShow = this.SettingInfo.talk.langShow
@@ -843,8 +845,11 @@ export default {
     },
     saveSpeechInfo() {
       localStorage.setItem("volume", this.SettingInfo.talk.volume)
+      localStorage.setItem("autoRead", this.SettingInfo.talk.autoRead)
       localStorage.setItem("rate", this.SettingInfo.talk.rate)
       localStorage.setItem("pitch", this.SettingInfo.talk.pitch)
+      localStorage.setItem("language", this.SettingInfo.language)
+      localStorage.setItem("TemperatureAudio", this.SettingInfo.TemperatureAudio)
       localStorage.setItem("langShow", this.SettingInfo.talk.langShow)
       localStorage.setItem("typeShow", this.SettingInfo.talk.typeShow)
       this.$refs.chatWindow.speechUpdate()
@@ -856,13 +861,19 @@ export default {
     },
     deleteSpeechInfo() {
       localStorage.removeItem("volume")
+      localStorage.removeItem("autoRead")
       localStorage.removeItem("rate")
       localStorage.removeItem("pitch")
       localStorage.removeItem("langShow")
       localStorage.removeItem("typeShow")
+      localStorage.removeItem("language")
+      localStorage.removeItem("TemperatureAudio")
       this.SettingInfo.talk.volume = 1
+      this.SettingInfo.talk.autoRead = false
       this.SettingInfo.talk.rate = 1
       this.SettingInfo.talk.pitch = 1
+      this.SettingInfo.language = "中文"
+      this.SettingInfo.TemperatureAudio = 0.5
       this.SettingInfo.talk.langShow = "zh-CN"
       this.$refs.chatWindow.speechUpdate()
       this.$notify({

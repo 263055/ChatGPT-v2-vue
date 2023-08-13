@@ -77,6 +77,7 @@
             <div class="chat-text">
               <div v-if="item.chatType === 0" class="chat-text">
                 <el-row :gutter="20">
+                  <!--复制文本-->
                   <el-col :span="10">
                     <svg class="icon" height="22" p-id="6241" viewBox="0 0 24 24"
                          width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
@@ -88,10 +89,11 @@
                     .41.34.75.75.75h3.62v8.19h-1.2v1.49h1.95c.41 0 .75-.34.75-.75V8.16c0-.21-.08-.4-.22-.53Z"/>
                     </svg>
                   </el-col>
-                  <el-col :span="10">
+                  <!--朗读文本-->
+                  <el-col v-if="!settingInfo.talk.isSpeech" :span="10">
                     <svg class="icon" height="22" p-id="6241" viewBox="0 0 16 16"
                          width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
-                         @click="$copy(item.content, '已复制')">
+                         @click=speechRead(item.content)>
                       <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476
                     7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"/>
                       <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483
@@ -99,6 +101,16 @@
                       <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489
                     3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825
                      10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                    </svg>
+                  </el-col>
+                  <!--停止朗读文本-->
+                  <el-col v-else :span="10">
+                    <svg class="icon" height="22" viewBox="0 0 16 16"
+                         width="22" xmlns="http://www.w3.org/2000/svg" @click="speechStop">
+                      <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1
+                    .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0
+                     0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5
+                     7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
                     </svg>
                   </el-col>
                 </el-row>
@@ -134,7 +146,7 @@
                   </svg>
                 </el-col>
                 <!--朗读文本-->
-                <el-col :span="10">
+                <el-col v-if="!settingInfo.talk.isSpeech" :span="10">
                   <svg class="icon" height="22" p-id="6241" viewBox="0 0 16 16"
                        width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg" @click=speechRead(item.content)>
                     <path d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476
@@ -144,6 +156,16 @@
                     <path d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489
                     3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825
                      10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"/>
+                  </svg>
+                </el-col>
+                <!--停止朗读文本-->
+                <el-col v-else :span="10">
+                  <svg class="icon" height="22" viewBox="0 0 16 16"
+                       width="22" xmlns="http://www.w3.org/2000/svg" @click="speechStop">
+                    <path d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1
+                    .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06zm7.137 2.096a.5.5 0 0 1 0 .708L12.207 8l1.647 1.646a.5.5 0
+                     0 1-.708.708L11.5 8.707l-1.646 1.647a.5.5 0 0 1-.708-.708L10.793 8 9.146 6.354a.5.5 0 1 1 .708-.708L11.5
+                     7.293l1.646-1.647a.5.5 0 0 1 .708 0z"/>
                   </svg>
                 </el-col>
               </el-row>
@@ -566,6 +588,9 @@ export default {
           this.$nextTick(() => {
             this.acqStatus = true
           });
+          if (this.settingInfo.talk.autoRead) {
+            this.speechRead(_this.chatList[currentResLocation].content)
+          }
           return;
         }
         if (!_this.chatList[currentResLocation].reminder) {
@@ -699,7 +724,7 @@ export default {
       if (this.settingInfo.translateEnglish === false) {
         this.$message({
           type: 'info',
-          message: '请先在右侧栏打开 "语音转文字" 按钮之后在使用哦(⊙o⊙)？'
+          message: '请先在右侧栏的音频中打开 "语音转文字" 按钮之后在使用哦(⊙o⊙)？'
         });
         return;
       }
@@ -815,13 +840,16 @@ export default {
         queue: false,
         listeners: {
           onstart: () => {
+            this.settingInfo.talk.isSpeech = true
             // console.log("Start utterance");
           },
           onend: () => {
             // console.log("End utterance");
+            this.settingInfo.talk.isSpeech = false
           },
           onresume: () => {
             // console.log("Resume utterance");
+            this.settingInfo.talk.isSpeech = false
           },
           onboundary: event => {
             console.log(
@@ -835,11 +863,13 @@ export default {
       }).then(data => {
         // console.log("Success !", data);
       }).catch(e => {
+        this.settingInfo.talk.isSpeech = false
         // console.error("An error occurred :", e);
       });
     },
     speechStop() {
       this.settingInfo.talk.speech.pause();
+      this.settingInfo.talk.isSpeech = false
     },
   },
 };

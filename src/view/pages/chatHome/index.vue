@@ -332,10 +332,10 @@
           <el-collapse-transition>
             <div v-show="SettingStatus === 2">
               <div class="button-group">
-                <el-button class="left-btn" round size="small" type="primary" @click="saveSettingInfo">
+                <el-button class="left-btn" round size="small" type="primary" @click="saveSpeechInfo">
                   {{ $t('model.saveSetting') }}
                 </el-button>
-                <el-button class="right-btn" round size="small" type="primary" @click="deleteSettingInfo">
+                <el-button class="right-btn" round size="small" type="primary" @click="deleteSpeechInfo">
                   {{ $t('model.resetSetting') }}
                 </el-button>
               </div>
@@ -401,14 +401,14 @@
                   <el-tooltip :content="$t('audio.rate')" class="item" effect="dark" placement="top">
                     <span class="demonstration" style="">{{ $t('audio.rate') }}</span>
                   </el-tooltip>
-                  <el-slider v-model="SettingInfo.talk.rate" :max="3" :min="0.5" :step="0.1" class="astrict"/>
+                  <el-slider v-model="SettingInfo.talk.rate" :max="3" :min="0" :step="0.1" class="astrict"/>
                 </div>
                 <!--语调频率-->
                 <div class="block">
                   <el-tooltip :content="$t('audio.pitch')" class="item" effect="dark" placement="top">
                     <span class="demonstration" style="">{{ $t('audio.pitch') }}</span>
                   </el-tooltip>
-                  <el-slider v-model="SettingInfo.talk.pitch" :max="3" :min="0" :step="0.1" class="astrict"/>
+                  <el-slider v-model="SettingInfo.talk.pitch" :max="2" :min="0" :step="0.1" class="astrict"/>
                 </div>
                 <!--语言-->
                 <div class="block">
@@ -546,13 +546,17 @@ export default {
           isSpeech: false, // 浏览器支持的语音列表
           readSettingButton: false,
           autoRead: false, // 回答后自动朗读
-          volume: 1, // 朗读音量
-          rate: 1, // 朗读速度
-          pitch: 1, // 朗读语调频率
+          volume: localStorage.getItem("volume") == null ? 1 :
+              parseFloat(localStorage.getItem("volume")), // 朗读音量
+          rate: localStorage.getItem("rate") == null ? 1 :
+              parseFloat(localStorage.getItem("rate")), // 朗读速度
+          pitch: localStorage.getItem("pitch") == null ? 1 :
+              parseFloat(localStorage.getItem("pitch")), // 朗读语调频率
           langAll: [], // 语言种类
-          langShow: "zh-CN", // 语言具体种类
+          langShow: localStorage.getItem("langShow") == null ? "zh-CN" : localStorage.getItem("langShow"), // 语言具体种类
+          langOldShow: localStorage.getItem("langShow") == null ? "zh-CN" : localStorage.getItem("langShow"), // 语言具体种类
           type: [], // 语言对应的语种类型,比如全部都是中文的语种
-          typeShow: '', // 语种的具体展示
+          typeShow: localStorage.getItem("typeShow") == null ? "" : localStorage.getItem("typeShow"), // 语种的具体展示
           typeAll: [], // 语种所有类型
         },
         inputStatus: true,
@@ -750,6 +754,15 @@ export default {
         } else if (newVal.translateEnglish) {
           this.SettingInfo.read = false
         }
+        if (newVal.talk.langShow !== newVal.talk.langOldShow) {
+          this.SettingInfo.talk.langOldShow = this.SettingInfo.talk.langShow
+          const tempArr = this.SettingInfo.talk.typeAll
+          const langTemp = this.SettingInfo.talk.langShow
+          // 处理数组
+          this.SettingInfo.talk.type = tempArr.filter(function (element) {
+            return element.lang.includes(langTemp);
+          })
+        }
       },
       deep: true
     }
@@ -824,6 +837,36 @@ export default {
       this.SettingInfo.prompt = ""
       this.$notify({
         message: '系统预设重置成功',
+        duration: 5000,
+        type: 'success'
+      })
+    },
+    saveSpeechInfo() {
+      localStorage.setItem("volume", this.SettingInfo.talk.volume)
+      localStorage.setItem("rate", this.SettingInfo.talk.rate)
+      localStorage.setItem("pitch", this.SettingInfo.talk.pitch)
+      localStorage.setItem("langShow", this.SettingInfo.talk.langShow)
+      localStorage.setItem("typeShow", this.SettingInfo.talk.typeShow)
+      this.$refs.chatWindow.speechUpdate()
+      this.$notify({
+        message: '音频设置保存成功',
+        duration: 5000,
+        type: 'success'
+      })
+    },
+    deleteSpeechInfo() {
+      localStorage.removeItem("volume")
+      localStorage.removeItem("rate")
+      localStorage.removeItem("pitch")
+      localStorage.removeItem("langShow")
+      localStorage.removeItem("typeShow")
+      this.SettingInfo.talk.volume = 1
+      this.SettingInfo.talk.rate = 1
+      this.SettingInfo.talk.pitch = 1
+      this.SettingInfo.talk.langShow = "zh-CN"
+      this.$refs.chatWindow.speechUpdate()
+      this.$notify({
+        message: '音频设置重置成功',
         duration: 5000,
         type: 'success'
       })

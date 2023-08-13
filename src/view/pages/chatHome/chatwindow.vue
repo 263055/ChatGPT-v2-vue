@@ -751,10 +751,10 @@ export default {
     speechInit() {
       this.settingInfo.talk.speech = new Speech();
       this.settingInfo.talk.speech.init({
-        volume: 1, // 设置TTS所生成语音的音量大小。可以是0到1之间的浮点数，其中0表示完全静默，1表示最大可听到的音量
-        rate: 1, // 置TTS所生成语速。可以是小数或整数值，默认为1。较小值会使合成速度变慢，较大值会使合成速度加快
-        pitch: 1.5, // 设置TTS生成语调(频率)。它类似于录制时说话人"抬高"或"降低"他们说话时嗓子发出
-        lang: 'zh-CN', // 设置TTS的语言。它表示要说话文本或内容所使用的语言
+        volume: this.settingInfo.talk.volume, // 设置TTS所生成语音的音量大小。可以是0到1之间的浮点数，其中0表示完全静默，1表示最大可听到的音量
+        rate: this.settingInfo.talk.rate, // 置TTS所生成语速。可以是小数或整数值，默认为1。较小值会使合成速度变慢，较大值会使合成速度加快
+        pitch: this.settingInfo.talk.pitch, // 设置TTS生成语调(频率)。它类似于录制时说话人"抬高"或"降低"他们说话时嗓子发出
+        lang: this.settingInfo.talk.langShow, // 设置TTS的语言。它表示要说话文本或内容所使用的语言
         splitSentences: true, // 拆分句子
         listeners: {
           onvoiceschanged: () => {
@@ -762,6 +762,23 @@ export default {
         }
       }).then((data) => {
         this._addVoicesList(data.voices);
+      }).catch(() => {
+        this.$message.error('语音播报出现错误....请稍后再试,或更换浏览器再试')
+      });
+    },
+    speechUpdate() {
+      this.settingInfo.talk.speech = new Speech();
+      this.settingInfo.talk.speech.init({
+        volume: this.settingInfo.talk.volume, // 设置TTS所生成语音的音量大小。可以是0到1之间的浮点数，其中0表示完全静默，1表示最大可听到的音量
+        rate: this.settingInfo.talk.rate, // 置TTS所生成语速。可以是小数或整数值，默认为1。较小值会使合成速度变慢，较大值会使合成速度加快
+        pitch: this.settingInfo.talk.pitch, // 设置TTS生成语调(频率)。它类似于录制时说话人"抬高"或"降低"他们说话时嗓子发出
+        lang: this.settingInfo.talk.langShow, // 设置TTS的语言。它表示要说话文本或内容所使用的语言
+        splitSentences: true, // 拆分句子
+        listeners: {
+          onvoiceschanged: () => {
+          }
+        }
+      }).then(() => {
       }).catch(() => {
         this.$message.error('语音播报出现错误....请稍后再试,或更换浏览器再试')
       });
@@ -788,41 +805,42 @@ export default {
       console.log(this.settingInfo.talk.langAll)
     },
     speechRead(test) {
-      // const language = languages.value;
-      // const voice = languages.options[languages.selectedIndex].dataset.name;
-      // if (language) speech.setLanguage(languages.value);
-      // if (voice) speech.setVoice(voice);
+      const talk = this.settingInfo.talk;
+      const language = talk.langShow;
+      const voice = talk.typeShow;
+      if (language) this.settingInfo.talk.speech.setLanguage(language);
+      if (voice) this.settingInfo.talk.speech.setVoice(voice);
       this.settingInfo.talk.speech.speak({
         text: test,
         queue: false,
         listeners: {
           onstart: () => {
-            console.log("Start utterance");
+            // console.log("Start utterance");
           },
           onend: () => {
-            console.log("End utterance");
+            // console.log("End utterance");
           },
           onresume: () => {
-            console.log("Resume utterance");
+            // console.log("Resume utterance");
           },
           onboundary: event => {
             console.log(
-                event.name +
-                " boundary reached after " +
-                event.elapsedTime +
-                " milliseconds."
+                // event.name +
+                // " boundary reached after " +
+                // event.elapsedTime +
+                // " milliseconds."
             );
           }
         }
       }).then(data => {
-        console.log("Success !", data);
+        // console.log("Success !", data);
       }).catch(e => {
-        console.error("An error occurred :", e);
+        // console.error("An error occurred :", e);
       });
     },
     speechStop() {
       this.settingInfo.talk.speech.pause();
-    }
+    },
   },
 };
 </script>

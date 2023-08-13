@@ -313,7 +313,7 @@ export default {
       codeUrl: '',
       haveLogin: false,
       reNewMsg1: '1.加入了语音模型和照片模型',
-      reNewMsg2: '2.完善了登录页面以及聊天页面的样式',
+      reNewMsg2: '2.加入了语音播报功能，支持多种语种！',
       welcomeMsg1: '2.你的支持，就是我做下去的动力！',
       welcomeMsg2: '3.目前暂不支持图片和语音的调用，我后续会一一加入，敬请期待',
       welcomeMsg: '1.如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +

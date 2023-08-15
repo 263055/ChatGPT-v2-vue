@@ -543,7 +543,7 @@ export default {
           support: true, // 浏览器是否支持
           isSpeech: false, // 浏览器支持的语音列表
           readSettingButton: false,
-          autoRead: localStorage.getItem("autoRead") == null ? 1 :
+          autoRead: localStorage.getItem("autoRead") == null ? false :
               Boolean(localStorage.getItem("autoRead")), // 回答后自动朗读
           volume: localStorage.getItem("volume") == null ? 1 :
               parseFloat(localStorage.getItem("volume")), // 朗读音量

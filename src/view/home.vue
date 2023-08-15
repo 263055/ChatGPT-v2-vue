@@ -1,7 +1,7 @@
 <template>
   <div class="home" :class="{'is-pc':isPc}">
     <el-container height="100%">
-      <el-header style="padding: 0;">
+      <el-header v-show="$route.path !== '/register'" style="padding: 0;">
         <Nav/>
       </el-header>
       <el-main style="padding: 0;">

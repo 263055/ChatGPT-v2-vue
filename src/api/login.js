@@ -57,3 +57,27 @@ export function resetPassword(email, password, code, uuid) {
     timeout: 20000
   })
 }
+
+export function activate(token) {
+  return request({
+    url: '/user/activate',
+    headers: {
+      isToken: false
+    },
+    method: 'get',
+    params: {token},
+    timeout: 20000
+  })
+}
+
+export function reset(token) {
+  return request({
+    url: '/user/reset',
+    headers: {
+      isToken: false
+    },
+    method: 'get',
+    params: {token},
+    timeout: 20000
+  })
+}

@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import ChatHome from '../view/pages/chatHome/index.vue'
 import Setting from '../view/pages/setting/setting.vue'
 import Login from '../view/pages/user/login.vue'
+import Register from '../view/pages/Register/register.vue'
 
 import Vue from 'vue'
 
@@ -24,7 +25,7 @@ export default new VueRouter({
         {
             path: "/Setting",
             name: "Setting",
-            component: Setting
+            component: Setting,
         },
         {
             path: "/Login",
@@ -35,6 +36,11 @@ export default new VueRouter({
             path: '/404',
             component: () => import('@/view/error/404'),
             hidden: true
+        },
+        {
+            path: "/register",
+            name: "Register",
+            component: Register
         },
     ]
 })

@@ -188,23 +188,6 @@
     </style>
 </head>
 <body>
-<script>
-    let i = 8;  //这里是倒计时的秒数
-    let intervalid;
-    intervalid = setInterval("cutdown()", 1000);
-
-    function cutdown() {
-        if (i === 0) {
-            window.location.href = "https://www.4gai.me"; //倒计时完成后跳转的地址
-            clearInterval(intervalid);
-        }
-        document.getElementById("mes").innerHTML = i;
-        i--;
-    }
-
-    window.onload = cutdown;
-</script>
-
 <div id="app">
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -212,7 +195,9 @@
         <div class="loader-section section-right"></div>
         <div class="load_title">正在加载系统资源，请耐心等待
             <br>
-            如果长时间未反应,<span id="mes"></span> 秒后转至 4gai 的首页
+            如果长时间未反应,
+            <a href="https://www.4gai.me" style="color: #09030d; font-size: 30px"> 点我 </a>
+            转至 4gai 的首页
         </div>
     </div>
 </div>

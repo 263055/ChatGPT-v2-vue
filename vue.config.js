@@ -23,7 +23,7 @@ module.exports = defineConfig({
         }
     },
     transpileDependencies: true,
-    publicPath: './', // 设置资源文件的根路径
+    publicPath: process.env.NODE_ENV === 'production' ? './' : '/', // 设置资源文件的根路径
     devServer: {
         client: {
             overlay: false

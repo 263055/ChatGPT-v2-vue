@@ -194,6 +194,12 @@ export default {
       width: 100%;
       justify-content: center;
       padding-right: 10px;
+
+      .menu-list {
+        li {
+          margin: 0 10px;
+        }
+      }
     }
   }
 }

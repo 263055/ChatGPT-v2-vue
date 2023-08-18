@@ -1,7 +1,7 @@
 <template>
   <div class="home" :class="{'is-pc':isPc}">
     <el-container height="100%">
-      <el-header v-show="$route.path !== '/register'" style="padding: 0;">
+      <el-header v-show="$route.path !== '/register'" style="padding: 0;position: relative;">
         <Nav/>
       </el-header>
       <el-main style="padding: 0;">
@@ -70,6 +70,7 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  overflow-y: scroll;
 }
 .is-pc {
   width: 100vw;

@@ -32,10 +32,10 @@ export default {
   data() {
     return {
       menuList: [
-        "user",
+        "house",
         "message",
         "gear",
-        "shopping",
+        "user",
       ],
       current: 0,
       asideStatus: true,

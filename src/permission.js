@@ -4,7 +4,7 @@ import 'nprogress/nprogress.css'
 
 NProgress.configure({showSpinner: false})
 
-const allUrl = ['/Login', '/ChatHome', '/Setting']
+const allUrl = ['/Login', '/ChatHome', '/Setting', '/order']
 
 router.beforeEach((to, from, next) => {
     NProgress.start()

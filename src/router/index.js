@@ -5,6 +5,7 @@ import ChatHome from '../view/pages/chatHome/index.vue'
 import Setting from '../view/pages/setting/setting.vue'
 import Login from '../view/pages/user/login.vue'
 import Register from '../view/pages/Register/register.vue'
+import Order from '../view/pages/order/order.vue'
 
 import Vue from 'vue'
 
@@ -41,6 +42,11 @@ export default new VueRouter({
             path: "/register",
             name: "Register",
             component: Register
+        },
+        {
+            path: "/order",
+            name: "Order",
+            component: Order
         },
     ]
 })

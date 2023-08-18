@@ -9,10 +9,10 @@ import i18n from '@/config/i18n'
 import store from './store'
 import './permission' // permission control 加入了路由控制
 import './assets/icons' // icon
+// import 'intro.js/themes/introjs-flattener.css'
 import introJs from 'intro.js'
 import 'intro.js/introjs.css'
 import './assets/css/intro.css'
-// import 'intro.js/themes/introjs-flattener.css'
 
 Vue.use(VueRouter)
 Vue.use(introJs)

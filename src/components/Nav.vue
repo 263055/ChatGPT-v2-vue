@@ -14,7 +14,6 @@
           <!--按钮上方的蓝色显示-->
           <div class="block"></div>
           <!--按钮的具体展示-->
-          <!--<span :class="item" class="iconfont"></span>-->
           <svg-icon :class="item" :icon-class="item" class="iconfont"/>
         </li>
       </ul>

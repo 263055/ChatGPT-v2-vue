@@ -817,7 +817,6 @@ export default {
       this.settingInfo.talk.type = voices.filter(function (element) {
         return element.lang.includes('zh-CN');
       })
-      console.log(this.settingInfo.talk.type)
       // 处理语言
       const langSet = new Set();
       voices.forEach(function (element) {
@@ -827,7 +826,6 @@ export default {
       });
       // 将 Set 转换回数组
       this.settingInfo.talk.langAll = Array.from(langSet);
-      console.log(this.settingInfo.talk.langAll)
     },
     speechRead(test) {
       const talk = this.settingInfo.talk;

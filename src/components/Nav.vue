@@ -14,7 +14,8 @@
           <!--按钮上方的蓝色显示-->
           <div class="block"></div>
           <!--按钮的具体展示-->
-          <svg-icon :class="item" :icon-class="item" class="iconfont"/>
+          <span v-show="asideStatus"> {{ item.text }} </span>
+          <svg-icon :icon-class="item.icon" class="iconfont"/>
         </li>
       </ul>
     </div>
@@ -32,10 +33,22 @@ export default {
   data() {
     return {
       menuList: [
-        "house",
-        "message",
-        "gear",
-        "user",
+        {
+          text: '主页',
+          icon: 'house',
+        },
+        {
+          text: '聊天',
+          icon: 'message',
+        },
+        {
+          text: '日志',
+          icon: 'gear',
+        },
+        {
+          text: '个人',
+          icon: 'user',
+        },
       ],
       current: 0,
       asideStatus: true,
@@ -154,7 +167,7 @@ export default {
           position: absolute;
           top: -10px;
           left: -3px;
-          width: 30px;
+          width: 70px;
           height: 6px;
           transition: 0.5s;
           border-bottom-right-radius: 4px;
@@ -198,6 +211,10 @@ export default {
       .menu-list {
         li {
           margin: 0 10px;
+          //最左边的蓝色提示
+          .block {
+            width: 30px;
+          }
         }
       }
     }

@@ -14,7 +14,8 @@
           <!--按钮上方的蓝色显示-->
           <div class="block"></div>
           <!--按钮的具体展示-->
-          <span :class="item" class="iconfont"></span>
+          <!--<span :class="item" class="iconfont"></span>-->
+          <svg-icon :class="item" :icon-class="item" class="iconfont"/>
         </li>
       </ul>
     </div>
@@ -23,15 +24,19 @@
 
 <script>
 import {USER_HEAD_IMG_URL} from '@/store/mutation-types'
+import SvgIcon from "../components/SvgIcon.vue";
 
 export default {
-
+  components: {
+    SvgIcon
+  },
   data() {
     return {
       menuList: [
-        "icon-weidenglu",
-        "icon-xinxi",
-        "icon-shezhi",
+        "user",
+        "message",
+        "gear",
+        "shopping",
       ],
       current: 0,
       asideStatus: true,
@@ -66,6 +71,12 @@ export default {
         case 2:
           this.$router.push({
             name: "Setting",
+          }, () => {
+          });
+          break;
+        case 3:
+          this.$router.push({
+            name: "Order",
           }, () => {
           });
           break;
@@ -152,9 +163,9 @@ export default {
           opacity: 0;
         }
 
-        // 点击按钮的时候高亮显示
+        // 鼠标移动到按钮的时候高亮显示
         &:hover {
-          span {
+          .svg-icon {
             color: rgb(29, 76, 162);
           }
 
@@ -169,7 +180,7 @@ export default {
 
 // 点击按钮之后保持高亮
 .activeNav {
-  span {
+  .svg-icon {
     color: rgb(22, 81, 134);
   }
 

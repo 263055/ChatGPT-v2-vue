@@ -156,8 +156,8 @@
               </div>
             </div>
             <div class="pay-body pay-slider">
-              <el-slider v-model="form.price" :max="99" :min="0" :step="0.1" style="width: 60%;"/>
-              <el-input-number v-model="form.price" style="width: 30%; "/>
+              <el-slider v-model="form.price" :max="99" :min="0" :step="0.1"/>
+              <el-input-number v-model="form.price"/>
             </div>
             <hr class="my-4">
             <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info">
@@ -417,19 +417,15 @@ td, th, thead, tr {
   }
 
   .pay-card {
-    font-size: x-large;
     max-width: 56rem;
     font-weight: 700;
-    display: grid;
     margin: 5rem auto;
     row-gap: 2rem;
     justify-content: center;
 
     .pay-from {
-      min-width: 40rem;
       margin-right: 14px;
       margin-left: 14px;
-      padding: 35px;
       border-radius: 20px;
       --tw-bg-opacity: 0.5;
       background-color: rgb(31 25 50 / var(--tw-bg-opacity));
@@ -443,15 +439,16 @@ td, th, thead, tr {
 
       .pay-slider {
         padding: 10px;
-        display: grid;
         justify-content: space-between;
         font-size: medium;
 
         .el-slider {
           margin: 10px;
+          width: 100%;
         }
 
         .el-input-number {
+          width: 100%;
           margin: 10px;
         }
       }
@@ -559,6 +556,47 @@ td, th, thead, tr {
       grid-template-columns: repeat(3, minmax(0, 1fr));
 
       .cards {
+      }
+    }
+  }
+}
+
+@media (min-width: 1000px) {
+  .order-main {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    .plan-card {
+      max-width: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+
+      .cards {
+      }
+    }
+
+    .pay-card {
+      font-size: x-large;
+      display: grid;
+
+      .pay-from {
+        min-width: 40rem;
+        padding: 35px;
+
+        .pay-slider {
+
+          .el-slider {
+            margin: 10px;
+            width: 60%;
+          }
+
+          .el-input-number {
+            width: 30%;
+            margin: 10px;
+          }
+        }
       }
     }
   }

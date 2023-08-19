@@ -464,7 +464,6 @@ td, th, thead, tr {
 
         .form-label {
           display: inline-block;
-          min-width: 100px;
           text-align: right;
         }
 
@@ -477,7 +476,6 @@ td, th, thead, tr {
           cursor: pointer;
           margin-left: 25px;
           padding: .375rem .75rem;
-          font-size: 1.5rem;
           border-radius: 0.375rem;
           transition: box-shadow .15s ease-in-out, box-shadow .15s ease-in-out
         }
@@ -596,6 +594,17 @@ td, th, thead, tr {
             width: 30%;
             margin: 10px;
           }
+        }
+      }
+
+      .pay-body {
+
+        .form-label {
+          min-width: 100px;
+        }
+
+        .form-control {
+          font-size: 1.5rem;
         }
       }
     }

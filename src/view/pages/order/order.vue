@@ -193,6 +193,18 @@
                 </td>
               </tr>
               <tr>
+                <th class="text-start" scope="row">客服服务</th>
+                <td>
+                  <svg-icon icon-class="error"/>
+                </td>
+                <td>
+                  <svg-icon icon-class="error"/>
+                </td>
+                <td>
+                  <svg-icon icon-class="check2"/>
+                </td>
+              </tr>
+              <tr>
                 <th class="text-start" scope="row">gpt4等额外语言模型</th>
                 <td>
                   <svg-icon icon-class="error"/>
@@ -205,15 +217,27 @@
                 </td>
               </tr>
               <tr>
-                <th class="text-start" scope="row">客服服务</th>
+                <th class="text-start" scope="row">3.5初级线路</th>
+                <td>
+                  <a>free</a>
+                </td>
+                <td>
+                  <a>free</a>
+                </td>
+                <td>
+                  <a>free</a>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-start" scope="row">3.5优质线路</th>
                 <td>
                   <svg-icon icon-class="error"/>
                 </td>
                 <td>
-                  <svg-icon icon-class="error"/>
+                  <a>0.6倍率</a>
                 </td>
                 <td>
-                  <svg-icon icon-class="check2"/>
+                  <a>0.4倍率</a>
                 </td>
               </tr>
               <tr>
@@ -300,11 +324,12 @@ td, th, thead, tr {
   }
 
   .plan-card {
-    justify-content: space-between;
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -14px;
-    margin-left: -14px;
+    margin-right: auto;
+    margin-left: auto;
+    display: grid;
+    margin-top: 2rem;
+    row-gap: 2rem;
+    justify-content: center;
 
     li {
       margin-top: 10px;
@@ -370,14 +395,12 @@ td, th, thead, tr {
     .plan-card {
 
       .cards {
-        flex: 0 0 33.333333%;
-        max-width: 100%;
       }
     }
   }
 }
 
-@media only screen and (min-width: 1200px) {
+@media (min-width: 1000px) {
   .order-main {
     padding-left: 2rem;
     padding-right: 2rem;
@@ -391,47 +414,12 @@ td, th, thead, tr {
     }
 
     .plan-card {
+      max-width: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
 
       .cards {
-        flex: 0 0 33.333333%;
-        max-width: 30%;
       }
     }
-  }
-}
-
-@media (max-width: 575.98px) {
-  .table-responsive-sm {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch
-  }
-}
-
-@media (max-width: 767.98px) {
-  .table-responsive-md {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch
-  }
-}
-
-@media (max-width: 991.98px) {
-  .table-responsive-lg {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch
-  }
-}
-
-@media (max-width: 1199.98px) {
-  .table-responsive-xl {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch
-  }
-}
-
-@media (max-width: 1399.98px) {
-  .table-responsive-xxl {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch
   }
 }
 </style>

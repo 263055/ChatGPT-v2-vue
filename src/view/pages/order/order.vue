@@ -146,7 +146,7 @@
             <div class="pay-body">
               <div class="col-sm-6">
                 <label class="form-label">金币:</label>
-                <input v-model="form.token" class="form-control">
+                <input v-model="form.token" :disabled="true" class="form-control" style="cursor: auto;">
               </div>
             </div>
             <div class="pay-body">
@@ -155,8 +155,9 @@
                 <input v-model="form.price" class="form-control" placeholder="(⊙o⊙)？">
               </div>
             </div>
-            <div class="pay-body">
-              <el-slider v-model="form.price" :max="99" :min="0" :step="0.1" style="width: 90%;"/>
+            <div class="pay-body pay-slider">
+              <el-slider v-model="form.price" :max="99" :min="0" :step="0.1" style="width: 60%;"/>
+              <el-input-number v-model="form.price" style="width: 30%; "/>
             </div>
             <hr class="my-4">
             <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info">
@@ -305,6 +306,11 @@ export default {
   components: {
     SvgIcon
   },
+  watch: {
+    'form.price': function (newVal) {
+      this.form.token = newVal * 35000;
+    }
+  },
   data() {
     return {
       form: {
@@ -315,7 +321,10 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    handleChange() {
+    }
+  }
 }
 </script>
 
@@ -430,6 +439,21 @@ td, th, thead, tr {
         font-size: xx-large;
         text-align: center;
         font-weight: 700;
+      }
+
+      .pay-slider {
+        padding: 10px;
+        display: grid;
+        justify-content: space-between;
+        font-size: medium;
+
+        .el-slider {
+          margin: 10px;
+        }
+
+        .el-input-number {
+          margin: 10px;
+        }
       }
 
       .pay-body {

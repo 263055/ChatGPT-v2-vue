@@ -4,8 +4,9 @@
       <header>
         <div class="header-all">
           <p>Pricing</p>
-          <p class="">我们致力于提供高性价比的优质服务,同时后期还会开放免费的接口平台,让更多的人体验gpt的魅力！！！</p>
-          <p style="color: #8a4141">注：您无需为套餐本身付费，只要充值数额满足条件即可</p>
+          <p class="header-p">我们致力于提供高性价比的优质服务</p>
+          <p class="header-p">同时后期还会开放免费的接口平台,让更多的人体验gpt的魅力！！！</p>
+          <p class="header-p" style="color: #8a4141">注：您无需为套餐本身付费，只要充值数额满足条件即可</p>
         </div>
       </header>
 
@@ -381,20 +382,31 @@ td, th, thead, tr {
   }
 }
 
-@media only screen and (min-width: 640px) {
+@media only screen and (max-width: 640px) {
   .order-main {
     .header-all {
-      .top1 {
-        p {
-          font-size: 3rem;
-          line-height: 1;
-        }
+      .header-p {
+        text-align: center;
+        max-width: 42rem;
+        --tw-text-opacity: 1;
+        color: rgb(209 213 219/var(--tw-text-opacity));
+        margin-top: 1.25rem;
+        margin-left: 1.25rem;
+        margin-right: 1.25rem;
+        font-size: 1.75rem;
+        line-height: 1.75rem;
       }
     }
 
     .plan-card {
-
       .cards {
+      }
+    }
+
+    .compare-card {
+      p {
+        font-size: 1.75rem;
+        line-height: 1.75rem;
       }
     }
   }
@@ -409,8 +421,6 @@ td, th, thead, tr {
     margin-right: auto;
 
     .header-all {
-      .top1 {
-      }
     }
 
     .plan-card {

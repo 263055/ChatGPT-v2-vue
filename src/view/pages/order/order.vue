@@ -43,10 +43,6 @@
                   免费使用此网站的3.5模型,语音等模型
                 </li>
               </ul>
-              <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px"
-                         type="info">
-                <span>立即订阅</span>
-              </el-button>
             </div>
           </el-card>
           <el-card class="cards" shadow="hover">
@@ -129,6 +125,44 @@
               </el-button>
             </div>
           </el-card>
+        </div>
+
+        <!--支付面板-->
+        <div class="pay-card">
+          <el-form :model="form" class="pay-from" label-width="80px">
+            <h4 class="text-center pay-header">order计划</h4>
+            <div class="pay-body">
+              <div class="col-sm-6">
+                <label class="form-label">邮箱:</label>
+                <input v-model="form.email" class="form-control" placeholder="。。。。。。。。O.o?">
+              </div>
+            </div>
+            <div class="pay-body">
+              <div class="col-sm-6">
+                <label class="form-label">备注:</label>
+                <input v-model="form.text" class="form-control" placeholder="随便说点啥吧，不说也行">
+              </div>
+            </div>
+            <div class="pay-body">
+              <div class="col-sm-6">
+                <label class="form-label">金币:</label>
+                <input v-model="form.token" class="form-control">
+              </div>
+            </div>
+            <div class="pay-body">
+              <div class="col-sm-6">
+                <label class="form-label">额度:</label>
+                <input v-model="form.price" class="form-control" placeholder="(⊙o⊙)？">
+              </div>
+            </div>
+            <div class="pay-body">
+              <el-slider v-model="form.price" :max="99" :min="0" :step="0.1" style="width: 90%;"/>
+            </div>
+            <hr class="my-4">
+            <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info">
+              <span>立即支付</span>
+            </el-button>
+          </el-form>
         </div>
 
         <!--套餐比较-->
@@ -264,12 +298,24 @@
 
 <script>
 import SvgIcon from "../../../components/SvgIcon.vue";
+import Cookies from "js-cookie";
 
 export default {
   name: "Order",
   components: {
     SvgIcon
   },
+  data() {
+    return {
+      form: {
+        email: Cookies.get('email'),
+        text: '',
+        price: 0.0,
+        token: 0.0,
+      }
+    }
+  },
+  methods: {}
 }
 </script>
 
@@ -299,6 +345,10 @@ export default {
 }
 
 .el-card {
+  color: white;
+}
+
+.el-form {
   color: white;
 }
 
@@ -354,6 +404,63 @@ td, th, thead, tr {
       --tw-ring-offset-shadow: var(--tw-bg-opacity) 0 0 0 var(--tw-bg-opacity) var(--tw-bg-opacity);
       --tw-ring-shadow: var(--tw-bg-opacity) 0 0 0 calc(1px + var(--tw-bg-opacity)) var(--tw-ring-color);
       box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, #ffffff);
+    }
+  }
+
+  .pay-card {
+    font-size: x-large;
+    max-width: 56rem;
+    font-weight: 700;
+    display: grid;
+    margin: 5rem auto;
+    row-gap: 2rem;
+    justify-content: center;
+
+    .pay-from {
+      min-width: 40rem;
+      margin-right: 14px;
+      margin-left: 14px;
+      padding: 35px;
+      border-radius: 20px;
+      --tw-bg-opacity: 0.5;
+      background-color: rgb(31 25 50 / var(--tw-bg-opacity));
+
+      .pay-header {
+        margin-bottom: 1rem;
+        font-size: xx-large;
+        text-align: center;
+        font-weight: 700;
+      }
+
+      .pay-body {
+        width: 100%;
+        bottom: 0;
+        display: flex;
+        background-color: #323644;
+        flex-wrap: wrap;
+        flex: 0 0 auto;
+        padding: 15px;
+
+        .form-label {
+          display: inline-block;
+          min-width: 100px;
+          text-align: right;
+        }
+
+        .form-control {
+          color: #a2a1a1;
+          background-color: rgb(50, 54, 60);
+          border: 1px solid rgb(80, 85, 80);
+          box-shadow: 0 0 5px 0 rgb(0, 136, 255);
+          position: relative;
+          cursor: pointer;
+          margin-left: 25px;
+          padding: .375rem .75rem;
+          font-size: 1.5rem;
+          border-radius: 0.375rem;
+          transition: box-shadow .15s ease-in-out, box-shadow .15s ease-in-out
+        }
+      }
     }
   }
 

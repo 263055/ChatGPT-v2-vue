@@ -160,10 +160,30 @@
               <el-input-number v-model="form.price"/>
             </div>
             <hr class="my-4">
-            <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info">
+            <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info"
+                       @click="getQrCode">
               <span>立即支付</span>
             </el-button>
           </el-form>
+        </div>
+
+        <!--二维码面板-->
+        <div v-show="qrCodeShow" class="qrCode-card">
+          <hr class="qrCode-line">
+          <p class="qrCode-header">目前仅支持微信扫码支付</p>
+          <el-image :src=qrCode class="qrCode-image"/>
+          <div class="qrCode-font">
+            <el-button size="medium" style="margin-top: 5px; margin-bottom: 15px" type="info"
+                       @click="getQrStatus">
+              <span>点我查询订单状态</span>
+            </el-button>
+            <p style="color: #9c4a4a;">{{ qrStatus }}</p>
+            <p>支付成功后，如果账户余额未发生改变，或有任何问题</p>
+            <p>请联系邮箱至
+              <a href="mailto:lhr@4gai.me" style="color: #964040;">lhr@4gai.me</a>
+            </p>
+          </div>
+          <hr class="qrCode-line">
         </div>
 
         <!--套餐比较-->
@@ -300,6 +320,7 @@
 <script>
 import SvgIcon from "../../../components/SvgIcon.vue";
 import Cookies from "js-cookie";
+import {getQrCode, getQrStatus} from "@/api/order";
 
 export default {
   name: "Order",
@@ -313,6 +334,10 @@ export default {
   },
   data() {
     return {
+      qrCodeShow: false,
+      qrAoid: '',
+      qrCode: '',
+      qrStatus: '当前订单状态:  订单未支付',
       form: {
         email: Cookies.get('email'),
         text: '',
@@ -322,7 +347,31 @@ export default {
     }
   },
   methods: {
-    handleChange() {
+    getQrStatus() {
+      new Promise((resolve, reject) => {
+        getQrStatus(this.qrAoid).then((res) => {
+          console.log(res.msg)
+          this.qrStatus = '当前订单状态:  ' + res.msg
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    getQrCode() {
+      new Promise((resolve, reject) => {
+        const text = this.form.text;
+        const price = this.form.price;
+        const token = this.form.token;
+        getQrCode(text, price, token).then((res) => {
+          this.qrCodeShow = true
+          this.qrAoid = res.data.aoid
+          this.qrCode = 'https://xorpay.com/qr?data=' + res.data.info.qr
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
     }
   }
 }
@@ -480,6 +529,47 @@ td, th, thead, tr {
           transition: box-shadow .15s ease-in-out, box-shadow .15s ease-in-out
         }
       }
+    }
+  }
+
+  .qrCode-card {
+    max-width: 56rem;
+    font-weight: 700;
+    margin: 5rem auto;
+    row-gap: 2rem;
+    text-align: center;
+
+    .qrCode-font {
+      margin-top: 15px;
+
+      p {
+        color: white;
+        margin-bottom: 1rem;
+        text-align: center;
+        max-width: 56rem;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 700;
+      }
+    }
+
+    .qrCode-image {
+      width: 300px;
+      height: 300px;
+    }
+
+    .qrCode-header {
+      text-align: center;
+      color: #964040;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+      font-size: 1.75rem;
+      line-height: 1.75rem;
+    }
+
+    .qrCode-line {
+      margin-top: 1.5rem !important;
+      margin-bottom: 1.5rem !important
     }
   }
 

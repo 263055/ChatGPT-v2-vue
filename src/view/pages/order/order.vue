@@ -75,8 +75,8 @@
                   解锁网站包含4.0在内的所有模型
                 </li>
               </ul>
-              <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px"
-                         type="info">
+              <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info"
+                         @click="jumpToPay">
                 <span>立即订阅</span>
               </el-button>
             </div>
@@ -119,8 +119,8 @@
                   解锁网站包含4.0在内的所有模型
                 </li>
               </ul>
-              <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px"
-                         type="info">
+              <el-button size="medium" style="width:100%;margin-top: 20px; margin-bottom: 10px" type="info"
+                         @click="jumpToPay">
                 <span>立即订阅</span>
               </el-button>
             </div>
@@ -128,7 +128,7 @@
         </div>
 
         <!--支付面板-->
-        <div class="pay-card">
+        <div ref="targetDiv" class="pay-card">
           <el-form :model="form" class="pay-from" label-width="80px">
             <h4 class="text-center pay-header">order计划</h4>
             <div class="pay-body">
@@ -321,6 +321,7 @@
 import SvgIcon from "../../../components/SvgIcon.vue";
 import Cookies from "js-cookie";
 import {getQrCode, getQrStatus} from "@/api/order";
+import {animation} from "@/util/util";
 
 export default {
   name: "Order",
@@ -347,6 +348,13 @@ export default {
     }
   },
   methods: {
+    jumpToPay() {
+      this.$refs.targetDiv.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center'
+      });
+    },
     getQrStatus() {
       new Promise((resolve, reject) => {
         getQrStatus(this.qrAoid).then((res) => {

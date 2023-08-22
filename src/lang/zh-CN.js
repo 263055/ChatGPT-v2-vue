@@ -182,8 +182,8 @@ export default {
         get_roles_fail:"获取角色列表失败哦~",
     },
     index: {
-        detail: "chatgpt v3.5 所基于的模型",
-        lastMsg: "chatgpt v3.5 所基于的模型",
+        detail: "0.0015$/1000token",
+        lastMsg: "0.0015$/1000token",
         up_file_id: "文件已上传成功,文件ID是",
         copy: ",已经帮您复制啦~",
         file_id: "`文件ID:`",

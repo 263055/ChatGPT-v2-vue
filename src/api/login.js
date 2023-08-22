@@ -39,6 +39,18 @@ export function getCodeImg() {
   })
 }
 
+// 获取验证码
+export function getUserDto() {
+  return request({
+    url: '/user/getUserDto',
+    headers: {
+      isToken: true
+    },
+    method: 'post',
+    timeout: 20000
+  })
+}
+
 // 重置密码
 export function resetPassword(email, password, code, uuid) {
   const data = {

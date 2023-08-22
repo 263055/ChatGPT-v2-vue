@@ -29,3 +29,19 @@ export function getQrStatus(aoid) {
         timeout: 20000
     })
 }
+
+// 升级套餐
+export function updateBalance(balance) {
+    const data = {
+        balance,
+    }
+    return request({
+        url: '/order/updateBalance',
+        headers: {
+            isToken: true
+        },
+        data: data,
+        method: 'post',
+        timeout: 20000
+    })
+}

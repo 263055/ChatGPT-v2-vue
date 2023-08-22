@@ -15,15 +15,13 @@ function findIndexByName(arr, name) {
 }
 
 const desp_model = {
-  "gpt-3.5-turbo": "chatgpt v3.5 所基于的模型",
-  "gpt-3.5-turbo-0301": "chatgpt v3.5 衍生而来",
-  "gpt4": "chatgpt v4.0 所基于的模型，规模大，速度慢，价钱贵",
-  "gpt-4-0314": "chatgpt v4.0 所基于的模型，规模大，速度慢，价钱贵",
-  "ada": "自然语言模型，OpenAI提供的最快，最便宜的模型，但性能也最差，含有ada字眼的模型都是基于ada训练而来",
-  "babbage": "自然语言模型，性能比ada强，价格比ada贵，规模比ada大，含有babbage字眼的模型都是基于babbage训练而来",
-  "curie": "自然语言模型，性能优于ada，babbage，价钱也更贵，规模更大，含有curie字眼的模型都是基于curie训练而来",
-  "davinci": "自然语言模型，在ada，babbage，curie和davinci中性能最优，规模最大，速度最慢，价钱最贵，含有davinci字眼的模型都是基于davinci训练而来，目前chatgpt基于davinci微调而来",
-  "whisper-1": "强大的语音转换文本的模型"
+  "gpt-3.5-turbo": "0.0015$/1000token",
+  "gpt-3.5-turbo-0301": "0.0015$/1000token",
+  "gpt-3.5-turbo-0613": "0.0015$/1000token",
+  "gpt4": "0.03$/1000token",
+  "gpt-4": "0.03$/1000token",
+  "gpt-4-0314": "0.03$/1000token",
+  "claude-2": "免费体验,但有速率限制",
 }
 const other_desps = {
   "code": "的AI代码处理模型",

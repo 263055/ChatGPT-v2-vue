@@ -995,8 +995,8 @@ export default {
         const info = {
           img: "",
           name: "ChatGPT",
-          detail: "chatgpt v3.5 所基于的模型",
-          lastMsg: "chatgpt v3.5 所基于的模型",
+          detail: "0.0015$/1000token",
+          lastMsg: "0.0015$/1000token",
           id: "gpt-3.5-turbo",
           headImg: AI_HEAD_IMG_URL,
           showHeadImg: true

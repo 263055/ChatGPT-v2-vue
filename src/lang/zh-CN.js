@@ -35,6 +35,7 @@ export default {
     },
     model: {
         title: "模型",
+        route: "线路种类",
         talk: "对话",
         saveSetting: "保存对话设置",
         resetSetting: "重置对话设置",

@@ -329,25 +329,31 @@
               <tr>
                 <th class="text-start" scope="row">generations产图模型</th>
                 <td>
-                  <a>6000token/次</a>
+                  <a>free(暂定)</a>
+                  <!--<a>6000token/次</a>-->
                 </td>
                 <td>
-                  <a>5000token/次</a>
+                  <a>free(暂定)</a>
+                  <!--<a>5000token/次</a>-->
                 </td>
                 <td>
-                  <a>4000token/次</a>
+                  <a>free(暂定)</a>
+                  <!--<a>4000token/次</a>-->
                 </td>
               </tr>
               <tr>
                 <th class="text-start" scope="row">whisper-1语音转文字模型</th>
                 <td>
-                  <a>0.6倍率</a>
+                  <a>free(暂定)</a>
+                  <!--<a>0.6倍率</a>-->
                 </td>
                 <td>
-                  <a>0.5倍率</a>
+                  <a>free(暂定)</a>
+                  <!--<a>0.5倍率</a>-->
                 </td>
                 <td>
-                  <a>0.3倍率</a>
+                  <a>free(暂定)</a>
+                  <!--<a>0.3倍率</a>-->
                 </td>
               </tr>
               <tr>

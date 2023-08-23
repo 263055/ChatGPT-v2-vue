@@ -519,10 +519,14 @@ export default {
         } //
         else // 普通的gpt对话
         {
+          const routeType = this.settingInfo.chat.routeType
           this.sendMsg(chatMsg);
           this.options.sessionId = this.curSessionId
           this.options.parentMessageId = this.lastChatMsg.id
-
+          this.options.routeType = 0
+          console.log(routeType)
+          if (routeType !== '普通线路/free') this.options.routeType = 1
+          console.log(this.options.routeType)
           this.setting.model = this.frinedInfo.id
           this.setting.stop = this.settingInfo.chat.stop
           this.setting.frequencyPenalty = this.settingInfo.chat.FrequencyPenalty

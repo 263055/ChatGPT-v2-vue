@@ -35,6 +35,7 @@ export default {
     },
     model: {
         title: "model",
+        route: "route type",
         talk: "chat",
         saveSetting: "save Chat Setting",
         savePrompt: "save Prompt",

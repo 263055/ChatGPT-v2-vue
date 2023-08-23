@@ -194,6 +194,17 @@
               <!--</div>-->
               <!--不联网-->
               <div v-show="!SettingInfo.openNet">
+                <!--优质线路-->
+                <div class="block">
+                  <el-tooltip :content="$t('model.route')" class="item" effect="dark" placement="top">
+                    <span class="demonstration">{{ $t('model.route') }}</span>
+                  </el-tooltip>
+                  <div>
+                    <el-select v-model="SettingInfo.chat.routeType" placeholder="请选择" style="margin-top: 10px;">
+                      <el-option v-for="item in SettingInfo.chat.routeShow" :value="item.value"/>
+                    </el-select>
+                  </div>
+                </div>
                 <!--停用词-->
                 <div class="block">
                   <el-tooltip class="item" effect="dark" :content="$t('model.stop')" placement="top">
@@ -569,6 +580,14 @@ export default {
         language: localStorage.getItem("language") === null ? "中文" : localStorage.getItem("language"),
         prompt: localStorage.getItem("prompt") == null ? "" : localStorage.getItem("prompt"),
         chat: {
+          // 线路种类
+          routeType: localStorage.getItem("routeType") == null ? "普通线路/free" : localStorage.getItem("routeType"),
+          // 线路分类
+          routeShow: [{
+            value: '普通线路/free',
+          }, {
+            value: '优质线路/按量付费',
+          }],
           // 后缀
           suffix: localStorage.getItem("suffix") == null ? "" : localStorage.getItem("suffix"),
           // 停用词
@@ -886,6 +905,7 @@ export default {
       localStorage.setItem("suffix", this.SettingInfo.chat.suffix)
       localStorage.setItem("stop", this.SettingInfo.chat.stop)
       localStorage.setItem("FrequencyPenalty", this.SettingInfo.chat.FrequencyPenalty)
+      localStorage.setItem("routeType", this.SettingInfo.chat.routeType)
       localStorage.setItem("PresencePenalty", this.SettingInfo.chat.PresencePenalty)
       localStorage.setItem("MaxTokens", this.SettingInfo.chat.MaxTokens)
       localStorage.setItem("Temperature", this.SettingInfo.chat.Temperature)
@@ -901,6 +921,7 @@ export default {
       localStorage.removeItem("suffix")
       localStorage.removeItem("stop")
       localStorage.removeItem("FrequencyPenalty")
+      localStorage.removeItem("routeType")
       localStorage.removeItem("PresencePenalty")
       localStorage.removeItem("MaxTokens")
       localStorage.removeItem("Temperature")
@@ -909,6 +930,7 @@ export default {
       this.SettingInfo.chat.suffix = ""
       this.SettingInfo.chat.stop = ""
       this.SettingInfo.chat.FrequencyPenalty = 0
+      this.SettingInfo.chat.routeType = '普通线路/free'
       this.SettingInfo.chat.PresencePenalty = 0
       this.SettingInfo.chat.MaxTokens = 1024
       this.SettingInfo.chat.Temperature = 1

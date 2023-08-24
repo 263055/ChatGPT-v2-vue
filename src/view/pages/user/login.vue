@@ -6,7 +6,7 @@
           <div class="page1-left">
             <div>
               <h1 class="page1-left-1">
-                <span class="black">
+                <span>
                   Access to AI tech
                 </span>
                 <span class="page1-left-1-font">
@@ -14,7 +14,8 @@
                 </span>
               </h1>
               <p class="page1-left-2">4gai 可以让你便捷地访问ChatGPT等AI模型。</p>
-              <p class="page1-left-2">使用Tokenizer分词器精准计费，目前完全免费。</p>
+              <p class="page1-left-2">可以在此网站畅想使用openai的3.5模型。</p>
+              <p class="page1-left-2">使用Tokenizer分词器精准计费，同时可以查看对话的扣费日志和订单日志，一切操作透明化处理。</p>
               <p class="page1-left-2">已经接入了chatgpt模型，whisper-1语音模型以及generations产图模型，目前正在努力接入更多的新功能。</p>
             </div>
           </div>
@@ -101,8 +102,164 @@
           </div>
         </div>
       </div>
+      <!--套餐比较-->
+      <div class="compare-card" style="text-align: center;">
+        <p>我们的服务计划</p>
+        <div class="table-responsive">
+          <table class="table text-center">
+            <thead>
+            <tr>
+              <th style="width: 34%;"></th>
+              <th style="width: 22%;">Free/体验版</th>
+              <th style="width: 22%;">Model/基础版</th>
+              <th style="width: 22%;">VIP/进阶版</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th class="text-start" scope="row">稳定性</th>
+              <td>
+                <svg-icon icon-class="error"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">响应速度</th>
+              <td>
+                <svg-icon icon-class="error"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">优质线路</th>
+              <td>
+                <svg-icon icon-class="error"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">接口平台</th>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">客服服务</th>
+              <td>
+                <svg-icon icon-class="error"/>
+              </td>
+              <td>
+                <svg-icon icon-class="error"/>
+              </td>
+              <td>
+                <svg-icon icon-class="check2"/>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">gpt3.5普通线路（低稳定）</th>
+              <td>
+                <a>free</a>
+              </td>
+              <td>
+                <a>free</a>
+              </td>
+              <td>
+                <a>free</a>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">generations产图模型</th>
+              <td>
+                <a>free(暂定)</a>
+                <!--<a>6000token/次</a>-->
+              </td>
+              <td>
+                <a>free(暂定)</a>
+                <!--<a>5000token/次</a>-->
+              </td>
+              <td>
+                <a>free(暂定)</a>
+                <!--<a>4000token/次</a>-->
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">whisper-1语音转文字模型</th>
+              <td>
+                <a>free(暂定)</a>
+                <!--<a>0.6倍率</a>-->
+              </td>
+              <td>
+                <a>free(暂定)</a>
+                <!--<a>0.5倍率</a>-->
+              </td>
+              <td>
+                <a>free(暂定)</a>
+                <!--<a>0.3倍率</a>-->
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">claude2线路</th>
+              <td>
+                <a>3次/1min/free</a>
+              </td>
+              <td>
+                <a>10次/1min/free</a>
+              </td>
+              <td>
+                <a>无限制/free</a>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">gpt3.5优质线路</th>
+              <td>
+                <a>0.6倍率</a>
+              </td>
+              <td>
+                <a>0.5倍率</a>
+              </td>
+              <td>
+                <a>0.3倍率</a>
+              </td>
+            </tr>
+            <tr>
+              <th class="text-start" scope="row">gpt4</th>
+              <td>
+                <a>1.4倍率</a>
+              </td>
+              <td>
+                <a>0.8倍率</a>
+              </td>
+              <td>
+                <a>0.6倍率</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <el-image :src="require('@/assets/gpt.jpg')" style="text-align: center;"/>
+        </div>
+      </div>
     </div>
-
     <!--底部通知栏-->
     <template v-if="logInfo">
       <div class="bottom-alert">
@@ -325,6 +482,154 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+.table > :not(caption) > * > * {
+  padding: .8rem .8rem;
+  color: var(--bs-table-color-state, var(--bs-table-color-type, var(--bs-table-color)));
+  background-color: var(--bs-table-bg);
+  border-bottom-width: 0.5px;
+  box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)))
+}
+
+td, th, thead, tr {
+  border-color: inherit;
+  border-style: solid;
+  border-width: 0;
+}
+
+.login-title {
+  font-size: 35px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.main-box {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 20px;
+  box-sizing: border-box;
+
+  .login-page1 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100rem;
+    padding-top: 8rem;
+
+    .page1-left {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      max-width: 28rem;
+      margin-left: auto;
+      margin-right: auto;
+
+      .page1-left-1 {
+        --tw-text-opacity: 1;
+        color: rgb(255 255 255 / var(--tw-text-opacity));
+        font-weight: 700;
+        font-size: 3rem;
+        line-height: 1;
+        margin-top: -5rem;
+
+        .page1-left-1-font {
+          display: block;
+          color: transparent;
+          -webkit-background-clip: text;
+          padding-bottom: 1rem;
+          --tw-gradient-to: #22d3ee;
+          --tw-gradient-from: #99f6e4;
+          background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
+        }
+      }
+
+      .page1-left-2 {
+        --tw-text-opacity: 1;
+        color: rgb(209 213 219 / var(--tw-text-opacity));
+        font-size: 1rem;
+        line-height: 1.5rem;
+        margin-top: 1.25rem;
+      }
+    }
+
+    .page1-right {
+      margin-top: 3rem;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      max-width: 28rem;
+      z-index: 50;
+
+      .right-login-div {
+        width: 100%;
+        margin-top: 2rem;
+
+        .login-card {
+          --tw-bg-opacity: 1;
+          background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+          --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
+          --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+          box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, #0000), var(--tw-shadow);
+          padding: 1.5rem;
+          border-radius: 0.5rem;
+          color: #fff;
+
+          .input-icon {
+            height: 39px;
+            width: 14px;
+            margin-left: 2px;
+          }
+
+          .login-card-input {
+            width: 60%;
+            flex: 1; /*将输入框自动调整为剩余空间的大小*/
+            margin-right: 10px; /*为了在输入框和图片之间添加一些间距，你可以调整这个数值*/
+          }
+
+          .login-code {
+            img {
+              height: 38px;
+              float: right;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .compare-card {
+    --tw-bg-opacity: 1;
+    background-color: rgb(17 24 50 / var(--tw-bg-opacity));
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100rem;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    color: white;
+
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 10rem;
+
+      .table {
+        width: 80%;
+        margin: auto auto 2rem;
+        vertical-align: top;
+        border-color: var(--bs-table-border-color);
+      }
+    }
+
+    p {
+      font-size: xxx-large;
+      margin: auto;
+      text-align: center;
+      max-width: 56rem;;
+      font-weight: 700;
+    }
+  }
+}
+
 .el-login-footer {
   height: 40px;
   line-height: 40px;
@@ -336,96 +641,6 @@ export default {
   font-size: 12px;
   letter-spacing: 1px;
 }
-
-.login-page1 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 80rem;
-  padding-top: 8rem;
-
-  .page1-left {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    max-width: 28rem;
-    margin-left: auto;
-    margin-right: auto;
-
-    .page1-left-1 {
-      --tw-text-opacity: 1;
-      color: rgb(255 255 255 / var(--tw-text-opacity));
-      font-weight: 700;
-      font-size: 3rem;
-      line-height: 1;
-      margin-top: -5rem;
-
-      .page1-left-1-font {
-        display: block;
-        color: transparent;
-        -webkit-background-clip: text;
-        padding-bottom: 1rem;
-        --tw-gradient-to: #22d3ee;
-        --tw-gradient-from: #99f6e4;
-        background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
-      }
-    }
-
-    .page1-left-2 {
-      --tw-text-opacity: 1;
-      color: rgb(209 213 219 / var(--tw-text-opacity));
-      font-size: 1rem;
-      line-height: 1.5rem;
-      margin-top: 1.25rem;
-    }
-  }
-
-  .page1-right {
-    margin-top: 3rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    max-width: 28rem;
-    z-index: 50;
-
-    .right-login-div {
-      width: 100%;
-      margin-top: 2rem;
-
-      .login-card {
-        --tw-bg-opacity: 1;
-        background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-        --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
-        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
-        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, #0000), var(--tw-shadow);
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        color: #fff;
-
-        .input-icon {
-          height: 39px;
-          width: 14px;
-          margin-left: 2px;
-        }
-
-        .login-card-input {
-          width: 60%;
-          flex: 1; /*将输入框自动调整为剩余空间的大小*/
-          margin-right: 10px; /*为了在输入框和图片之间添加一些间距，你可以调整这个数值*/
-        }
-
-        .login-code {
-          img {
-            height: 38px;
-            float: right;
-          }
-        }
-      }
-    }
-  }
-}
-
 
 .bottom-alert {
   padding-bottom: 0.5rem;
@@ -609,7 +824,7 @@ export default {
   }
   .login-page1 {
     overflow: hidden;
-    padding: 2rem 2rem 14rem;
+    padding-bottom: 10rem;
 
     .grid {
       gap: 2rem;
@@ -649,22 +864,5 @@ export default {
       }
     }
   }
-}
-
-.black {
-  display: block;
-}
-
-.login-title {
-  font-size: 35px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.main-box {
-  width: 100vw;
-  height: 88vh;
-  border-radius: 20px;
-  box-sizing: border-box;
 }
 </style>

@@ -417,7 +417,7 @@ export default {
   },
   watch: {
     'form.price': function (newVal) {
-      this.form.token = newVal * 35000;
+      this.form.token = newVal * 50000;
     }
   },
   data() {

@@ -320,13 +320,13 @@
                     </el-select>
                   </div>
                 </div>
-                <!--图片数量-->
-                <div class="block">
-                  <el-tooltip :content="$t('image.count_title')" class="item" effect="dark" placement="top">
-                    <span class="demonstration">{{ $t('image.count') }}</span>
-                  </el-tooltip>
-                  <el-slider v-model="SettingInfo.n" :max="5" :min="-1" :step="1" class="astrict"></el-slider>
-                </div>
+                <!--&lt;!&ndash;图片数量&ndash;&gt;-->
+                <!--<div class="block">-->
+                <!--  <el-tooltip :content="$t('image.count_title')" class="item" effect="dark" placement="top">-->
+                <!--    <span class="demonstration">{{ $t('image.count') }}</span>-->
+                <!--  </el-tooltip>-->
+                <!--  <el-slider v-model="SettingInfo.n" :max="5" :min="-1" :step="1" class="astrict"></el-slider>-->
+                <!--</div>-->
                 <!--提示文字-->
                 <div class="block">
                   <h3 style="color: #ad4040">

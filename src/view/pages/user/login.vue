@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <div class="main-box">
+      <!--登录表单-->
       <div class="login-page1">
         <div class="grid">
           <div class="page1-left">
@@ -102,8 +103,92 @@
           </div>
         </div>
       </div>
+      <!--比较-->
+      <div class="login-page2">
+        <div class="page3-container">
+          <div class="page3-header">
+            <div class="page3-h-left">
+              <h2 class="header-title" data-wow-delay=".4s" style="visibility: visible; animation-delay: 0.4s;">
+                services we offer</h2>
+              <p class="subtitle" data-wow-delay=".6s" style="visibility: visible; animation-delay: 0.6s;">
+                Why does many people choose our project and frequent use<br>
+                Understand GPT, learn GPT, and master GPT.</p>
+            </div>
+            <div v-show="asideStatus" class="page3-h-right">
+              <div class="" data-wow-delay=".8s" style="visibility: visible; animation-delay: 0.8s;">
+                <a class="btn-solid" @click="jumpToChat">
+                  点我跳转聊天界面啊
+                  <svg-icon class="page3-h-icon" icon-class="right"/>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="page3-body">
+            <div class="page3-card row service-box">
+              <div class="service-icon">
+                <svg-icon class="page3-c-icon" icon-class="speed"/>
+              </div>
+              <div class="service-content">
+                <h3>低延迟性</h3>
+                <p class="service-text">1.根据你选择的服务不同，你将感受到到不同的体验！</p>
+                <p class="service-text">2.gpt的平均响应时间控制在两秒以内，高级的订阅服务可以体验更快的响应速度</p>
+              </div>
+            </div>
+            <div class="page3-card row service-box">
+              <div class="service-icon">
+                <svg-icon class="page3-c-icon" icon-class="safe"/>
+              </div>
+              <div class="service-content">
+                <h3>高可靠性</h3>
+                <p class="service-text">1.对用户的重要信息进行md加密处理</p>
+                <p class="service-text">2.强制使用https，同时前后端交互的重要数据采用post请求，保证数据传输的安全性</p>
+              </div>
+            </div>
+            <div class="page3-card row service-box">
+              <div class="service-icon">
+                <svg-icon class="page3-c-icon" icon-class="transparent"/>
+              </div>
+              <div class="service-content">
+                <h3>透明化</h3>
+                <p class="service-text">1.公开token的计算方式以及token兑换比例</p>
+                <p class="service-text">2.向用户公开对话日志，账单日志，可以清楚的看到自己的在本网站的任何操作，同时不涉及用户的敏感数据</p>
+              </div>
+            </div>
+            <div class="page3-card row service-box">
+              <div class="service-icon">
+                <svg-icon class="page3-c-icon" icon-class="diversity"/>
+              </div>
+              <div class="service-content">
+                <h3>多样化</h3>
+                <p class="service-text">1.本网站内置了多个功能，可以便捷的一键调整/保存gpt回答的温度等参数</p>
+                <p class="service-text">2.同时本网站也提供免费的tts语音服务，提供免费的语音播报，同时支持多个语种（取决于浏览器）</p>
+              </div>
+            </div>
+            <div class="page3-card row service-box">
+              <div class="service-icon">
+                <svg-icon class="page3-c-icon" icon-class="welfare"/>
+              </div>
+              <div class="service-content">
+                <h3>公益性</h3>
+                <p class="service-text">1.网站免费提供gpt3.5，whisper-1等模型，可以在本网站畅想ai对话</p>
+                <p class="service-text">2.免费开放gpt3.5，claude2的接口（预计九月初上线），可以在您的私人项目中集成一个自己的ai服务！</p>
+              </div>
+            </div>
+            <div class="page3-card row service-box">
+              <div class="service-icon">
+                <svg-icon class="page3-c-icon" icon-class="iterative"/>
+              </div>
+              <div class="service-content">
+                <h3>高性价比</h3>
+                <p class="service-text">1.与其他网站相比，本网站提供的服务更全面，价格上也更具有性价比/p>
+                <p class="service-text" style="color: #c64a4a;">2.在本网站享受免费的gpt服务，也享受比官网更智能，比其他镜像网站更具有性价比的特色服务</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!--套餐比较-->
-      <div class="compare-card" style="text-align: center;">
+      <div class="login-page3" style="text-align: center;">
         <p>我们的服务计划</p>
         <div class="table-responsive">
           <table class="table text-center">
@@ -300,12 +385,6 @@
         </div>
       </div>
     </template>
-    <!--  底部  -->
-    <el-footer style="height: 0;">
-      <div class="el-login-footer">
-        <span>Copyright © 2023 4gai.me All Rights Reserved.</span>
-      </div>
-    </el-footer>
   </el-container>
 </template>
 
@@ -333,24 +412,18 @@ export default {
     SvgIcon
   },
   destoryed() {
-    // window.removeEventListener('resize', this.handleResize)
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    // resize() {
-    //   this.asideStatus = window.innerWidth > 500;
-    // },
-    //监听窗口尺寸的变化
-    // handleResize() {
-    //   if (this.firstSize) {
-    //     this.resize();
-    //     this.firstSize = false;
-    //     this.width = window.innerWidth;
-    //   }
-    //   if (this.width !== window.innerWidth) {
-    //     this.resize();
-    //     this.width = window.innerWidth;
-    //   }
-    // },
+    jumpToChat() {
+      this.$router.push({
+        name: "ChatHome",
+      }, () => {
+      });
+    },
+    resize() {
+      this.asideStatus = window.innerWidth > 800;
+    },
     closeInfo() {
       this.logInfo = false
     },
@@ -432,8 +505,8 @@ export default {
     }
   },
   created() {
-    // window.addEventListener('resize', this.handleResize)
-    // this.handleResize()
+    window.addEventListener('resize', this.resize)
+    this.resize()
     this.getCode();
     this.getCookie();
     this.isLogin();
@@ -442,7 +515,7 @@ export default {
   },
   data() {
     return {
-      // asideStatus: true,
+      asideStatus: true,
       firstSize: true,
       logInfo: true,
       width: 0,
@@ -597,9 +670,183 @@ td, th, thead, tr {
     }
   }
 
-  .compare-card {
+  .login-page2 {
+    color: white;
     --tw-bg-opacity: 1;
-    background-color: rgb(17 24 50 / var(--tw-bg-opacity));
+    background-color: rgb(30 24 50 / var(--tw-bg-opacity));
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100rem;
+    padding-top: 4rem;
+
+    .page3-container {
+
+      .page3-header {
+        position: relative;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .page3-h-left {
+          .header-title {
+            position: relative;
+            margin-bottom: 0.75rem;
+            font-size: 3rem;
+            font-weight: 500;
+            text-transform: capitalize;
+            letter-spacing: 1.5px;
+            line-height: 1.3;
+            display: inline-block;
+            z-index: 0;
+          }
+
+          .subtitle {
+            margin: 0 auto 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+            text-transform: capitalize;
+            opacity: 0.75;
+          }
+
+          p {
+            display: block;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+          }
+        }
+
+        .page3-h-right {
+          .btn-solid {
+            --clr-white: #fff;
+            --clr-main: #09aff4;
+            color: var(--clr-white);
+            background-color: var(--clr-main);
+            border-color: var(--clr-main);
+            position: relative;
+            display: inline-flex;
+            letter-spacing: 1px;
+            border-radius: 0.25rem 1rem 0.25rem 1rem;
+            padding: 0.75rem 2.25rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+          }
+
+          .page3-h-icon {
+            display: flex;
+            margin-left: 0.5rem;
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: transform 0.3s ease-in-out 0s;
+          }
+        }
+      }
+
+      .page3-body {
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin: calc(-1 * var(--bs-gutter-y)) calc(-.5 * var(--bs-gutter-x)) 2rem;
+
+        .page3-card {
+          margin-right: auto !important;
+          margin-left: auto !important;
+          flex: 0 0 auto;
+          width: 28%;
+
+          .service-icon {
+            margin-bottom: 1rem;
+            transition: all 0.5s ease-in-out 0s;
+
+            .page3-c-icon {
+              display: block;
+              line-height: 3rem;
+              font-size: 3rem;
+              color: #09aff4;
+              transform-origin: center;
+              transition: all 0.3s ease-in-out 0s;
+            }
+          }
+
+          .service-content {
+            margin-bottom: 1.5rem;
+
+            .service-text {
+              font-size: 1.1rem;
+              line-height: 1.5;
+              margin: 0;
+              opacity: 0.85;
+            }
+
+            h3 {
+              text-transform: capitalize;
+              font-size: 1.5rem;
+              font-weight: 600;
+              margin-bottom: 1rem;
+            }
+
+            p {
+              display: block;
+              margin-block-start: 1em;
+              margin-block-end: 1em;
+              margin-inline-start: 0;
+              margin-inline-end: 0;
+            }
+          }
+
+          .read-more {
+            text-transform: capitalize;
+            color: #09aff4;
+            font-weight: 600;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease-in-out 0s;
+            border: none;
+            padding: 0;
+
+            a {
+              text-decoration: none;
+              color: inherit;
+            }
+          }
+        }
+
+        .service-box {
+          border-radius: 0.5rem;
+          padding: 2rem;
+          border: 1px solid rgba(79, 102, 111, 0.35);
+          box-shadow: 0 0 10px 0 rgba(6, 9, 34, 0.1);
+          position: relative;
+          transition: all 0.3s ease-in-out 0s;
+          z-index: 0;
+        }
+
+        //&:hover {
+        //  .service-box-choose{
+        //    background-color: rgba(#5757ae, 1);
+        //  }
+        //}
+
+        .row > * {
+          flex-shrink: 0;
+          width: 100%;
+          max-width: 100%;
+          padding-right: calc(1.5rem * .5);
+          padding-left: calc(1.5rem * .5);
+          margin-top: 1.5rem;
+        }
+      }
+    }
+  }
+
+  .login-page3 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
     margin-left: auto;
     margin-right: auto;
     max-width: 100rem;
@@ -783,33 +1030,94 @@ td, th, thead, tr {
     }
   }
   .main-box {
-  }
-  .login-page1 {
-    padding-top: 4rem;
+    .login-page1 {
+      padding-top: 4rem;
 
-    .page1-left {
-      text-align: center;
-      max-width: 42rem;
+      .page1-left {
+        text-align: center;
+        max-width: 42rem;
 
-      .page1-left-1 {
-        font-size: 2.25rem;
-        line-height: 2.5rem;
-        margin-top: 1.25rem;
+        .page1-left-1 {
+          font-size: 2.25rem;
+          line-height: 2.5rem;
+          margin-top: 1.25rem;
 
-        .page1-left-1-font {
-          padding-bottom: 1.25rem
+          .page1-left-1-font {
+            padding-bottom: 1.25rem
+          }
+        }
+
+        .page1-left-2 {
+          font-size: 1.25rem;
+          line-height: 1.75rem;
         }
       }
 
-      .page1-left-2 {
-        font-size: 1.25rem;
-        line-height: 1.75rem;
+      .page1-right {
+        .right-login-div {
+          min-width: 15rem;
+        }
       }
     }
 
-    .page1-right {
-      .right-login-div {
-        min-width: 15rem;
+    .login-page2 {
+      padding-top: 4rem;
+
+      .page3-container {
+        padding-left: 1rem;
+
+        .page3-header {
+          text-align: center;
+          max-width: 42rem;
+
+          .page3-h-left {
+            .header-title {
+
+            }
+
+            .subtitle {
+
+            }
+
+            p {
+
+            }
+          }
+
+          .page3-h-right {
+            .btn-solid {
+              --clr-white: #fff;
+              --clr-main: #09aff4;
+              color: var(--clr-white);
+              background-color: var(--clr-main);
+              border-color: var(--clr-main);
+              position: relative;
+              display: inline-flex;
+              letter-spacing: 1px;
+              border-radius: 0.25rem 1rem 0.25rem 1rem;
+              padding: 0.75rem 2.25rem;
+              font-size: 1.1rem;
+              font-weight: 500;
+              cursor: pointer;
+            }
+
+            .page3-h-icon {
+              display: flex;
+              margin-left: 0.5rem;
+              font-size: 1.5rem;
+              line-height: 1;
+              transition: transform 0.3s ease-in-out 0s;
+            }
+          }
+        }
+
+        .page3-body {
+          padding-right: 5rem;
+
+          .page3-card {
+            width: 100%;
+          }
+        }
       }
     }
   }
@@ -863,6 +1171,11 @@ td, th, thead, tr {
         }
       }
     }
+  }
+
+  .page3-container {
+    padding-left: 5rem;
+    padding-right: 5rem;
   }
 }
 </style>

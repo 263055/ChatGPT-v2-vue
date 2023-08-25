@@ -383,7 +383,7 @@
               <tr>
                 <th class="text-start" scope="row">gpt4</th>
                 <td>
-                  <a>1.4倍率</a>
+                  <a>1.2倍率</a>
                 </td>
                 <td>
                   <a>0.8倍率</a>

@@ -117,7 +117,7 @@
             <div v-show="asideStatus" class="page3-h-right">
               <div class="" data-wow-delay=".8s" style="visibility: visible; animation-delay: 0.8s;">
                 <a class="btn-solid" @click="jumpToChat">
-                  点我跳转聊天界面啊
+                  点我跳转聊天界面
                   <svg-icon class="page3-h-icon" icon-class="right"/>
                 </a>
               </div>
@@ -130,7 +130,7 @@
               </div>
               <div class="service-content">
                 <h3>低延迟性</h3>
-                <p class="service-text">1.根据你选择的服务不同，你将感受到到不同的体验！</p>
+                <p class="service-text">1.根据你选择的服务不同，你将感受到不同的体验！</p>
                 <p class="service-text">2.gpt的平均响应时间控制在两秒以内，高级的订阅服务可以体验更快的响应速度</p>
               </div>
             </div>
@@ -151,7 +151,7 @@
               <div class="service-content">
                 <h3>透明化</h3>
                 <p class="service-text">1.公开token的计算方式以及token兑换比例</p>
-                <p class="service-text">2.向用户公开对话日志，账单日志，可以清楚的看到自己的在本网站的任何操作，同时不涉及用户的敏感数据</p>
+                <p class="service-text">2.向用户公开对话日志，账单日志，可以清楚的看到自己在本网站的任何操作，同时不涉及用户的敏感数据</p>
               </div>
             </div>
             <div class="page3-card row service-box">
@@ -160,7 +160,7 @@
               </div>
               <div class="service-content">
                 <h3>多样化</h3>
-                <p class="service-text">1.本网站内置了多个功能，可以便捷的一键调整/保存gpt回答的温度等参数</p>
+                <p class="service-text">1.本网站内置了多个功能，可以便捷的一键调整/保存gpt的回答参数</p>
                 <p class="service-text">2.同时本网站也提供免费的tts语音服务，提供免费的语音播报，同时支持多个语种（取决于浏览器）</p>
               </div>
             </div>
@@ -180,7 +180,7 @@
               </div>
               <div class="service-content">
                 <h3>高性价比</h3>
-                <p class="service-text">1.与其他网站相比，本网站提供的服务更全面，价格上也更具有性价比/p>
+                <p class="service-text">1.与其他网站相比，本网站提供的服务更全面，价格上也更具有性价比
                 <p class="service-text" style="color: #c64a4a;">2.在本网站享受免费的gpt服务，也享受比官网更智能，比其他镜像网站更具有性价比的特色服务</p>
               </div>
             </div>
@@ -330,7 +330,7 @@
             <tr>
               <th class="text-start" scope="row">gpt4</th>
               <td>
-                <a>1.4倍率</a>
+                <a>1.2倍率</a>
               </td>
               <td>
                 <a>0.8倍率</a>

@@ -84,7 +84,7 @@
         <el-collapse v-model="activeNames">
           <el-collapse-item name="1" title="使用这个网站是否需要掏钱">
             <p>1.对于本网站的3.5模型以及claude2模型，是不需要额外付费的，但这毕竟是免费的服务，会出现线路崩溃等情况（比如key过期，key额度用完）</p>
-            <p>2.可以付费使用更好的线路，保证响应速度以及稳定性，同时3.5的价格同官网（openai）相比，更为低价</p>
+            <p>2.可以付费使用更好的线路，保证响应速度以及稳定性，同时gpt的价格同官网（openai）相比，更为低价</p>
             <p>3.网站的4.0也可以直接使用，每个新用户都会有一定的额度，用来体验gpt3.5的优质线路或gpt4</p>
           </el-collapse-item>
           <el-collapse-item name="2" title="gpt的使用价格是怎么计算的">

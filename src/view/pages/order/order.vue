@@ -383,7 +383,7 @@
               <tr>
                 <th class="text-start" scope="row">gpt4</th>
                 <td>
-                  <a>1.2倍率</a>
+                  <a>1.1倍率</a>
                 </td>
                 <td>
                   <a>0.8倍率</a>
@@ -417,7 +417,7 @@ export default {
   },
   watch: {
     'form.price': function (newVal) {
-      this.form.token = newVal * 50000;
+      this.form.token = newVal * 70000;
     }
   },
   data() {

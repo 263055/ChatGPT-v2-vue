@@ -24,6 +24,7 @@
             <!--登录第一页右边的内容，表格所在的卡片-->
             <div class="right-login-div">
               <div class="login-card">
+                <!--已经登录-->
                 <template v-if="!this.haveLogin">
                   <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
                     <!--最顶端的文字描述部分-->
@@ -82,16 +83,62 @@
                     </el-form-item>
                   </el-form>
                 </template>
+                <!--没有登录-->
                 <template v-else>
                   <el-form class="login-form1">
                     <div class="login-title">{{ getUserEmail }}</div>
-                    <div>{{ welcomeMsg }}</div>
-                    <div>{{ welcomeMsg1 }}</div>
-                    <div>{{ welcomeMsg2 }}</div>
-                    <div class="login-renew" style="color: #d44141">最新一次更新：</div>
-                    <div style="color: #d44141">{{ reNewMsg1 }}</div>
-                    <div style="color: #d44141">{{ reNewMsg2 }}</div>
-                    <div class="welcome-button">
+                    <!--已经邀请-->
+                    <div v-if="isInvite">
+                      你已经填写过邀请码了，操作记录可以在 "日志" 中查看
+                    </div>
+                    <!--没有邀请-->
+                    <div v-else>
+                      <div>在下面的框中输入其他人的邀请码,即可获取Token哦</div>
+                      <div class="pay-body">
+                        <label class="form-label">邀请码:</label>
+                        <input v-model="inviteOtherCode" class="form-control" placeholder="没有邀请码?那不妨试试下面的神秘代码吧!">
+                      </div>
+                      <div class="copy-context">
+                        <p>神秘代码:</p>
+                        <div class="copy-button">
+                          <span>8ced1d2f-56ed-3e2b</span>
+                          <svg height="22" p-id="6241" viewBox="0 0 24 24"
+                               width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
+                               @click="$copy('8ced1d2f-56ed-3e2b', '邀请码已复制')">
+                            <path
+                                d="M16.02 20.96H3.78c-.41 0-.75-.34-.75-.75V7.74c0-.41.34-.75.75-.75h7.87c.21 0 .39.08.53.22l4.37 4.37c.14.14.22.32.22.53v8.11c0 .4-.34.74-.75.74ZM4.53 19.47h10.75v-6.61h-3.62c-.410-.75-.34-.75-.75V8.48H4.53v10.99Z"/>
+                            <path
+                                d="m20.74 7.63-4.37-4.37c-.14-.14-.36-.2-.53-.22H8.01c-.41 0-.75.34-.75.75V5.5h1.49v-.97h6.34v3.62c0.41.34.75.75.75h3.62v8.19h-1.2v1.49h1.95c.41 0 .75-.34.75-.75V8.16c0-.21-.08-.4-.22-.53Z"/>
+                          </svg>
+                        </div>
+                      </div>
+                      <el-button :loading="loadingInvite" size="medium"
+                                 style="width:100%;margin-bottom: 15px;" type="primary"
+                                 @click="inviteUser">
+                        <span v-if="!loadingInvite">接受邀请</span>
+                        <span v-else>系统正在处理中...</span>
+                      </el-button>
+                    </div>
+
+                    <div class="copy-context">
+                      <p>你的邀请码是:</p>
+                      <div class="copy-button">
+                        <span>{{ inviteCode }}</span>
+                        <svg height="22" p-id="6241" viewBox="0 0 24 24"
+                             width="22" x="1679666016648" xmlns="http://www.w3.org/2000/svg"
+                             @click="$copy(inviteCode, '邀请码已复制')">
+                          <path
+                              d="M16.02 20.96H3.78c-.41 0-.75-.34-.75-.75V7.74c0-.41.34-.75.75-.75h7.87c.21 0 .39.08.53.22l4.37 4.37c.14.14.22.32.22.53v8.11c0 .4-.34.74-.75.74ZM4.53 19.47h10.75v-6.61h-3.62c-.410-.75-.34-.75-.75V8.48H4.53v10.99Z"/>
+                          <path
+                              d="m20.74 7.63-4.37-4.37c-.14-.14-.36-.2-.53-.22H8.01c-.41 0-.75.34-.75.75V5.5h1.49v-.97h6.34v3.62c0.41.34.75.75.75h3.62v8.19h-1.2v1.49h1.95c.41 0 .75-.34.75-.75V8.16c0-.21-.08-.4-.22-.53Z"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <span style="color: #a05d5d">将你的邀请码发给你的朋友,让他也来体验一下这个网站吧!!邀请成功后双方都能获得Token奖励</span>
+                    <p>这个网站已经持续运营了接近四个月的时间,如果您愿意使用我们的小站,这是我们的荣幸</p>
+                    <p>同时也希望你能够转发给身边的朋友,你的支持,就是我最大的动力!!!</p>
+                    <p>我后续会持续增加更多的新功能,4gai期待你的到来</p>
+                    <div class="welcome-button" style="text-align: center; width:100%;">
                       <el-button type="primary" @click="layout">
                         退出登录
                       </el-button>
@@ -330,7 +377,7 @@
             <tr>
               <th class="text-start" scope="row">gpt4</th>
               <td>
-                <a>1.2倍率</a>
+                <a>1.1倍率</a>
               </td>
               <td>
                 <a>0.8倍率</a>
@@ -395,6 +442,7 @@ import SvgIcon from "../../../components/SvgIcon.vue";
 import {getCodeImg} from "@/api/login";
 import Cookies from "js-cookie";
 import {getToken} from "@/util/auth";
+import {getInviteCode, getInviteIsExist, setInviteCode} from "@/api/log";
 
 export default {
   name: "Login",
@@ -471,6 +519,12 @@ export default {
     isLogin() {
       const token = getToken();
       this.haveLogin = !(token === undefined || token === '' || token === null);
+      if (this.haveLogin) {
+        this.getInviteCode();
+        this.getInviteIsExist();
+      } else {
+        this.getCode();
+      }
     },
     layout() {
       localStorage.removeItem('4gai-Token');
@@ -502,20 +556,61 @@ export default {
           });
         }
       });
+    },
+    getInviteCode() {
+      new Promise((resolve, reject) => {
+        getInviteCode().then((res) => {
+          this.inviteCode = res.msg
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    getInviteIsExist() {
+      new Promise((resolve, reject) => {
+        getInviteIsExist().then((res) => {
+          this.isInvite = res.data
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    inviteUser() {
+      this.loadingInvite = true
+      new Promise((resolve, reject) => {
+        setInviteCode(this.inviteOtherCode).then((res) => {
+          this.$notify({
+            message: res.msg,
+            duration: 5000,
+            type: 'success'
+          })
+          this.isInvite = true
+          this.loadingInvite = false
+          resolve()
+        }).catch(error => {
+          this.loadingInvite = false
+          reject(error)
+        })
+      })
     }
   },
   created() {
     window.addEventListener('resize', this.resize)
     this.resize()
-    this.getCode();
-    this.getCookie();
-    this.isLogin();
   },
   mounted() {
+    this.getCookie();
+    this.isLogin();
   },
   data() {
     return {
       asideStatus: true,
+      isInvite: false,
+      loadingInvite: false,
+      inviteCode: '',
+      inviteOtherCode: '',
       firstSize: true,
       logInfo: true,
       width: 0,
@@ -542,13 +637,6 @@ export default {
       captchaEnabled: true,
       codeUrl: '',
       haveLogin: false,
-      reNewMsg1: '1.加入了语音模型和照片模型',
-      reNewMsg2: '2.加入了语音播报功能，支持多种语种！',
-      welcomeMsg1: '2.你的支持，就是我做下去的动力！',
-      welcomeMsg2: '3.目前暂不支持图片和语音的调用，我后续会一一加入，敬请期待',
-      welcomeMsg: '1.如果您觉得网站做的不错，请多多支持并分享给身边的朋友，' +
-          '网站已经持续运行了接近三个月，始终秉承着以高性价比为主。' +
-          '希望这次的更新能为你提供更好的服务。',
     };
   },
 };
@@ -587,7 +675,7 @@ td, th, thead, tr {
     margin-left: auto;
     margin-right: auto;
     max-width: 100rem;
-    padding-top: 8rem;
+    padding-top: 4rem;
 
     .page1-left {
       padding-left: 1.5rem;
@@ -600,7 +688,7 @@ td, th, thead, tr {
         --tw-text-opacity: 1;
         color: rgb(255 255 255 / var(--tw-text-opacity));
         font-weight: 700;
-        font-size: 3rem;
+        font-size: 3.5rem;
         line-height: 1;
         margin-top: -5rem;
 
@@ -618,7 +706,7 @@ td, th, thead, tr {
       .page1-left-2 {
         --tw-text-opacity: 1;
         color: rgb(209 213 219 / var(--tw-text-opacity));
-        font-size: 1rem;
+        font-size: 1.5rem;
         line-height: 1.5rem;
         margin-top: 1.25rem;
       }
@@ -646,6 +734,63 @@ td, th, thead, tr {
           padding: 1.5rem;
           border-radius: 0.5rem;
           color: #fff;
+
+          .login-form1 {
+            .copy-context {
+              display: flex;
+              align-items: stretch;
+              white-space: nowrap;
+
+              p {
+                display: flex;
+                align-items: center;
+              }
+
+              .copy-button {
+                padding: 0.5rem;
+                border-radius: 0.375rem;
+                justify-content: space-between;
+                display: inline-flex;
+                margin: 0.5rem;
+                background-color: #5769a2;
+                align-items: center;
+
+                span {
+                  margin-right: 10px;
+                }
+              }
+            }
+
+            .pay-body {
+              width: 100%;
+              padding-top: 15px;
+              padding-bottom: 7.5px;
+
+              .form-label {
+                display: inline-block;
+                text-align: right;
+              }
+
+              .form-control {
+                width: 70%;
+                color: #a2a1a1;
+                background-color: rgb(50, 54, 60);
+                border: 1px solid rgb(80, 85, 80);
+                box-shadow: 0 0 5px 0 rgb(0, 136, 255);
+                position: relative;
+                cursor: pointer;
+                margin-left: 25px;
+                padding: .375rem .75rem;
+                border-radius: 0.375rem;
+                transition: box-shadow .15s ease-in-out, box-shadow .15s ease-in-out
+              }
+            }
+
+            p {
+              margin-bottom: 5px;
+              margin-top: 10px;
+            }
+          }
 
           .input-icon {
             height: 39px;
@@ -891,7 +1036,7 @@ td, th, thead, tr {
 
 .bottom-alert {
   padding-bottom: 0.5rem;
-  z-index: 20;
+  z-index: 9999;
   bottom: 0;
   left: 0;
   right: 0;
@@ -1056,6 +1201,27 @@ td, th, thead, tr {
       .page1-right {
         .right-login-div {
           min-width: 15rem;
+
+          .login-card {
+
+            .login-form1 {
+              .copy-context {
+                p {
+                  margin: auto;
+                }
+              }
+
+              .pay-body {
+                display: flex;
+                align-items: stretch;
+                white-space: nowrap;
+
+                .form-label {
+                  margin: auto;
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -1167,6 +1333,12 @@ td, th, thead, tr {
 
           .login-card {
             width: 350px;
+
+            .login-form1 {
+              .pay-body {
+                align-items: center;
+              }
+            }
           }
         }
       }

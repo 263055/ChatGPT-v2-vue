@@ -28,11 +28,8 @@
             <el-table-column label="问答类型" prop="chatType"/>
             <el-table-column align="right">
               <template #default="scope">
-                <el-button
-                    size="small"
-                    type="danger"
-                    @click="deleteChatMsgDetail(scope.$index, scope.row)"
-                >删除
+                <el-button size="small" type="danger"
+                           @click="deleteChatMsgDetail(scope.$index, scope.row)">删除
                 </el-button>
               </template>
             </el-table-column>
@@ -114,7 +111,14 @@
             <p>网站采用累计充值的方法计数,你充值的金额会在个人中心中显示出来</p>
             <p>当你想要升级套餐的时候,会将你的 "累计充值" 转换为对应的套餐以及一个月的订阅时间</p>
           </el-collapse-item>
-          <el-collapse-item name="6" title="邀请用户有什么好处?怎么判别是否邀请新用户?">
+          <el-collapse-item name="6" title="为什么我用gpt4提问,一下子扣我十几万的Token?????">
+            <p>首先,使用gpt4的时候不建议开启上下文,因为历史对话也会被算作Token</p>
+            <p>同时,你可以参考上面的gpt4的计算公式,gpt4是真的贵啊啊啊啊啊啊啊啊</p>
+            <p>站主也有幸尝测试过,一个携带了上下文的问题,问题Token是5000,回答Token是1000,你猜怎么着?一下子扣除我接近11万的Token,那叫一个心疼啊!</p>
+            <p style="color: #b54747">所以总结一下:gpt4的使用要尽量减少上下文</p>
+            <p>也有一次我向gpt4提问,大概六条对话(携带少量上下文),扣了我差不多 2rmb, 好心疼┭┮﹏┭┮</p>
+          </el-collapse-item>
+          <el-collapse-item name="7" title="邀请用户有什么好处?怎么判别是否邀请新用户?">
             <p>1.邀请新用户当然是拿Token免费白嫖啦(开小号试试?似乎可以卡站主的bug)</p>
             <p>2.让新用户在登录页面填写你的邀请码,双方即可获得邀请奖励</p>
             <p>&nbsp;&nbsp;&nbsp;(1)被邀请者获得 30000 的Token,而邀请者获得 15000 Token</p>
@@ -210,6 +214,7 @@ export default {
     //删除某一条对话日志
     deleteChatMsgDetail(event) {
       deleteChatMsgLog(this.chatMsgLog[event].id)
+      this.$message.success("对话记录删除成功")
       this.getChtMsgDetail();
     },
     //获取邀请日志

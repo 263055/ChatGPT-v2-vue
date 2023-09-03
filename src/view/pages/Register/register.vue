@@ -35,7 +35,8 @@
       </header>
       <!-- Footer -->
       <footer id="footer">
-        <p class="copyright">&copy; Copyright 2023 4gai.me All Rights Reserved <a href="https://www.4gai.me">点我立即跳转</a>.
+        <p class="copyright">&copy; Copyright 2023 4gai.me All Rights Reserved <a
+            href="https://www.4gai.quest">点我立即跳转</a>.
         </p>
       </footer>
     </div>
@@ -118,7 +119,7 @@ export default {
           this.time--;
         } else {
           clearInterval(timer);
-          window.location.href = 'https://www.4gai.me';
+          window.location.href = 'https://www.4gai.quest';
         }
       }, 1000);
     }

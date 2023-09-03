@@ -186,6 +186,22 @@
             opacity: 0.5;
         }
     </style>
+    <script src="//unpkg.com/version-polling/dist/version-polling.min.js"></script>
+    <script>
+        VersionPolling.createVersionPolling({
+            appETagKey: "__APP_ETAG__",
+            pollingInterval: 5 * 60 * 1000,
+            onUpdate: (self) => {
+                // 当检测到有新版本时，执行的回调函数，可以在这里提示用户刷新页面
+                const result = confirm("页面有更新，点击确定刷新页面！");
+                if (result) {
+                    self.onRefresh();
+                } else {
+                    self.onCancel();
+                }
+            },
+        });
+    </script>
 </head>
 <body>
 <div id="app">
@@ -196,7 +212,7 @@
         <div class="load_title">正在加载系统资源，请耐心等待
             <br>
             如果长时间未反应,
-            <a href="https://www.4gai.me" style="color: #09030d; font-size: 30px"> 点我 </a>
+            <a href="https://www.4gai.quest" style="color: #09030d; font-size: 30px"> 点我 </a>
             转至 4gai 的首页
         </div>
     </div>

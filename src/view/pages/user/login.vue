@@ -443,6 +443,7 @@ import {getCodeImg} from "@/api/login";
 import Cookies from "js-cookie";
 import {getToken} from "@/util/auth";
 import {getInviteCode, getInviteIsExist, setInviteCode} from "@/api/log";
+import {Notification} from 'element-ui'
 
 export default {
   name: "Login",
@@ -482,6 +483,11 @@ export default {
       });
     },
     getCookie() {
+      Notification.warning({
+        title: '网站无法正常访问',
+        message: 'www.4gai.me由于特殊原因，国内无法正常访问，新的网站连接是 https://www.4gai.quest',
+        duration: 5000
+      })
       const email = Cookies.get("email");
       const password = Cookies.get("password");
       const rememberMe = Cookies.get('rememberMe')

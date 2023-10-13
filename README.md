@@ -1,158 +1,33 @@
-node--16.14.0
+**项目简介**
 
+这是一个前后端分离的项目，前端vue2后端springboot3.0+jdk17
 
-<div align=center>
-  <img src="https://i.328888.xyz/2023/04/09/icPI3N.png"   />
-</div>
-<a href="https://github.com/202252197">
-  <img width=800 src="https://github-profile-trophy.vercel.app/?username=202252197&column=7&theme=gruvbox&no-frame=true"/>
-</a>
-<div>
-声明：此项目只发布于 GitHub，基于 BSD-3-Clause license 协议，免费且作为开源学习使用。并且不会有任何形式的卖号、付费服务、卖key等行为。谨防受骗。
-项目使用Vue2进行开发，给大家提供一个方便使用的OpenAI web 管理界面，有好的建议和bug欢迎大家提出来，项目会一直开源和代码优化，方便对openai进行入门了解使用，后期会接入后端，实现更丰富的功能。
-</div>
+## 该项目主要包含的功能如下：
+-登录注册发邮件（包含邮件模板）
+-支付功能（对接xorpay）
+-简单的gpt对话功能,支持3.5以及4.0
+-语音朗读模块（使用了speech库，调用的是浏览器的语音包）
+-gpt的生成图片功能
+-日志详情功能（包含对话日志，充值日志）
+-邀请功能
+-敏感词过滤
 
-> 🤭记得点个小星星Starred
+## 使用到的技术（这里针对后端springboot3.0+jdk17）
+-责任链设计模式
+-redis
+-mybatis-plus
+-jwt
+-thymeleaf（主要针对邮件模板）
+-kaptcha（参考若依的图片验证码）
 
-## 会话
-![webui4.5](https://i.328888.xyz/2023/04/09/icM7uP.png)
-## 模型
-![webui4.5](https://i.328888.xyz/2023/04/09/icMKez.png)
-## 微调模型
-![webui4.5](https://i.328888.xyz/2023/04/09/icM9Zb.png)
-## 文件
-![webui4.5](https://i.328888.xyz/2023/04/09/icMdBA.png)
-## 多种prompt角色
-![webui4.5](https://i.328888.xyz/2023/04/09/icMO4p.png)
-## 中英文切换
-![webui4.5](https://i.328888.xyz/2023/04/09/icMLaw.png)
-## 适配手机&平板
-<div>
-  <img src="https://i.328888.xyz/2023/04/09/icMzet.png" alt="drawing" width="270px" />
-  <img src="https://i.328888.xyz/2023/04/09/icMeHX.png" alt="drawing" width="280px"/>
-  <img src="https://i.328888.xyz/2023/04/09/icMGkc.png" alt="drawing" width="270px" />
-</div>
-<div>
-  <img src="https://i.328888.xyz/2023/04/09/icMh9o.png" alt="drawing" />
-</div>
+## 其中，针对项目功能，我有如下补充：
+-后端提供了发邮件的模板，具体代码可以查看我的开源项目 https://github.com/263055/springboot-wzy-all  我已经集成到了spring-boot-email模块中
+-前端代码是根据一位大佬的代码去修改的，这位大佬的代码地址是：https://github.com/202252197/ChatGPT_JCM
+-本项目引入了若依的相关代码，比如验证码，icon，request请求等相关迪马
+-前后端代码，目前不在维护，2023年十月，我也大三了，开始准备找工作
+-截止2023-10-13 后端代码暂时没有开源的意愿，我不喜欢别人拿我的代码去骗钱骗小白
 
-## 应用程序
-https://wweu.lanzoub.com/ia2Zy0v2fxqd  蓝奏云下载地址
+## 项目的演示地址(截止到2023年10月13日，项目依然稳定运行)：
+[www.4gi.me](https://www.4gai.me/)
 
-## 参考视频
-https://www.bilibili.com/video/BV1BM4y187bp 使用API调用StableDiffusion生成图片简单案例
-https://www.bilibili.com/video/BV1iL411k7pC 本地+云服务器 部署此项目视频
-https://www.bilibili.com/video/BV1ss4y1d72g 此项目微调使用的简单案例
-关注我的B站，持续输出简单的入门案例
-
-# 部署步骤
-## 本地部署
-```
-npm install
-npm run serve
-npm run build
-```
-
-# 在线体验地址 (需要使用OpenAI KEY)
-
-> https://huggingface.co/spaces/junchenmo/OpenAI-Manager
-
-# 国内在线体验地址 (没kx再或者没有KEY--省点用)
-
-> https://175.178.88.119/learn.html
-
-## OpenAI-Key设置以及自定义设置
-### 在.env.serve中添加代码
-```
-VUE_APP_OPENAI_API_KEY='你的openai api key'
-```
-### 在/src/store/mutation-types.js
-
-可以在此文件中设置AI头像+用户头像+用户名称
-
-# Docker部署(暂时不是最新的镜像)
-
-## 构建镜像
-使用以下命令构建镜像，其中 "jcm-chatgpt" 是您想要给镜像取的名称，"." 表示 Dockerfile 在当前目录中。
-```
-docker build -t jcm-chatgpt .
-```
-## 运行镜像
-构建完成后，可以使用以下命令运行镜像，其中 "my-container" 是您想要给容器取的名称。该命令会将容器端口 80 映射到本地机器的端口 80。
-```
-docker run --name my-chatgpt -p 80:80 jcm-chatgpt
-```
-
-# 技术栈
-
-|  名称   | 版本  |
-|  ----  | ----  |
-| vue  | 2.6.14 |
-| element-ui  | 2.15.12 |
-| NodeJS  | 14+ |
-
-# 项目进度（对标OpenAI官方接口文档）
-
-|  接口   | 描述  | 
-|  ----  | ----  |
-| List Models  | 获取模型列表 | 
-| Completion  | text-davinci-003, text-davinci-002, text-curie-001, text-babbage-001, text-ada-001, davinci, curie, babbage, ada模型 |
-| Chat Completion  | gpt-4, gpt-4-0314, gpt-4-32k, gpt-4-32k-0314, gpt-3.5-turbo, gpt-3.5-turbo-0301模型 |
-| Create edit  | 创建编辑(待..) |
-| Create Image  | 根据描述生成图片 |
-| Create image edit  | 根据上传的图片结合输入的描述生成图片 |
-| Create Image Variation  | 根据上传的图片生成变体图片 |
-| Create embeddings    | 创建向量查询(可以实现PDF对话)(待..) |
-| Create transcription  | 语音转换为文字 |
-| Create translation    | 一个或多个来源语言的语音或音频文件翻译成目标语言 |
-| List files    | 文件列表 |
-| Upload file    | 上传文件 |
-| Delete file    | 删除文件 |
-| Retrieve file    | 检索文件信息 |
-| Retrieve file content    | 检索文件内容(OpenAI为了防止滥用,只要plus用户才可以使用) |
-| Create fine-tune    | 创建微调 |
-| List fine-tunes    | 微调列表 |
-| Retrieve fine-tune    | 检索微调信息 |
-| Cancel fine-tune    | 取消微调 |
-| List fine-tune events | 微调事件列表(待..) |
-| Delete fine-tune model    | 删除微调模型 |
-| Create moderation    | 创建审核 |
-| List engines | 引擎列表(已弃用) |
-| Retrieve engine | 检索引擎信息(已弃用) |
-| 多会话储存和上下文逻辑    | GPT3.5模型支持上下文逻辑,多窗口上下文对话 |
-| 导出导入数据   | 支持导出当前会话，导出全部会话，导入当前会话，导出当前会话，清除当前会话，清除全部会话 |
-| 聊天截图到本地图片    | 截图功能，有缺陷只能截图当前窗口的图片，建议QQ长截图（暂时取消） |
-| 更换聊天窗口背景    | 支持输入背景图片URL，暂时取消并保留此功能，没太大意义（暂时取消） |
-| 角色扮演    | 内置多角色prompt |
-| 界面多语言    | 支持中英文语言 |
-| 更换主题    | 待开发 |
-| 增加后端实现更多功能    | 待开发 |
-| More    | 待开发 |
-
-# 贡献者
-<div>
-  <a href="https://github.com/202252197/ChatGPT_JCM/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=202252197/ChatGPT_JCM" />
-  </a>
-</div>
-
-# 进学习群加V&商务合作
-<div>
-  <img src="https://i.328888.xyz/2023/04/03/iHKA4H.jpeg" alt="drawing" width="300px" height="300px"/>
-</div>
-
-## Star History
-[![Star History Chart](https://api.star-history.com/svg?repos=202252197/ChatGPT_JCM&type=Timeline)](https://star-history.com/#202252197/ChatGPT_JCM&Timeline)
-
-# 免责声明
-这不是官方的OpenAI产品。这是一个个人项目，与OpenAI没有任何关系。不要起诉我。
-
-<a href="https://github.com/202252197/ChatGPT_JCM" ><img src="https://img.shields.io/github/stars/202252197/ChatGPT_JCM" /></a>
-<a href="https://github.com/202252197/ChatGPT_JCM" ><img src="https://img.shields.io/github/last-commit/202252197/ChatGPT_JCM" /></a>
-<a href="https://github.com/202252197/ChatGPT_JCM" ><img src="https://img.shields.io/github/release/202252197/ChatGPT_JCM" /></a>
-<a href="https://github.com/202252197/ChatGPT_JCM" ><img src="https://img.shields.io/github/downloads/202252197/ChatGPT_JCM/total" /></a>
-<a href="https://github.com/202252197/ChatGPT_JCM" ><img src="https://img.shields.io/github/license/202252197/ChatGPT_JCM" /></a>
-</p>
-
-![Visitor Count](https://profile-counter.glitch.me/202252197/count.svg)
-
+ps:这个是我着手写的第二个项目，有了第一次前后端项目的经验，这次成熟了很多

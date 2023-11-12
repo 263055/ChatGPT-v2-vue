@@ -14,7 +14,8 @@
                   Easy, Cheap and Fast.
                 </span>
               </h1>
-              <p class="page1-left-2">4gai 可以让你便捷地访问ChatGPT等AI模型。</p>
+              <p class="page1-left-2">4gai可以让你便捷地访问ChatGPT等AI模型。如果喜欢这个页面的话，记得点赞支持哦</p>
+              <p class="page1-left-2">前端项目已经开源到GitHub，地址是：https://github.com/263055/ChatGPT-v2-vue</p>
               <p class="page1-left-2">可以在此网站畅想使用openai的3.5模型。</p>
               <p class="page1-left-2">使用Tokenizer分词器精准计费，同时可以查看对话的扣费日志和订单日志，一切操作透明化处理。</p>
               <p class="page1-left-2">已经接入了chatgpt模型，whisper-1语音模型以及generations产图模型，目前正在努力接入更多的新功能。</p>
@@ -483,9 +484,9 @@ export default {
       });
     },
     getCookie() {
-      Notification.warning({
+      Notification.info({
         title: '网站无法正常访问',
-        message: 'www.4gai.me由于特殊原因，国内无法正常访问，新的网站连接是 https://www.4gai.quest',
+        message: '前端页面已经开源到GitHub，如果喜欢的话记得给我点个赞哦',
         duration: 5000
       })
       const email = Cookies.get("email");

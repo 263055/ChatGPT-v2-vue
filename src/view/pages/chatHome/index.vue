@@ -488,6 +488,7 @@ import {createChatRoom, getChatRoom} from "@/api/session";
 import {generateUUID} from "@/util/util";
 import Cookies from "js-cookie";
 import introJs from 'intro.js'
+import {Notification} from 'element-ui'
 
 import {
   getModels,
@@ -791,6 +792,11 @@ export default {
   methods: {
     // 指导栏
     guide() {
+      Notification.info({
+        title: '2023-11-11开始，免费gpt3.5不稳定',
+        message: '如果频繁出现，可以再右侧栏的对话选项中更换线路种类',
+        duration: 5000
+      })
       introJs().setOptions({
         nextLabel: '下一个',  // 下一个按钮文字
         prevLabel: '上一个',  // 上一个按钮文字

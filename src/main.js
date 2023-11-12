@@ -7,6 +7,7 @@ import router from './router/index'
 import {copyToClipboard} from '@/util/util'
 import i18n from '@/config/i18n'
 import store from './store'
+import "normalize.css"
 import './permission' // permission control 加入了路由控制
 import './assets/icons' // icon
 // import 'intro.js/themes/introjs-flattener.css'
